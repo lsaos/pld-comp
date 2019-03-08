@@ -1,0 +1,353 @@
+
+// Generated from expr.g4 by ANTLR 4.7.2
+
+
+#include "exprListener.h"
+#include "exprVisitor.h"
+
+#include "exprParser.h"
+
+
+using namespace antlrcpp;
+using namespace antlr4;
+
+exprParser::exprParser(TokenStream *input) : Parser(input) {
+  _interpreter = new atn::ParserATNSimulator(this, _atn, _decisionToDFA, _sharedContextCache);
+}
+
+exprParser::~exprParser() {
+  delete _interpreter;
+}
+
+std::string exprParser::getGrammarFileName() const {
+  return "expr.g4";
+}
+
+const std::vector<std::string>& exprParser::getRuleNames() const {
+  return _ruleNames;
+}
+
+dfa::Vocabulary& exprParser::getVocabulary() const {
+  return _vocabulary;
+}
+
+
+//----------------- ProgContext ------------------------------------------------------------------
+
+exprParser::ProgContext::ProgContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+exprParser::MainContext* exprParser::ProgContext::main() {
+  return getRuleContext<exprParser::MainContext>(0);
+}
+
+
+size_t exprParser::ProgContext::getRuleIndex() const {
+  return exprParser::RuleProg;
+}
+
+void exprParser::ProgContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<exprListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterProg(this);
+}
+
+void exprParser::ProgContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<exprListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitProg(this);
+}
+
+
+antlrcpp::Any exprParser::ProgContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
+    return parserVisitor->visitProg(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+exprParser::ProgContext* exprParser::prog() {
+  ProgContext *_localctx = _tracker.createInstance<ProgContext>(_ctx, getState());
+  enterRule(_localctx, 0, exprParser::RuleProg);
+
+  auto onExit = finally([=] {
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(4);
+    main();
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- MainContext ------------------------------------------------------------------
+
+exprParser::MainContext::MainContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* exprParser::MainContext::TYPE() {
+  return getToken(exprParser::TYPE, 0);
+}
+
+tree::TerminalNode* exprParser::MainContext::INT() {
+  return getToken(exprParser::INT, 0);
+}
+
+std::vector<tree::TerminalNode *> exprParser::MainContext::SPACE() {
+  return getTokens(exprParser::SPACE);
+}
+
+tree::TerminalNode* exprParser::MainContext::SPACE(size_t i) {
+  return getToken(exprParser::SPACE, i);
+}
+
+
+size_t exprParser::MainContext::getRuleIndex() const {
+  return exprParser::RuleMain;
+}
+
+void exprParser::MainContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<exprListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterMain(this);
+}
+
+void exprParser::MainContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<exprListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitMain(this);
+}
+
+
+antlrcpp::Any exprParser::MainContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
+    return parserVisitor->visitMain(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+exprParser::MainContext* exprParser::main() {
+  MainContext *_localctx = _tracker.createInstance<MainContext>(_ctx, getState());
+  enterRule(_localctx, 2, exprParser::RuleMain);
+  size_t _la = 0;
+
+  auto onExit = finally([=] {
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(6);
+    match(exprParser::TYPE);
+    setState(8); 
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    do {
+      setState(7);
+      match(exprParser::SPACE);
+      setState(10); 
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    } while (_la == exprParser::SPACE);
+    setState(12);
+    match(exprParser::T__0);
+    setState(16);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == exprParser::SPACE) {
+      setState(13);
+      match(exprParser::SPACE);
+      setState(18);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+    setState(19);
+    match(exprParser::T__1);
+    setState(23);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == exprParser::SPACE) {
+      setState(20);
+      match(exprParser::SPACE);
+      setState(25);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+    setState(26);
+    match(exprParser::T__2);
+    setState(30);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == exprParser::SPACE) {
+      setState(27);
+      match(exprParser::SPACE);
+      setState(32);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+    setState(33);
+    match(exprParser::T__3);
+    setState(37);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == exprParser::SPACE) {
+      setState(34);
+      match(exprParser::SPACE);
+      setState(39);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+    setState(40);
+    match(exprParser::T__4);
+    setState(42); 
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    do {
+      setState(41);
+      match(exprParser::SPACE);
+      setState(44); 
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    } while (_la == exprParser::SPACE);
+    setState(46);
+    match(exprParser::INT);
+    setState(50);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == exprParser::SPACE) {
+      setState(47);
+      match(exprParser::SPACE);
+      setState(52);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+    setState(53);
+    match(exprParser::T__5);
+    setState(57);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == exprParser::SPACE) {
+      setState(54);
+      match(exprParser::SPACE);
+      setState(59);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+    setState(60);
+    match(exprParser::T__6);
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+// Static vars and initialization.
+std::vector<dfa::DFA> exprParser::_decisionToDFA;
+atn::PredictionContextCache exprParser::_sharedContextCache;
+
+// We own the ATN which in turn owns the ATN states.
+atn::ATN exprParser::_atn;
+std::vector<uint16_t> exprParser::_serializedATN;
+
+std::vector<std::string> exprParser::_ruleNames = {
+  "prog", "main"
+};
+
+std::vector<std::string> exprParser::_literalNames = {
+  "", "'main'", "'('", "')'", "'{'", "'return'", "';'", "'}'"
+};
+
+std::vector<std::string> exprParser::_symbolicNames = {
+  "", "", "", "", "", "", "", "", "TYPE", "INT", "SPACE"
+};
+
+dfa::Vocabulary exprParser::_vocabulary(_literalNames, _symbolicNames);
+
+std::vector<std::string> exprParser::_tokenNames;
+
+exprParser::Initializer::Initializer() {
+	for (size_t i = 0; i < _symbolicNames.size(); ++i) {
+		std::string name = _vocabulary.getLiteralName(i);
+		if (name.empty()) {
+			name = _vocabulary.getSymbolicName(i);
+		}
+
+		if (name.empty()) {
+			_tokenNames.push_back("<INVALID>");
+		} else {
+      _tokenNames.push_back(name);
+    }
+	}
+
+  _serializedATN = {
+    0x3, 0x608b, 0xa72a, 0x8133, 0xb9ed, 0x417c, 0x3be7, 0x7786, 0x5964, 
+    0x3, 0xc, 0x41, 0x4, 0x2, 0x9, 0x2, 0x4, 0x3, 0x9, 0x3, 0x3, 0x2, 0x3, 
+    0x2, 0x3, 0x3, 0x3, 0x3, 0x6, 0x3, 0xb, 0xa, 0x3, 0xd, 0x3, 0xe, 0x3, 
+    0xc, 0x3, 0x3, 0x3, 0x3, 0x7, 0x3, 0x11, 0xa, 0x3, 0xc, 0x3, 0xe, 0x3, 
+    0x14, 0xb, 0x3, 0x3, 0x3, 0x3, 0x3, 0x7, 0x3, 0x18, 0xa, 0x3, 0xc, 0x3, 
+    0xe, 0x3, 0x1b, 0xb, 0x3, 0x3, 0x3, 0x3, 0x3, 0x7, 0x3, 0x1f, 0xa, 0x3, 
+    0xc, 0x3, 0xe, 0x3, 0x22, 0xb, 0x3, 0x3, 0x3, 0x3, 0x3, 0x7, 0x3, 0x26, 
+    0xa, 0x3, 0xc, 0x3, 0xe, 0x3, 0x29, 0xb, 0x3, 0x3, 0x3, 0x3, 0x3, 0x6, 
+    0x3, 0x2d, 0xa, 0x3, 0xd, 0x3, 0xe, 0x3, 0x2e, 0x3, 0x3, 0x3, 0x3, 0x7, 
+    0x3, 0x33, 0xa, 0x3, 0xc, 0x3, 0xe, 0x3, 0x36, 0xb, 0x3, 0x3, 0x3, 0x3, 
+    0x3, 0x7, 0x3, 0x3a, 0xa, 0x3, 0xc, 0x3, 0xe, 0x3, 0x3d, 0xb, 0x3, 0x3, 
+    0x3, 0x3, 0x3, 0x3, 0x3, 0x2, 0x2, 0x4, 0x2, 0x4, 0x2, 0x2, 0x2, 0x46, 
+    0x2, 0x6, 0x3, 0x2, 0x2, 0x2, 0x4, 0x8, 0x3, 0x2, 0x2, 0x2, 0x6, 0x7, 
+    0x5, 0x4, 0x3, 0x2, 0x7, 0x3, 0x3, 0x2, 0x2, 0x2, 0x8, 0xa, 0x7, 0xa, 
+    0x2, 0x2, 0x9, 0xb, 0x7, 0xc, 0x2, 0x2, 0xa, 0x9, 0x3, 0x2, 0x2, 0x2, 
+    0xb, 0xc, 0x3, 0x2, 0x2, 0x2, 0xc, 0xa, 0x3, 0x2, 0x2, 0x2, 0xc, 0xd, 
+    0x3, 0x2, 0x2, 0x2, 0xd, 0xe, 0x3, 0x2, 0x2, 0x2, 0xe, 0x12, 0x7, 0x3, 
+    0x2, 0x2, 0xf, 0x11, 0x7, 0xc, 0x2, 0x2, 0x10, 0xf, 0x3, 0x2, 0x2, 0x2, 
+    0x11, 0x14, 0x3, 0x2, 0x2, 0x2, 0x12, 0x10, 0x3, 0x2, 0x2, 0x2, 0x12, 
+    0x13, 0x3, 0x2, 0x2, 0x2, 0x13, 0x15, 0x3, 0x2, 0x2, 0x2, 0x14, 0x12, 
+    0x3, 0x2, 0x2, 0x2, 0x15, 0x19, 0x7, 0x4, 0x2, 0x2, 0x16, 0x18, 0x7, 
+    0xc, 0x2, 0x2, 0x17, 0x16, 0x3, 0x2, 0x2, 0x2, 0x18, 0x1b, 0x3, 0x2, 
+    0x2, 0x2, 0x19, 0x17, 0x3, 0x2, 0x2, 0x2, 0x19, 0x1a, 0x3, 0x2, 0x2, 
+    0x2, 0x1a, 0x1c, 0x3, 0x2, 0x2, 0x2, 0x1b, 0x19, 0x3, 0x2, 0x2, 0x2, 
+    0x1c, 0x20, 0x7, 0x5, 0x2, 0x2, 0x1d, 0x1f, 0x7, 0xc, 0x2, 0x2, 0x1e, 
+    0x1d, 0x3, 0x2, 0x2, 0x2, 0x1f, 0x22, 0x3, 0x2, 0x2, 0x2, 0x20, 0x1e, 
+    0x3, 0x2, 0x2, 0x2, 0x20, 0x21, 0x3, 0x2, 0x2, 0x2, 0x21, 0x23, 0x3, 
+    0x2, 0x2, 0x2, 0x22, 0x20, 0x3, 0x2, 0x2, 0x2, 0x23, 0x27, 0x7, 0x6, 
+    0x2, 0x2, 0x24, 0x26, 0x7, 0xc, 0x2, 0x2, 0x25, 0x24, 0x3, 0x2, 0x2, 
+    0x2, 0x26, 0x29, 0x3, 0x2, 0x2, 0x2, 0x27, 0x25, 0x3, 0x2, 0x2, 0x2, 
+    0x27, 0x28, 0x3, 0x2, 0x2, 0x2, 0x28, 0x2a, 0x3, 0x2, 0x2, 0x2, 0x29, 
+    0x27, 0x3, 0x2, 0x2, 0x2, 0x2a, 0x2c, 0x7, 0x7, 0x2, 0x2, 0x2b, 0x2d, 
+    0x7, 0xc, 0x2, 0x2, 0x2c, 0x2b, 0x3, 0x2, 0x2, 0x2, 0x2d, 0x2e, 0x3, 
+    0x2, 0x2, 0x2, 0x2e, 0x2c, 0x3, 0x2, 0x2, 0x2, 0x2e, 0x2f, 0x3, 0x2, 
+    0x2, 0x2, 0x2f, 0x30, 0x3, 0x2, 0x2, 0x2, 0x30, 0x34, 0x7, 0xb, 0x2, 
+    0x2, 0x31, 0x33, 0x7, 0xc, 0x2, 0x2, 0x32, 0x31, 0x3, 0x2, 0x2, 0x2, 
+    0x33, 0x36, 0x3, 0x2, 0x2, 0x2, 0x34, 0x32, 0x3, 0x2, 0x2, 0x2, 0x34, 
+    0x35, 0x3, 0x2, 0x2, 0x2, 0x35, 0x37, 0x3, 0x2, 0x2, 0x2, 0x36, 0x34, 
+    0x3, 0x2, 0x2, 0x2, 0x37, 0x3b, 0x7, 0x8, 0x2, 0x2, 0x38, 0x3a, 0x7, 
+    0xc, 0x2, 0x2, 0x39, 0x38, 0x3, 0x2, 0x2, 0x2, 0x3a, 0x3d, 0x3, 0x2, 
+    0x2, 0x2, 0x3b, 0x39, 0x3, 0x2, 0x2, 0x2, 0x3b, 0x3c, 0x3, 0x2, 0x2, 
+    0x2, 0x3c, 0x3e, 0x3, 0x2, 0x2, 0x2, 0x3d, 0x3b, 0x3, 0x2, 0x2, 0x2, 
+    0x3e, 0x3f, 0x7, 0x9, 0x2, 0x2, 0x3f, 0x5, 0x3, 0x2, 0x2, 0x2, 0xa, 
+    0xc, 0x12, 0x19, 0x20, 0x27, 0x2e, 0x34, 0x3b, 
+  };
+
+  atn::ATNDeserializer deserializer;
+  _atn = deserializer.deserialize(_serializedATN);
+
+  size_t count = _atn.getNumberOfDecisions();
+  _decisionToDFA.reserve(count);
+  for (size_t i = 0; i < count; i++) { 
+    _decisionToDFA.emplace_back(_atn.getDecisionState(i), i);
+  }
+}
+
+exprParser::Initializer exprParser::_init;
