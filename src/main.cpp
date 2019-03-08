@@ -18,5 +18,7 @@ int main()
 
 	cout << tree->toStringTree() << endl;
 
+	system("pause");
+
 	return 0;
 }
