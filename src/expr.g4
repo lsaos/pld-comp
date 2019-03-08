@@ -2,12 +2,12 @@ grammar expr;
 
 prog: main;
 
-main: TYPE SPACE+ 'main' SPACE* '(' SPACE* ')'
+main: SPACE* 'int' SPACE+ 'main' SPACE* '(' SPACE* ')'
     SPACE* '{' SPACE* 'return' SPACE+ INT SPACE* ';'
-    SPACE* '}';
+    SPACE* '}' SPACE*;
 
-TYPE: 'int' | 'void';
-
+TYPE: 'int' | 'char';
 INT: [0-9]+;
-
-SPACE: ' ' | '\r' | '\n' | '\t';
+CHAR: '\'' [a-zA-Z0-9] '\'';
+VAR: [a-zA-Z_] [a-zA-Z_0-9]*;
+SPACE: [ \t\r\n];
