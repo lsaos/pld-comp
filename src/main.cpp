@@ -1,8 +1,10 @@
 #include <antlr4-runtime.h>
+#include <string>
 #include <iostream>
-#include "ExprLexer.h"
-#include "ExprParser.h"
-#include "ExprBaseVisitor.h"
+#include "exprLexer.h"
+#include "exprParser.h"
+#include "exprBaseVisitor.h"
+#include "assembl.h"
 
 using namespace antlr4;
 using namespace std;
@@ -33,7 +35,13 @@ int main(int argc, char* argv[])
 	exprParser parser(&tokens);
 	tree::ParseTree* tree = parser.prog();
 
-	cout << tree->toStringTree() << endl;
+	//cout << tree->toStringTree() << endl;
+	cout<<endl<<endl;
+	string name = string(argv[1]);
+	Assembl visitor(name);
+	int resultat = (int)visitor.visit(tree);
+	
+	cout << "Le programme a retourné : "<< resultat << endl;
 
 	return 0;
 }

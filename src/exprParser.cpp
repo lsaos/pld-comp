@@ -1,8 +1,7 @@
 
-// Generated from expr.g4 by ANTLR 4.7.2
+// Generated from src/expr.g4 by ANTLR 4.7.1
 
 
-#include "exprListener.h"
 #include "exprVisitor.h"
 
 #include "exprParser.h"
@@ -46,19 +45,6 @@ exprParser::MainContext* exprParser::ProgContext::main() {
 size_t exprParser::ProgContext::getRuleIndex() const {
   return exprParser::RuleProg;
 }
-
-void exprParser::ProgContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<exprListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterProg(this);
-}
-
-void exprParser::ProgContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<exprListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitProg(this);
-}
-
 
 antlrcpp::Any exprParser::ProgContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
@@ -111,19 +97,6 @@ tree::TerminalNode* exprParser::MainContext::SPACE(size_t i) {
 size_t exprParser::MainContext::getRuleIndex() const {
   return exprParser::RuleMain;
 }
-
-void exprParser::MainContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<exprListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterMain(this);
-}
-
-void exprParser::MainContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<exprListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitMain(this);
-}
-
 
 antlrcpp::Any exprParser::MainContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))

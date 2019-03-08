@@ -1,5 +1,5 @@
 
-// Generated from expr.g4 by ANTLR 4.7.2
+// Generated from src/expr.g4 by ANTLR 4.7.1
 
 #pragma once
 
@@ -39,9 +39,6 @@ public:
     virtual size_t getRuleIndex() const override;
     MainContext *main();
 
-    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
-    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
@@ -55,9 +52,6 @@ public:
     antlr4::tree::TerminalNode *INT();
     std::vector<antlr4::tree::TerminalNode *> SPACE();
     antlr4::tree::TerminalNode* SPACE(size_t i);
-
-    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
-    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
