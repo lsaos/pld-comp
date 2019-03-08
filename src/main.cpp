@@ -1,4 +1,5 @@
 #include <antlr4-runtime.h>
+#include <string>
 #include <iostream>
 #include "exprLexer.h"
 #include "exprParser.h"
@@ -36,7 +37,8 @@ int main(int argc, char* argv[])
 
 	//cout << tree->toStringTree() << endl;
 	cout<<endl<<endl;
-	Assembl visitor;
+	string name = string(argv[1]);
+	Assembl visitor(name);
 	int resultat = (int)visitor.visit(tree);
 	
 	cout << "Le programme a retourné : "<< resultat << endl;
