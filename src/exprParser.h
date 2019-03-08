@@ -1,5 +1,5 @@
 
-// Generated from expr.g4 by ANTLR 4.7.2
+// Generated from src/expr.g4 by ANTLR 4.7.1
 
 #pragma once
 
@@ -13,7 +13,7 @@ class  exprParser : public antlr4::Parser {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    TYPE = 8, INT = 9, SPACE = 10
+    T__7 = 8, TYPE = 9, INT = 10, CHAR = 11, VAR = 12, SPACE = 13
   };
 
   enum {
@@ -39,9 +39,6 @@ public:
     virtual size_t getRuleIndex() const override;
     MainContext *main();
 
-    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
-    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
@@ -52,13 +49,9 @@ public:
   public:
     MainContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *TYPE();
     antlr4::tree::TerminalNode *INT();
     std::vector<antlr4::tree::TerminalNode *> SPACE();
     antlr4::tree::TerminalNode* SPACE(size_t i);
-
-    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
-    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
