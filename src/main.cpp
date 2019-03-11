@@ -1,6 +1,7 @@
 #include <antlr4-runtime.h>
 #include <string>
 #include <iostream>
+#include <unistd.h>
 #include "exprLexer.h"
 #include "exprParser.h"
 #include "exprBaseVisitor.h"
@@ -24,6 +25,25 @@ int main(int argc, char* argv[])
 	{
 		cout << "Failed to open file '" << argv[1] << '\'' << endl;
 		return -1;
+	}
+	
+	int opt;
+	bool optionA=false, optionC=false, optionO=false;
+	while((opt=getopt(argc, argv, "oca"))!=-1){
+		switch(opt){
+			case 'o':
+				cout << "Il y aura optimisation" << endl;
+				optionO=true;
+				break;
+			case 'c':
+				cout << "Il y aura génération de code assembleur" << endl;
+				optionC=true;
+				break;
+			case 'a':
+				cout << "Il y aura analyse statique" << endl;
+				optionA=true;
+				break;
+		}
 	}
 
 	ANTLRInputStream input(file);
