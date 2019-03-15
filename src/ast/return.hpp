@@ -21,7 +21,7 @@ namespace ast
 			expr = expression;
 		}
 
-		const Expression* getExpression() const
+		Expression* getExpression()
 		{
 			return expr;
 		}

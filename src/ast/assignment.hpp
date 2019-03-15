@@ -4,23 +4,23 @@
 
 namespace ast
 {
-	class Variable;
+	class Identifier;
 
 	class Assignment : public Expression
 	{
 	public:
 		Assignment(const ItemPosition& position, Block* parent)
 			: Expression(position, parent),
-			variable(nullptr),
+			identifier(nullptr),
 			expr(nullptr)
 		{
 		}
 
 	public:
-		void setVariable(Variable* var)
+		void setIdentifier(Identifier* ident)
 		{
-			assert(var);
-			variable = var;
+			assert(ident);
+			identifier = ident;
 		}
 
 		void setValue(Expression* expression)
@@ -29,12 +29,12 @@ namespace ast
 			expr = expression;
 		}
 
-		const Variable* getVariable() const
+		Identifier* getIdentifier()
 		{
-			return variable;
+			return identifier;
 		}
 
-		const Expression* getExpression() const
+		Expression* getExpression()
 		{
 			return expr;
 		}
@@ -46,19 +46,8 @@ namespace ast
 			return expr->getType();
 		}
 
-		virtual int getValue() const
-		{
-			assert(expr);
-			return expr->getValue();
-		}
-
-		virtual bool isConstant() const
-		{
-			return false;
-		}
-
 	private:
-		Variable* variable;
+		Identifier* identifier;
 		Expression* expr;
 	};
 }

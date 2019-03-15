@@ -15,16 +15,34 @@ namespace ast
 		}
 
 	public:
-		const Function* getFunction(const string& name) const
+		Function* getFunction(const string& name)
 		{
-			const Instruction* ident = (const Instruction*)getIdentifiable(name, false);
+			const Instruction* ident = (Instruction*)getIdentifiable(name, false);
 
 			if (ident && ident->isFunction()) {
-				return (const Function*)ident;
+				return (Function*)ident;
 			}
 			else {
 				return nullptr;
 			}
+		}
+
+		Function* getMain()
+		{
+			return getFunction("main");
+		}
+
+		vector<Function*> getFunctions()
+		{
+			vector< Function*> funcs;
+
+			for (const Instruction* instr : instructions) {
+				if (instr->isFunction()) {
+					funcs.push_back((Function*)instr);
+				}
+			}
+
+			return funcs;
 		}
 
 	public:

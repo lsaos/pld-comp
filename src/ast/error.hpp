@@ -6,6 +6,7 @@ namespace ast
 	{
 		None,
 		InvalidInstruction,
-		DivisionByZero
+		DivisionByZero,
+		NotConstant
 	};
 }

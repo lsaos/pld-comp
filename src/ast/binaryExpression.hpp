@@ -34,12 +34,12 @@ namespace ast
 			op = ope;
 		}
 
-		const Expression* getLeftExpression() const
+		Expression* getLeftExpression()
 		{
 			return left;
 		}
 
-		const Expression* getRightExpression() const
+		Expression* getRightExpression()
 		{
 			return right;
 		}

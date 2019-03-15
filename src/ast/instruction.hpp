@@ -71,6 +71,12 @@ namespace ast
 			case Error::InvalidInstruction:
 				cout << "invalid instruction";
 				break;
+			case Error::DivisionByZero:
+				cout << "division by zero";
+				break;
+			case Error::NotConstant:
+				cout << "not constant";
+				break;
 			}
 
 			cout << endl;

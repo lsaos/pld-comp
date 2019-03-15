@@ -19,29 +19,23 @@ namespace ast
 		}
 
 	public:
-		virtual void add(Instruction* instr)
+		Variable* getVariable(const string& name, bool withAncestors)
 		{
-			assert(instr);
-			instructions.push_back(instr);
-		}
-
-		const Variable* getVariable(const string& name, bool withAncestors) const
-		{
-			const Instruction* ident = (const Instruction*)getIdentifiable(name, withAncestors);
+			Instruction* ident = (Instruction*)getIdentifiable(name, withAncestors);
 
 			if (ident && ident->isVariable()) {
-				return (const Variable*)ident;
+				return (Variable*)ident;
 			}
 			else {
 				return nullptr;
 			}
 		}
 
-		const Identifiable* getIdentifiable(const string& name, bool withAncestors) const
+		Identifiable* getIdentifiable(const string& name, bool withAncestors)
 		{
 			for (const Instruction* instr : instructions) {
-				if (instr->isIdentifiable() && ((const Identifiable*)instr)->getName() == name) {
-					return (const Identifiable*)instr;
+				if (instr->isIdentifiable() && ((Identifiable*)instr)->getName() == name) {
+					return (Identifiable*)instr;
 				}
 			}
 
@@ -51,6 +45,26 @@ namespace ast
 			else {
 				return nullptr;
 			}
+		}
+
+		vector<Variable*> getVariables()
+		{
+			vector<Variable*> vars;
+
+			for (const Instruction* instr : instructions) {
+				if (instr->isVariable()) {
+					vars.push_back((Variable*)instr);
+				}
+			}
+
+			return vars;
+		}
+
+	public:
+		virtual void add(Instruction* instr)
+		{
+			assert(instr);
+			instructions.push_back(instr);
 		}
 
 	protected:
