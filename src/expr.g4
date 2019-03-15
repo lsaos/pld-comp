@@ -1,18 +1,21 @@
 grammar expr;
 
-prog: main;
+prog: preproc SPACE* main;
 
-main: preproc SPACE* 'int' SPACE+ 'main' SPACE* '(' SPACE* ')'
-    SPACE* '{' SPACE* (instruction SPACE*)* 'return' SPACE+ expression SPACE* ';'
-    SPACE* '}' SPACE*;
+
 preproc: (SPACE* include)*;
 include: '#include' SPACE* '<' LIB '>';
+
+main: 'int' SPACE+ 'main' SPACE* '(' SPACE* ')' SPACE* '{' SPACE* (instruction SPACE*)* ret SPACE* '}' SPACE*;
+ret: 'return' SPACE+ expression SPACE* ';';
 block: (instruction SPACE*)+;
 instruction: declaration SPACE* ';'
 		   | definition SPACE* ';'
+		   | assignment SPACE* ';'
 		   ;
 declaration: type SPACE* VAR;
 definition: type SPACE* VAR SPACE* '=' SPACE* expression;
+assignment: VAR SPACE* '=' SPACE* expression;
 expression: VAR #variable
 		  | INT #int
 		  | CHAR #char
