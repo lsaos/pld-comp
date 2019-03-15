@@ -18,7 +18,6 @@ namespace ast
 		Function* getFunction(const string& name)
 		{
 			const Instruction* ident = (Instruction*)getIdentifiable(name, false);
-
 			if (ident && ident->isFunction()) {
 				return (Function*)ident;
 			}

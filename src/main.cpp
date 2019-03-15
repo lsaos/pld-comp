@@ -7,8 +7,27 @@
 #include "exprBaseVisitor.h"
 #include "visiteur.hpp"
 
+#include "ast/program.hpp"
+#include "ast/assignment.hpp"
+#include "ast/binaryExpression.hpp"
+#include "ast/block.hpp"
+#include "ast/constant.hpp"
+#include "ast/controlStructure.hpp"
+#include "ast/expression.hpp"
+#include "ast/functionCall.hpp"
+#include "ast/function.hpp"
+#include "ast/instruction.hpp"
+#include "ast/operator.hpp"
+#include "ast/program.hpp"
+#include "ast/type.hpp"
+#include "ast/unaryExpression.hpp"
+#include "ast/variable.hpp"
+#include "ast/error.hpp"
+#include "ast/return.hpp"
+
 using namespace antlr4;
 using namespace std;
+using namespace ast;
 
 int main(int argc, char* argv[])
 {
@@ -57,13 +76,13 @@ int main(int argc, char* argv[])
 	exprParser parser(&tokens);
 	tree::ParseTree* tree = parser.prog();
 
-	//cout << tree->toStringTree() << endl;
-	cout << endl << endl;
-	string name = string(argv[1]);
-	Visiteur visitor(name);
-	int resultat = (int)visitor.visit(tree);
-
-	cout << "Le programme a retourné : "<< resultat << endl;
+	/*cout << tree->toStringTree() << endl;
+	cout << endl << endl;*/
+	Visiteur visitor;
+	Program* prog = (Program*)visitor.visit(tree);
+	Function* func = prog->getMain();
+	cout << func->getName() << endl;
+	cout << "Le programme s'est fini correctement" << endl;
 	system("pause");
 	return 0;
 }

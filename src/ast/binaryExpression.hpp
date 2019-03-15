@@ -78,7 +78,7 @@ namespace ast
 				}
 				return l / r;
 
-			case BinaryOperator::LogicialAnd:
+			case BinaryOperator::LogicalAnd:
 				return l & r;
 			case BinaryOperator::LogicalOr:
 				return l | r;

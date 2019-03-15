@@ -43,6 +43,8 @@ public:
 
     virtual antlrcpp::Any visitMult(exprParser::MultContext *context) = 0;
 
+    virtual antlrcpp::Any visitBin(exprParser::BinContext *context) = 0;
+
     virtual antlrcpp::Any visitVariable(exprParser::VariableContext *context) = 0;
 
     virtual antlrcpp::Any visitChar(exprParser::CharContext *context) = 0;

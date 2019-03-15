@@ -22,12 +22,14 @@ expression: VAR #variable
 		  | '('SPACE* expression SPACE* ')' #parenthesis
 		  | expression SPACE* OPMUL SPACE* expression #mult
 		  | expression SPACE* OPADD SPACE* expression #add
+		  | expression SPACE* OPBIN SPACE* expression #bin
 		  ;
 
 type: 'int'|'char';
 SPACE: [ \t\r\n];
 OPMUL: ('*'|'/');
 OPADD: ('+'|'-');
+OPBIN: ('&'|'^'|'|'); 
 INT: [0-9]+;
 LIB: [a-zA-Z]+ '.h';
 CHAR: '\'' [a-zA-Z0-9] '\'';

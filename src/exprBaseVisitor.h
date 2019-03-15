@@ -63,6 +63,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitBin(exprParser::BinContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitVariable(exprParser::VariableContext *ctx) override {
     return visitChildren(ctx);
   }
