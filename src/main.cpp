@@ -5,7 +5,7 @@
 #include "exprLexer.h"
 #include "exprParser.h"
 #include "exprBaseVisitor.h"
-#include "assembl.h"
+#include "visiteur.hpp"
 
 using namespace antlr4;
 using namespace std;
@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
 	//cout << tree->toStringTree() << endl;
 	cout<<endl<<endl;
 	string name = string(argv[1]);
-	Assembl visitor(name);
+	Visiteur visitor(name);
 	int resultat = (int)visitor.visit(tree);
 	
 	cout << "Le programme a retourné : "<< resultat << endl;

@@ -23,6 +23,32 @@ public:
 
     virtual antlrcpp::Any visitMain(exprParser::MainContext *context) = 0;
 
+    virtual antlrcpp::Any visitPreproc(exprParser::PreprocContext *context) = 0;
+
+    virtual antlrcpp::Any visitInclude(exprParser::IncludeContext *context) = 0;
+
+    virtual antlrcpp::Any visitBlock(exprParser::BlockContext *context) = 0;
+
+    virtual antlrcpp::Any visitInstruction(exprParser::InstructionContext *context) = 0;
+
+    virtual antlrcpp::Any visitDeclaration(exprParser::DeclarationContext *context) = 0;
+
+    virtual antlrcpp::Any visitDefinition(exprParser::DefinitionContext *context) = 0;
+
+    virtual antlrcpp::Any visitAdd(exprParser::AddContext *context) = 0;
+
+    virtual antlrcpp::Any visitMult(exprParser::MultContext *context) = 0;
+
+    virtual antlrcpp::Any visitVariable(exprParser::VariableContext *context) = 0;
+
+    virtual antlrcpp::Any visitChar(exprParser::CharContext *context) = 0;
+
+    virtual antlrcpp::Any visitParenthesis(exprParser::ParenthesisContext *context) = 0;
+
+    virtual antlrcpp::Any visitInt(exprParser::IntContext *context) = 0;
+
+    virtual antlrcpp::Any visitType(exprParser::TypeContext *context) = 0;
+
 
 };
 
