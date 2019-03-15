@@ -6,35 +6,22 @@ using namespace std;
 
 #include "type.hpp"
 #include "block.hpp"
+#include "identifiable.hpp"
 
 namespace ast
 {
 	class Block;
 
-	class Function : public Block
+	class Function : public Block, public Identifiable
 	{
 	public:
-		Function(const ItemPosition& position)
-			: Block(position)
+		Function(const ItemPosition& position, Block* parent)
+			: Block(position, parent)
 		{
-		}
-
-	public:
-		void setName(const string& n)
-		{
-			assert(!n.empty());
-			name = n;
-		}
-
-		const string& getName() const
-		{
-			return name;
 		}
 
 	public:
 		virtual bool isFunction() const { return true; }
-
-	private:
-		string name;
+		virtual bool isIdentifiable() const { return true; }
 	};
 }

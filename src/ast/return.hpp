@@ -9,8 +9,8 @@ namespace ast
 	class Return : public Instruction
 	{
 	public:
-		Return(const ItemPosition& position)
-			: Instruction(position)
+		Return(const ItemPosition& position, Block* parent)
+			: Instruction(position, parent)
 		{
 		}
 

@@ -4,7 +4,7 @@
 
 using namespace std;
 
-#include "instruction.hpp"
+#include "variable.hpp"
 
 namespace ast
 {
@@ -13,8 +13,8 @@ namespace ast
 	class Block : public Instruction
 	{
 	public:
-		Block(const ItemPosition& position)
-			: Instruction(position)
+		Block(const ItemPosition& position, Block* parent)
+			: Instruction(position, parent)
 		{
 		}
 
@@ -25,7 +25,35 @@ namespace ast
 			instructions.push_back(instr);
 		}
 
-	private:
+		const Variable* getVariable(const string& name, bool withAncestors) const
+		{
+			const Instruction* ident = (const Instruction*)getIdentifiable(name, withAncestors);
+
+			if (ident && ident->isVariable()) {
+				return (const Variable*)ident;
+			}
+			else {
+				return nullptr;
+			}
+		}
+
+		const Identifiable* getIdentifiable(const string& name, bool withAncestors) const
+		{
+			for (const Instruction* instr : instructions) {
+				if (instr->isIdentifiable() && ((const Identifiable*)instr)->getName() == name) {
+					return (const Identifiable*)instr;
+				}
+			}
+
+			if (withAncestors && getParent()) {
+				return getParent()->getIdentifiable(name, true);
+			}
+			else {
+				return nullptr;
+			}
+		}
+
+	protected:
 		vector<Instruction*> instructions;
 	};
 }

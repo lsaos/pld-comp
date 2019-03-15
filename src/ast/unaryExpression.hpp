@@ -8,8 +8,8 @@ namespace ast
 	class UnaryExpression : public Expression
 	{
 	public:
-		UnaryExpression(const ItemPosition& position)
-			: Expression(position),
+		UnaryExpression(const ItemPosition& position, Block* parent)
+			: Expression(position, parent),
 			op(UnaryOperator::Minus),
 			expr(nullptr)
 		{

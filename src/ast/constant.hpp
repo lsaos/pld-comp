@@ -8,8 +8,8 @@ namespace ast
 	class Constant : public Expression
 	{
 	public:
-		Constant(const ItemPosition& position)
-			: Expression(position),
+		Constant(const ItemPosition& position, Block* parent)
+			: Expression(position, parent),
 			type(Type::Void),
 			value(0)
 		{

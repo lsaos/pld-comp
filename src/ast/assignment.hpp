@@ -9,8 +9,8 @@ namespace ast
 	class Assignment : public Expression
 	{
 	public:
-		Assignment(const ItemPosition& position)
-			: Expression(position),
+		Assignment(const ItemPosition& position, Block* parent)
+			: Expression(position, parent),
 			variable(nullptr),
 			expr(nullptr)
 		{

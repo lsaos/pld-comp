@@ -8,8 +8,8 @@ namespace ast
 	class BinaryExpression : public Expression
 	{
 	public:
-		BinaryExpression(const ItemPosition& position)
-			: Expression(position),
+		BinaryExpression(const ItemPosition& position, Block* parent)
+			: Expression(position, parent),
 			op(BinaryOperator::Add),
 			left(nullptr),
 			right(nullptr)

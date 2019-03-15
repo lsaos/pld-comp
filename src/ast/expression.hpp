@@ -8,8 +8,8 @@ namespace ast
 	class Expression : public Instruction
 	{
 	public:
-		Expression(const ItemPosition& position)
-			: Instruction(position)
+		Expression(const ItemPosition& position, Block* parent)
+			: Instruction(position, parent)
 		{
 		}
 
