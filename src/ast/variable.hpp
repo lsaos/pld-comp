@@ -10,16 +10,38 @@ using namespace std;
 
 namespace ast
 {
+	enum class Scope
+	{
+		Global,
+		Parameter,
+		Block
+	};
+
 	class Variable : public Instruction, public Identifiable
 	{
 	public:
 		Variable(const ItemPosition& position)
-			: Instruction(position)
+			: Instruction(position),
+			scope(Scope::Block)
 		{
+		}
+
+	public:
+		void setScope(Scope s)
+		{
+			scope = s;
+		}
+
+		Scope getScope() const
+		{
+			return scope;
 		}
 
 	public:
 		virtual bool isVariable() const { return true; }
 		virtual bool isIdentifiable() const { return true; }
+
+	private:
+		Scope scope;
 	};
 }

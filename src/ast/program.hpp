@@ -45,13 +45,26 @@ namespace ast
 			return funcs;
 		}
 
+		size_t getFunctionsCount()
+		{
+			size_t cnt = 0;
+
+			for (const Instruction* instr : instructions) {
+				if (instr->isFunction()) {
+					cnt++;
+				}
+			}
+
+			return cnt;
+		}
+
 	public:
 		virtual void add(Instruction* instr)
 		{
 			assert(instr);
 
-			if (!instr->isFunction() && !instr->isVariable()) {
-				error(Error::InvalidInstruction, instr);
+			if (instr->isVariable()) {
+				((Variable*)instr)->setScope(Scope::Global);
 			}
 
 			Block::add(instr);

@@ -1,5 +1,9 @@
 #pragma once
 
+#include <vector>
+
+using namespace std;
+
 #include "identifier.hpp"
 
 namespace ast
@@ -13,7 +17,30 @@ namespace ast
 		{
 		}
 
+	public:
+		void setIdentifier(Identifier* ident)
+		{
+			assert(ident);
+			ident->setParent(this);
+			identifier = ident;
+		}
+
+		void addArgument(Expression* arg)
+		{
+			assert(arg);
+			arg->setParent(this);
+			args.push_back(arg);
+		}
+
+	public:
+		virtual Type getType() const
+		{
+			assert(identifier);
+			return identifier->getType();
+		}
+
 	private:
+		vector<Expression*> args;
 		Identifier* identifier;
 	};
 }

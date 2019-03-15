@@ -8,7 +8,8 @@ namespace ast
 	{
 	public:
 		Return(const ItemPosition& position)
-			: Instruction(position)
+			: Instruction(position),
+			expr(nullptr)
 		{
 		}
 
