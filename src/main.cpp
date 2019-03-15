@@ -28,23 +28,23 @@ int main(int argc, char* argv[])
 		system("pause");
 		return -1;
 	}
-	
+
 	int opt;
-	bool optionA=false, optionC=false, optionO=false;
-	while((opt=getopt(argc, argv, "oca"))!=-1){
-		switch(opt){
-			case 'o':
-				cout << "Il y aura optimisation" << endl;
-				optionO=true;
-				break;
-			case 'c':
-				cout << "Il y aura génération de code assembleur" << endl;
-				optionC=true;
-				break;
-			case 'a':
-				cout << "Il y aura analyse statique" << endl;
-				optionA=true;
-				break;
+	bool optionA = false, optionC = false, optionO = false;
+	while ((opt = getopt(argc, argv, "oca")) != -1) {
+		switch (opt) {
+		case 'o':
+			cout << "Il y aura optimisation" << endl;
+			optionO = true;
+			break;
+		case 'c':
+			cout << "Il y aura génération de code assembleur" << endl;
+			optionC = true;
+			break;
+		case 'a':
+			cout << "Il y aura analyse statique" << endl;
+			optionA = true;
+			break;
 		}
 	}
 
@@ -58,11 +58,11 @@ int main(int argc, char* argv[])
 	tree::ParseTree* tree = parser.prog();
 
 	//cout << tree->toStringTree() << endl;
-	cout<<endl<<endl;
+	cout << endl << endl;
 	string name = string(argv[1]);
 	Visiteur visitor(name);
 	int resultat = (int)visitor.visit(tree);
-	
+
 	cout << "Le programme a retourné : "<< resultat << endl;
 	system("pause");
 	return 0;
