@@ -1,7 +1,7 @@
 #include <antlr4-runtime.h>
 #include <string>
 #include <iostream>
-#include <unistd.h>
+#include "unistd.h"
 #include "exprLexer.h"
 #include "exprParser.h"
 #include "exprBaseVisitor.h"
@@ -15,6 +15,7 @@ int main(int argc, char* argv[])
 	if (argc < 2)
 	{
 		cout << "Usage: comp source_file [-a] [-o] [-c]" << endl;
+		system("pause");
 		return -1;
 	}
 
@@ -24,6 +25,7 @@ int main(int argc, char* argv[])
 	if (!file)
 	{
 		cout << "Failed to open file '" << argv[1] << '\'' << endl;
+		system("pause");
 		return -1;
 	}
 
@@ -61,7 +63,7 @@ int main(int argc, char* argv[])
 	Assembl visitor(name);
 	int resultat = (int)visitor.visit(tree);
 
-	cout << "Le programme a retourné : " << resultat << endl;
-
+	cout << "Le programme a retourné : "<< resultat << endl;
+	system("pause");
 	return 0;
 }
