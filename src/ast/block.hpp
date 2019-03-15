@@ -68,6 +68,8 @@ namespace ast
 			instructions.push_back(instr);
 		}
 
+		virtual bool isBlock() const { return true; }
+
 	protected:
 		vector<Instruction*> instructions;
 	};

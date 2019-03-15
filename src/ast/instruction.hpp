@@ -9,6 +9,10 @@ using namespace std;
 
 namespace ast
 {
+	class Block;
+	class Program;
+	class Function;
+
 	struct ItemPosition
 	{
 		ItemPosition() : line(0), offset(0) {}
@@ -42,20 +46,58 @@ namespace ast
 			parent = parentInstruction;
 		}
 
-		const Instruction* getParent() const
+		Instruction* getParent()
 		{
 			return parent;
 		}
 
-		Instruction* getParent()
+		Block* getParentBlock()
 		{
-			return parent;
+			if (parent) {
+				if (parent->isBlock()) {
+					return (Block*)parent;
+				}
+				else {
+					return parent->getParentBlock();
+				}
+			}
+
+			return nullptr;
+		}
+
+		Function* getParentFunction()
+		{
+			if (parent) {
+				if (parent->isFunction()) {
+					return (Function*)parent;
+				}
+				else {
+					return parent->getParentFunction();
+				}
+			}
+
+			return nullptr;
+		}
+
+		Program* getProgram()
+		{
+			if (isProgram()) {
+				return (Program*)this;
+			}
+			else if (parent) {
+				return parent->getProgram();
+			}
+			else {
+				return nullptr;
+			}
 		}
 
 	public:
 		virtual bool isFunction() const { return false; }
 		virtual bool isVariable() const { return false; }
 		virtual bool isIdentifiable() const { return false; }
+		virtual bool isBlock() const { return false; }
+		virtual bool isProgram() const { return false; }
 
 	protected:
 		void error(Error error, const Instruction* instruction) const

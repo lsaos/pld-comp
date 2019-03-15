@@ -56,5 +56,7 @@ namespace ast
 
 			Block::add(instr);
 		}
+
+		virtual bool isProgram() const { return true; }
 	};
 }
