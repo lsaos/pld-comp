@@ -1,11 +1,19 @@
 #pragma once
 
-#include "expression.hpp"
+#include "identifier.hpp"
 
 namespace ast
 {
 	class FunctionCall : public Expression
 	{
-		// TODO
+	public:
+		FunctionCall(const ItemPosition& position)
+			: Expression(position),
+			identifier(nullptr)
+		{
+		}
+
+	private:
+		Identifier* identifier;
 	};
 }

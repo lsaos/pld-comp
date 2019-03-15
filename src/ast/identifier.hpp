@@ -22,11 +22,6 @@ namespace ast
 			identifiable = ident;
 		}
 
-		const Identifiable* getIdentifiable() const
-		{
-			return identifiable;
-		}
-
 		Identifiable* getIdentifiable()
 		{
 			return identifiable;

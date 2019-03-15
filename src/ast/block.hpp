@@ -39,12 +39,14 @@ namespace ast
 				}
 			}
 
-			if (withAncestors && getParent()) {
-				return getParent()->getIdentifiable(name, true);
+			if (withAncestors) {
+				Block* parentBlock = getParentBlock();
+				if (parentBlock) {
+					return parentBlock->getIdentifiable(name, true);
+				}
 			}
-			else {
-				return nullptr;
-			}
+
+			return nullptr;
 		}
 
 		vector<Variable*> getVariables()
