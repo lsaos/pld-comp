@@ -9,8 +9,7 @@ using namespace std;
 
 class Visiteur : public exprBaseVisitor{
 	public:
-		Visiteur(string name){
-			file = new ofstream(name.substr(0, name.size()-1)+"s", ios::out);
+		Visiteur(){
 		}
 		
 		virtual antlrcpp::Any visitProg(exprParser::ProgContext *ctx);
@@ -43,10 +42,11 @@ class Visiteur : public exprBaseVisitor{
 
 		virtual antlrcpp::Any visitType(exprParser::TypeContext *ctx);
 		
-		virtual ~Visiteur(){
-			delete file;
-}
+		virtual antlrcpp::Any visitRet(exprParser::RetContext *ctx);
+		
+		virtual ~Visiteur(){}
 
 	protected:
-		ofstream* file;
+		
+	
 };

@@ -18,9 +18,9 @@ public:
   };
 
   enum {
-    RuleProg = 0, RuleMain = 1, RulePreproc = 2, RuleInclude = 3, RuleBlock = 4, 
-    RuleInstruction = 5, RuleDeclaration = 6, RuleDefinition = 7, RuleExpression = 8, 
-    RuleType = 9
+    RuleProg = 0, RulePreproc = 1, RuleInclude = 2, RuleMain = 3, RuleRet = 4, 
+    RuleBlock = 5, RuleInstruction = 6, RuleDeclaration = 7, RuleDefinition = 8, 
+    RuleAssignment = 9, RuleExpression = 10, RuleType = 11
   };
 
   exprParser(antlr4::TokenStream *input);
@@ -34,13 +34,15 @@ public:
 
 
   class ProgContext;
-  class MainContext;
   class PreprocContext;
   class IncludeContext;
+  class MainContext;
+  class RetContext;
   class BlockContext;
   class InstructionContext;
   class DeclarationContext;
   class DefinitionContext;
+  class AssignmentContext;
   class ExpressionContext;
   class TypeContext; 
 
@@ -48,30 +50,16 @@ public:
   public:
     ProgContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    PreprocContext *preproc();
     MainContext *main();
+    std::vector<antlr4::tree::TerminalNode *> SPACE();
+    antlr4::tree::TerminalNode* SPACE(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
   ProgContext* prog();
-
-  class  MainContext : public antlr4::ParserRuleContext {
-  public:
-    MainContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    PreprocContext *preproc();
-    ExpressionContext *expression();
-    std::vector<antlr4::tree::TerminalNode *> SPACE();
-    antlr4::tree::TerminalNode* SPACE(size_t i);
-    std::vector<InstructionContext *> instruction();
-    InstructionContext* instruction(size_t i);
-
-    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-   
-  };
-
-  MainContext* main();
 
   class  PreprocContext : public antlr4::ParserRuleContext {
   public:
@@ -102,6 +90,36 @@ public:
 
   IncludeContext* include();
 
+  class  MainContext : public antlr4::ParserRuleContext {
+  public:
+    MainContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    RetContext *ret();
+    std::vector<antlr4::tree::TerminalNode *> SPACE();
+    antlr4::tree::TerminalNode* SPACE(size_t i);
+    std::vector<InstructionContext *> instruction();
+    InstructionContext* instruction(size_t i);
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  MainContext* main();
+
+  class  RetContext : public antlr4::ParserRuleContext {
+  public:
+    RetContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    ExpressionContext *expression();
+    std::vector<antlr4::tree::TerminalNode *> SPACE();
+    antlr4::tree::TerminalNode* SPACE(size_t i);
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  RetContext* ret();
+
   class  BlockContext : public antlr4::ParserRuleContext {
   public:
     BlockContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -125,6 +143,7 @@ public:
     std::vector<antlr4::tree::TerminalNode *> SPACE();
     antlr4::tree::TerminalNode* SPACE(size_t i);
     DefinitionContext *definition();
+    AssignmentContext *assignment();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -162,6 +181,21 @@ public:
   };
 
   DefinitionContext* definition();
+
+  class  AssignmentContext : public antlr4::ParserRuleContext {
+  public:
+    AssignmentContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *VAR();
+    ExpressionContext *expression();
+    std::vector<antlr4::tree::TerminalNode *> SPACE();
+    antlr4::tree::TerminalNode* SPACE(size_t i);
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  AssignmentContext* assignment();
 
   class  ExpressionContext : public antlr4::ParserRuleContext {
   public:

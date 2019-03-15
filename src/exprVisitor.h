@@ -21,11 +21,13 @@ public:
    */
     virtual antlrcpp::Any visitProg(exprParser::ProgContext *context) = 0;
 
-    virtual antlrcpp::Any visitMain(exprParser::MainContext *context) = 0;
-
     virtual antlrcpp::Any visitPreproc(exprParser::PreprocContext *context) = 0;
 
     virtual antlrcpp::Any visitInclude(exprParser::IncludeContext *context) = 0;
+
+    virtual antlrcpp::Any visitMain(exprParser::MainContext *context) = 0;
+
+    virtual antlrcpp::Any visitRet(exprParser::RetContext *context) = 0;
 
     virtual antlrcpp::Any visitBlock(exprParser::BlockContext *context) = 0;
 
@@ -34,6 +36,8 @@ public:
     virtual antlrcpp::Any visitDeclaration(exprParser::DeclarationContext *context) = 0;
 
     virtual antlrcpp::Any visitDefinition(exprParser::DefinitionContext *context) = 0;
+
+    virtual antlrcpp::Any visitAssignment(exprParser::AssignmentContext *context) = 0;
 
     virtual antlrcpp::Any visitAdd(exprParser::AddContext *context) = 0;
 

@@ -19,15 +19,19 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitMain(exprParser::MainContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
   virtual antlrcpp::Any visitPreproc(exprParser::PreprocContext *ctx) override {
     return visitChildren(ctx);
   }
 
   virtual antlrcpp::Any visitInclude(exprParser::IncludeContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitMain(exprParser::MainContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitRet(exprParser::RetContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -44,6 +48,10 @@ public:
   }
 
   virtual antlrcpp::Any visitDefinition(exprParser::DefinitionContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitAssignment(exprParser::AssignmentContext *ctx) override {
     return visitChildren(ctx);
   }
 
