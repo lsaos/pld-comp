@@ -52,7 +52,7 @@ namespace ast
 			return expr->getValue();
 		}
 
-		virtual bool isConstant() const = 0
+		virtual bool isConstant() const
 		{
 			return false;
 		}

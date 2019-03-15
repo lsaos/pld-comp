@@ -37,6 +37,11 @@ namespace ast
 			return value;
 		}
 
+		virtual bool isConstant() const
+		{
+			return true;
+		}
+
 	private:
 		Type type;
 		int value;

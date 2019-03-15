@@ -40,7 +40,7 @@ namespace ast
 		virtual bool isVariable() const { return false; }
 
 	protected:
-		void error(Error error, const Instruction* instruction)
+		void error(Error error, const Instruction* instruction) const
 		{
 			assert(instruction);
 

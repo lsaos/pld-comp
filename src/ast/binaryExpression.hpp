@@ -52,16 +52,54 @@ namespace ast
 	public:
 		virtual Type getType() const
 		{
-			assert(left);
-			// TODO
-			return left->getType();
+			return Type::Integer;
 		}
 
 		virtual int getValue() const
 		{
-			assert(false);
-			// TODO
-			return 0;
+			assert(left && right);
+
+			const int l = left->getValue();
+			const int r = right->getValue();
+
+			switch (op)
+			{
+			case BinaryOperator::Add:
+				return l + r;
+			case BinaryOperator::Substract:
+				return l - r;
+			case BinaryOperator::Multiply:
+				return l * r;
+			case BinaryOperator::Divide:
+				if (r == 0) {
+					error(Error::DivisionByZero, right);
+				}
+				return l / r;
+
+			case BinaryOperator::LogicialAnd:
+				return l & r;
+			case BinaryOperator::LogicalOr:
+				return l | r;
+			case BinaryOperator::LogicalXor:
+				return l ^ r;
+
+			case BinaryOperator::Equals:
+				return l == r;
+			case BinaryOperator::DifferentThan:
+				return l != r;
+			case BinaryOperator::GreaterThan:
+				return l > r;
+			case BinaryOperator::LowerThan:
+				return l < r;
+			case BinaryOperator::GreaterThanOrEquals:
+				return l >= r;
+			case BinaryOperator::LowerThanOrEquals:
+				return l <= r;
+
+			default:
+				assert(false);
+				return 0;
+			}
 		}
 
 		virtual bool isConstant() const

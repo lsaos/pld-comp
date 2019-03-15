@@ -5,6 +5,7 @@ namespace ast
 	enum class Error
 	{
 		None,
-		InvalidInstruction
+		InvalidInstruction,
+		DivisionByZero
 	};
 }
