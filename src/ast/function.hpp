@@ -15,8 +15,8 @@ namespace ast
 	class Function : public Block, public Identifiable
 	{
 	public:
-		Function(const ItemPosition& position, Block* parent)
-			: Block(position, parent)
+		Function(const ItemPosition& position)
+			: Block(position)
 		{
 		}
 

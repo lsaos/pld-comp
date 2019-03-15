@@ -8,8 +8,8 @@ namespace ast
 	class Identifier : public Expression
 	{
 	public:
-		Identifier(const ItemPosition& position, Block* parent)
-			: Expression(position, parent),
+		Identifier(const ItemPosition& position)
+			: Expression(position),
 			identifiable(nullptr)
 		{
 		}
@@ -18,6 +18,7 @@ namespace ast
 		void setIdentifiable(Identifiable* ident)
 		{
 			assert(ident);
+			((Instruction*)ident)->setParent(this);
 			identifiable = ident;
 		}
 

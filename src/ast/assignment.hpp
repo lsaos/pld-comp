@@ -1,16 +1,15 @@
 #pragma once
 
 #include "expression.hpp"
+#include "identifier.hpp"
 
 namespace ast
 {
-	class Identifier;
-
 	class Assignment : public Expression
 	{
 	public:
-		Assignment(const ItemPosition& position, Block* parent)
-			: Expression(position, parent),
+		Assignment(const ItemPosition& position)
+			: Expression(position),
 			identifier(nullptr),
 			expr(nullptr)
 		{
@@ -20,12 +19,14 @@ namespace ast
 		void setIdentifier(Identifier* ident)
 		{
 			assert(ident);
+			ident->setParent(this);
 			identifier = ident;
 		}
 
 		void setValue(Expression* expression)
 		{
 			assert(expression);
+			expression->setParent(this);
 			expr = expression;
 		}
 

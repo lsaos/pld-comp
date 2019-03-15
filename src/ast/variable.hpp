@@ -13,8 +13,8 @@ namespace ast
 	class Variable : public Instruction, public Identifiable
 	{
 	public:
-		Variable(const ItemPosition& position, Block* parent)
-			: Instruction(position, parent)
+		Variable(const ItemPosition& position)
+			: Instruction(position)
 		{
 		}
 

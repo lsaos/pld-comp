@@ -13,8 +13,8 @@ namespace ast
 	class Block : public Instruction
 	{
 	public:
-		Block(const ItemPosition& position, Block* parent)
-			: Instruction(position, parent)
+		Block(const ItemPosition& position)
+			: Instruction(position)
 		{
 		}
 
@@ -64,6 +64,7 @@ namespace ast
 		virtual void add(Instruction* instr)
 		{
 			assert(instr);
+			instr->setParent(this);
 			instructions.push_back(instr);
 		}
 

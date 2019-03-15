@@ -10,7 +10,7 @@ namespace ast
 	{
 	public:
 		Program()
-			: Block(ItemPosition(), nullptr)
+			: Block(ItemPosition())
 		{
 		}
 

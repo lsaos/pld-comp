@@ -9,8 +9,6 @@ using namespace std;
 
 namespace ast
 {
-	class Block;
-
 	struct ItemPosition
 	{
 		ItemPosition() : line(0), offset(0) {}
@@ -22,9 +20,9 @@ namespace ast
 	class Instruction
 	{
 	public:
-		Instruction(const ItemPosition& position, Block* parentBlock)
+		Instruction(const ItemPosition& position)
 			: pos(position),
-			parent(parentBlock)
+			parent(nullptr)
 		{
 		}
 
@@ -38,12 +36,18 @@ namespace ast
 			return pos;
 		}
 
-		const Block* getParent() const
+		void setParent(Instruction* parentInstruction)
+		{
+			assert(parentInstruction);
+			parent = parentInstruction;
+		}
+
+		const Instruction* getParent() const
 		{
 			return parent;
 		}
 
-		Block* getParent()
+		Instruction* getParent()
 		{
 			return parent;
 		}
@@ -84,6 +88,6 @@ namespace ast
 
 	private:
 		ItemPosition pos;
-		Block* parent;
+		Instruction* parent;
 	};
 }

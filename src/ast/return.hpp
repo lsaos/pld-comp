@@ -1,16 +1,14 @@
 #pragma once
 
-#include "instruction.hpp"
+#include "expression.hpp"
 
 namespace ast
 {
-	class Expression;
-
 	class Return : public Instruction
 	{
 	public:
-		Return(const ItemPosition& position, Block* parent)
-			: Instruction(position, parent)
+		Return(const ItemPosition& position)
+			: Instruction(position)
 		{
 		}
 
@@ -18,6 +16,7 @@ namespace ast
 		void setExpression(Expression* expression)
 		{
 			assert(expression);
+			expression->setParent(this);
 			expr = expression;
 		}
 
