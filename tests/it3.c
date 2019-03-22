@@ -3,5 +3,5 @@ int main(){
 	int b=3;
 	int c=b+a*2-5;
 	
-	return c; //12
+	return c;
 }

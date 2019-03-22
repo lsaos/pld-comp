@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <ostream>
 
 using namespace std;
 
@@ -93,6 +94,10 @@ namespace ast
 		}
 
 	public:
+		virtual bool checkSemantic() { return true; }
+		virtual void toTextualRepresentation(ostream& out, size_t i) {}
+
+	public:
 		virtual bool isFunction() const { return false; }
 		virtual bool isVariable() const { return false; }
 		virtual bool isBlock() const { return false; }
@@ -110,18 +115,15 @@ namespace ast
 
 			switch (error)
 			{
-			case Error::None:
-				cout << "none";
-				break;
-			case Error::InvalidInstruction:
-				cout << "invalid instruction";
-				break;
-			case Error::DivisionByZero:
-				cout << "division by zero";
-				break;
-			case Error::NotConstant:
-				cout << "not constant";
-				break;
+			case Error::None: cout << "none"; break;
+			case Error::InvalidInstruction: cout << "invalid instruction"; break;
+			case Error::DivisionByZero: cout << "division by zero"; break;
+			case Error::NotConstant: cout << "not constant"; break;
+			case Error::NoMain: cout << "no main function"; break;
+			case Error::InvalidStatement: cout << "invalid statement"; break;
+			case Error::DuplicatedSymbolName: cout << "duplicated symbol name"; break;
+			case Error::ExpectingExpression: cout << "excepting an expression"; break;
+			default: cout << "unknown error"; break;
 			}
 
 			cout << endl;
