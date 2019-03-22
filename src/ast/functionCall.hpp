@@ -35,6 +35,11 @@ namespace ast
 	public:
 		virtual bool checkSemantic()
 		{
+			if (!identifier) {
+				error(Error::InvalidStatement, this);
+				return false;
+			}
+
 			if (!identifier->checkSemantic()) {
 				return false;
 			}

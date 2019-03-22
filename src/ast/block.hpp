@@ -83,6 +83,34 @@ namespace ast
 				}
 			}
 
+			// Check symbols duplication
+			if (getParentBlock()) {
+				vector<string> symbols;
+
+				const vector<Variable*> vars(getParentBlock()->getVariables(true));
+				for (const Variable* var : vars) {
+					symbols.push_back(var->getName());
+				}
+
+				/*const vector<Function*> funcs(getProgram()->getFunctions());
+				for (const Function* func : funcs) {
+					symbols.push_back(func->getName());
+				}*/
+
+				for (auto& instr : instructions) {
+					if (instr->isVariable()) {
+						const string& name(((const Variable*)instr.get())->getName());
+
+						if (find(symbols.begin(), symbols.end(), name) != symbols.end()) {
+							error(Error::DuplicatedSymbolName, instr.get());
+							return false;
+						}
+
+						symbols.push_back(name);
+					}
+				}
+			}
+
 			return true;
 		}
 

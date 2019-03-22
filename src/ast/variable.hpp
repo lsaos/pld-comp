@@ -7,6 +7,7 @@ using namespace std;
 #include "type.hpp"
 #include "instruction.hpp"
 #include "identifiable.hpp"
+#include "program.hpp"
 
 namespace ast
 {
@@ -40,6 +41,11 @@ namespace ast
 	public:
 		virtual bool checkSemantic()
 		{
+			if (getName().empty() || getType() == Type::Void) {
+				error(Error::InvalidStatement, this);
+				return false;
+			}
+
 			return true;
 		}
 

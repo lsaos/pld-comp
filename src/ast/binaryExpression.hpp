@@ -134,6 +134,11 @@ namespace ast
 	public:
 		virtual bool checkSemantic()
 		{
+			if (!left || !right) {
+				error(Error::InvalidStatement, this);
+				return false;
+			}
+
 			if (!left->checkSemantic() || !right->checkSemantic()) {
 				return false;
 			}
