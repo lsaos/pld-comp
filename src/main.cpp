@@ -75,14 +75,22 @@ int main(int argc, char* argv[])
 
 	exprParser parser(&tokens);
 	tree::ParseTree* tree = parser.prog();
+	int nbErrors = parser.getNumberOfSyntaxErrors();
 
-	/*cout << tree->toStringTree() << endl;
-	cout << endl << endl;*/
-	Visiteur visitor;
-	Program* prog = (Program*)visitor.visit(tree);
-	prog->checkSemantic();
-	prog->toTextualRepresentation(cout);
-	system("pause");
+	if (nbErrors == 0)
+	{
+
+		Visiteur visitor;
+		Program* prog = (Program*)visitor.visit(tree);
+		prog->checkSemantic();
+		prog->toTextualRepresentation(cout);
+		cout << "Le programme s'est fini correctement" << endl;
+		system("pause");
+	}
+	else
+	{
+		cout << "Erreur de compilation" << endl;
+	}
 
 	return 0;
 }
