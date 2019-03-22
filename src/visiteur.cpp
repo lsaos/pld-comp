@@ -175,7 +175,7 @@ antlrcpp::Any Visiteur::visitValuedNewVariable(exprParser::ValuedNewVariableCont
 	Assignment* assignment = new Assignment(pos);
 	Expression* expression = (Expression*)visit(ctx->expression());
 	Identifier* identifier = new Identifier(pos);
-	identifier->setIdentifiable(variable);
+	identifier->setIdent(variable->getName());
 	assignment->setValue(expression);
 	assignment->setIdentifier(identifier);
 
@@ -198,10 +198,8 @@ antlrcpp::Any Visiteur::visitAssignment(exprParser::AssignmentContext *ctx) {
 	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
 	Assignment* assignment = new Assignment(pos);
 	Expression* expression = (Expression*)visit(ctx->expression());
-	Identifiable* identifiable = new Identifiable;
-	identifiable->setName(ctx->VAR()->getText());
 	Identifier* identifier = new Identifier(pos);
-	identifier->setIdentifiable(identifiable);
+	identifier->setIdent(ctx->VAR()->getText());
 	assignment->setValue(expression);
 	assignment->setIdentifier(identifier);
 #ifdef TREEVISIT
@@ -338,9 +336,7 @@ antlrcpp::Any Visiteur::visitVariable(exprParser::VariableContext *ctx){
 	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
 	//FIXME : create variable ?
 	Identifier* identifier = new Identifier(pos);
-	Identifiable* identifiable = new Identifiable();
-	identifiable->setName(ctx->VAR()->getText());
-	identifier->setIdentifiable(identifiable);
+	identifier->setIdent(ctx->VAR()->getText());
 	return (Expression*)identifier;
 }
 
