@@ -33,9 +33,9 @@ namespace ast
 		{
 			vector<Variable*> params;
 
-			for (Instruction* instr : instructions) {
-				if (instr->isVariable() && ((Variable*)instr)->getScope() == Scope::Parameter) {
-					params.push_back((Variable*)instr);
+			for (auto& instr : instructions) {
+				if (instr->isVariable() && ((Variable*)instr.get())->getScope() == Scope::Parameter) {
+					params.push_back((Variable*)instr.get());
 				}
 			}
 
@@ -46,8 +46,8 @@ namespace ast
 		{
 			size_t cnt = 0;
 
-			for (Instruction* instr : instructions) {
-				if (instr->isVariable() && ((Variable*)instr)->getScope() == Scope::Parameter) {
+			for (auto& instr : instructions) {
+				if (instr->isVariable() && ((Variable*)instr.get())->getScope() == Scope::Parameter) {
 					cnt++;
 				}
 			}
@@ -56,7 +56,24 @@ namespace ast
 		}
 
 	public:
+		virtual void toTextualRepresentation(ostream& out, size_t i)
+		{
+			for (size_t j = 0; j < i; j++) { out << ' '; }
+			out << "DefFun {" << endl;
+
+			for (size_t j = 0; j < i + 1; j++) { out << ' '; }
+			out << getTypeName() << endl;
+
+			for (size_t j = 0; j < i + 1; j++) { out << ' '; }
+			out << "Ident(" << getName() << ')' << endl;
+
+			Block::toTextualRepresentation(out, i + 1);
+
+			for (size_t j = 0; j < i; j++) { out << ' '; }
+			out << '}' << endl;
+		}
+
+	public:
 		virtual bool isFunction() const { return true; }
-		virtual bool isIdentifiable() const { return true; }
 	};
 }
