@@ -38,7 +38,7 @@ namespace ast
 			return nullptr;
 		}
 
-		vector<Variable*> getVariables()
+		vector<Variable*> getVariables(bool withAncestors)
 		{
 			vector<Variable*> vars;
 
@@ -48,17 +48,69 @@ namespace ast
 				}
 			}
 
+			if (withAncestors) {
+				Block* parentBlock = getParentBlock();
+				if (parentBlock) {
+					vector<Variable*> parentVars(parentBlock->getVariables(true));
+					vars.insert(vars.end(), parentVars.begin(), parentVars.end());
+				}
+			}
+
 			return vars;
 		}
 
-		vector<unique_ptr<Instruction>> getInstructions()
+		// Get block instructions which are NOT variable declarations.
+		vector<Instruction*> getInstructions()
 		{
-			return instructions;
+			vector<Instruction*> instrs;
+
+			for (const auto& instr : instructions) {
+				if (!instr->isVariable()) {
+					instrs.push_back(instr.get());
+				}
+			}
+
+			return instrs;
 		}
 
 	public:
 		virtual bool checkSemantic()
 		{
+			// Check children semantic
+			for (auto& instr : instructions) {
+				if (!instr->checkSemantic()) {
+					return false;
+				}
+			}
+
+			// Check symbols duplication
+			if (getParentBlock()) {
+				vector<string> symbols;
+
+				const vector<Variable*> vars(getParentBlock()->getVariables(true));
+				for (const Variable* var : vars) {
+					symbols.push_back(var->getName());
+				}
+
+				/*const vector<Function*> funcs(getProgram()->getFunctions());
+				for (const Function* func : funcs) {
+					symbols.push_back(func->getName());
+				}*/
+
+				for (auto& instr : instructions) {
+					if (instr->isVariable()) {
+						const string& name(((const Variable*)instr.get())->getName());
+
+						if (find(symbols.begin(), symbols.end(), name) != symbols.end()) {
+							error(Error::DuplicatedSymbolName, instr.get());
+							return false;
+						}
+
+						symbols.push_back(name);
+					}
+				}
+			}
+
 			return true;
 		}
 

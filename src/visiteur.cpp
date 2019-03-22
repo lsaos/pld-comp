@@ -17,6 +17,7 @@
 #include "ast/variable.hpp"
 #include "ast/error.hpp"
 #include "ast/return.hpp"
+#include <vector>
 
 using namespace ast;
 
@@ -47,8 +48,15 @@ antlrcpp::Any Visiteur::visitMain(exprParser::MainContext *ctx) {
 	jump(); cout << "MAIN(" << endl;
 	indent++;
 #endif
-	ItemPosition pos = buildPos(ctx->getRuleIndex(), 0);
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
 	Function* func = new Function(pos);
+    Type type = (Type)visit(ctx->funcType());
+    for (int i=0; i<ctx->declaration().size(); i++){
+        vector<Instruction*>* declarations = (vector<Instruction*>*)visit(ctx->declaration(i));
+        for(int j=0; j<declarations->size();j++){
+            func->add(declarations->at(j));
+        }
+    }
 	for (int i = 0; i < ctx->instruction().size(); i++) {
 		func->add((Instruction*)visit(ctx->instruction(i)));
 	}
@@ -77,20 +85,35 @@ antlrcpp::Any Visiteur::visitBlock(exprParser::BlockContext *ctx) {
 }
 
 
-antlrcpp::Any Visiteur::visitRet(exprParser::RetContext *ctx) {
+antlrcpp::Any Visiteur::visitRetExpr(exprParser::RetExprContext *ctx) {
 #ifdef TREEVISIT
-	jump(); cout << "RETURN(" << endl;
+	jump(); cout << "RETURN_EXPR(" << endl;
 	indent++;
 #endif
-	ItemPosition pos = buildPos(ctx->SPACE(0)->getSymbol()->getLine(), ctx->SPACE(0)->getSymbol()->getCharPositionInLine() - 6);
-	Expression* expr = (Expression*)visit(ctx->expression());
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
+    Expression* expr=(Expression*)visit(ctx->expression());
 	Return* ret = new Return(pos);
-	ret->setExpression(expr);
+    ret->setExpression(expr);
 #ifdef TREEVISIT
 	jump(); cout << ")" << endl;
 	indent--;
 #endif
 	return ret;
+}
+
+antlrcpp::Any Visiteur::visitRetNoExpr(exprParser::RetNoExprContext *ctx){
+    #ifdef TREEVISIT
+	jump(); cout << "RETURN_NO_EXPR(" << endl;
+	indent++;
+#endif
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
+	Return* ret = new Return(pos);
+#ifdef TREEVISIT
+	jump(); cout << ")" << endl;
+	indent--;
+#endif
+	return ret;
+
 }
 
 antlrcpp::Any Visiteur::visitInstruction(exprParser::InstructionContext *ctx) {
@@ -109,41 +132,61 @@ antlrcpp::Any Visiteur::visitDeclaration(exprParser::DeclarationContext *ctx) {
 	jump(); cout << "DECLARATION(" << endl;
 	indent++;
 #endif
-	ItemPosition pos = buildPos(ctx->SPACE(0)->getSymbol()->getLine(), ctx->SPACE(0)->getSymbol()->getCharPositionInLine() - 4);
-	Type type = (Type)visit(ctx->type());
-	Variable* variable = new Variable(pos);
-	variable->setType(type);
-	variable->setName(ctx->VAR()->getText());
-    variable->setScope(Scope::Block);
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
+	Type type = (Type)visit(ctx->varType());
+    vector<Instruction*>* declarations = new vector<Instruction*>;
+    for(size_t i =0; i<ctx->newVar().size(); i++){
+        vector<Instruction*>* sousDeclaration = (vector<Instruction*>*)visit(ctx->newVar(i));
+        for(size_t j=0; j<sousDeclaration->size(); j++){
+            if (sousDeclaration->at(j)->isVariable()){
+                Variable* var = (Variable*)sousDeclaration->at(j);
+                var->setType(type);
+            }
+            declarations->push_back(sousDeclaration->at(j));
+        }
+    }
 	#ifdef TREEVISIT
 		jump(); cout <<")"<<endl;
 		indent--;
 	#endif
-	return (Instruction*)variable;
+	return declarations;
 }
 
-antlrcpp::Any Visiteur::visitDefinition(exprParser::DefinitionContext *ctx) {
+antlrcpp::Any Visiteur::visitPlainNewVariable(exprParser::PlainNewVariableContext *ctx){
+    #ifdef TREEVISIT
+	jump(); cout << "PLAIN" << endl;
+    #endif
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
+    Variable* variable = new Variable(pos);
+    variable->setName(ctx->VAR()->getText());
+    vector<Instruction*>* declaration = new vector<Instruction*>;
+    declaration->push_back((Instruction*)variable);
+	return declaration;
+}
+
+antlrcpp::Any Visiteur::visitValuedNewVariable(exprParser::ValuedNewVariableContext *ctx){
 #ifdef TREEVISIT
-	jump(); cout << "DEFINITION(" << endl;
+	jump(); cout << "VALUED(" << endl;
 	indent++;
 #endif
-	ItemPosition pos = buildPos(ctx->SPACE(0)->getSymbol()->getLine(), ctx->SPACE(0)->getSymbol()->getCharPositionInLine() - 4);
-	Type type = (Type)visit(ctx->type());
-	Variable* variable = new Variable(pos);
-	variable->setType(type);
-	variable->setName(ctx->VAR()->getText());
-    variable->setScope(Scope::Block);
-	Expression* expression = (Expression*)visit(ctx->expression());
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
+    Variable* variable = new Variable(pos);
+    variable->setName(ctx->VAR()->getText());
 	Assignment* assignment = new Assignment(pos);
-	assignment->setValue(expression);
+	Expression* expression = (Expression*)visit(ctx->expression());
 	Identifier* identifier = new Identifier(pos);
-	identifier->setIdentifiable(variable);
+	identifier->setIdent(variable->getName());
+	assignment->setValue(expression);
 	assignment->setIdentifier(identifier);
+
+    vector<Instruction*>* declaration = new vector<Instruction*>;
+    declaration->push_back((Instruction*)variable);
+    declaration->push_back((Instruction*)assignment);
 #ifdef TREEVISIT
 	jump(); cout << ")" << endl;
 	indent--;
 #endif
-	return (Instruction*)assignment;
+	return declaration;
 }
 
 antlrcpp::Any Visiteur::visitAssignment(exprParser::AssignmentContext *ctx) {
@@ -152,13 +195,11 @@ antlrcpp::Any Visiteur::visitAssignment(exprParser::AssignmentContext *ctx) {
 	jump(); cout << "ASSIGNMENT(" << endl;
 	indent++;
 #endif
-	ItemPosition pos = buildPos(ctx->VAR()->getSymbol()->getLine(), ctx->VAR()->getSymbol()->getCharPositionInLine());
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
 	Assignment* assignment = new Assignment(pos);
 	Expression* expression = (Expression*)visit(ctx->expression());
-	Identifiable* identifiable = new Identifiable;
-	identifiable->setName(ctx->VAR()->getText());
 	Identifier* identifier = new Identifier(pos);
-	identifier->setIdentifiable(identifiable);
+	identifier->setIdent(ctx->VAR()->getText());
 	assignment->setValue(expression);
 	assignment->setIdentifier(identifier);
 #ifdef TREEVISIT
@@ -292,12 +333,10 @@ antlrcpp::Any Visiteur::visitVariable(exprParser::VariableContext *ctx){
 	#ifdef TREEVISIT
 		jump(); cout << "VAR"<<endl;
 	#endif
-	ItemPosition pos = buildPos(ctx->VAR()->getSymbol()->getLine(), ctx->VAR()->getSymbol()->getCharPositionInLine());
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
 	//FIXME : create variable ?
 	Identifier* identifier = new Identifier(pos);
-	Identifiable* identifiable = new Identifiable();
-	identifiable->setName(ctx->VAR()->getText());
-	identifier->setIdentifiable(identifiable);
+	identifier->setIdent(ctx->VAR()->getText());
 	return (Expression*)identifier;
 }
 
@@ -305,7 +344,7 @@ antlrcpp::Any Visiteur::visitChar(exprParser::CharContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "CHAR" << endl;
 #endif
-	ItemPosition pos = buildPos(ctx->CHAR()->getSymbol()->getLine(), ctx->CHAR()->getSymbol()->getCharPositionInLine());
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
 	char value = (char)ctx->CHAR()->getText().at(1);
 	Constant * constant = new Constant(pos);
 	constant->setType(Type::Character);
@@ -317,7 +356,7 @@ antlrcpp::Any Visiteur::visitInt(exprParser::IntContext *ctx) {
     #ifdef TREEVISIT
 	    jump(); cout << "INT";
     #endif
-	ItemPosition pos = buildPos(ctx->INT()->getSymbol()->getLine(), ctx->INT()->getSymbol()->getCharPositionInLine());
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
 	int value = stoi(ctx->INT()->getText());
 	Constant * constante = new Constant(pos);
 	constante->setType(Type::Integer);
@@ -328,9 +367,25 @@ antlrcpp::Any Visiteur::visitInt(exprParser::IntContext *ctx) {
 	return (Expression*)constante;
 }
 
-antlrcpp::Any Visiteur::visitType(exprParser::TypeContext *ctx) {
+antlrcpp::Any Visiteur::visitFuncType(exprParser::FuncTypeContext *ctx){
+    #ifdef TREEVISIT
+	jump(); cout << "FUNCTYPE" << endl;
+    #endif
+	string type = ctx->getText();
+	if (type == "void") {
+		return Type::Void;
+	}
+	else if (type == "int") {
+		return Type::Integer;
+	}
+	else {
+		return Type::Void;
+	}
+}
+
+antlrcpp::Any Visiteur::visitVarType(exprParser::VarTypeContext *ctx) {
 #ifdef TREEVISIT
-	jump(); cout << "TYPE" << endl;
+	jump(); cout << "VARTYPE" << endl;
 #endif
 	string type = ctx->getText();
 	if (type == "char") {

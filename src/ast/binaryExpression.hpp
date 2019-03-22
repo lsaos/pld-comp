@@ -134,6 +134,25 @@ namespace ast
 	public:
 		virtual bool checkSemantic()
 		{
+			if (!left || !right) {
+				error(Error::InvalidStatement, this);
+				return false;
+			}
+
+			if (!left->checkSemantic() || !right->checkSemantic()) {
+				return false;
+			}
+
+			if (left->getType() == Type::Void) {
+				error(Error::InvalidStatement, left.get());
+				return false;
+			}
+
+			if (right->getType() == Type::Void) {
+				error(Error::InvalidStatement, right.get());
+				return false;
+			}
+
 			return true;
 		}
 

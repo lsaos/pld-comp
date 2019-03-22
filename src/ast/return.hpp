@@ -46,6 +46,11 @@ namespace ast
 				if (!expr->checkSemantic()) {
 					return false;
 				}
+
+				if (expr->getType() == Type::Void) {
+					error(Error::InvalidStatement, expr.get());
+					return false;
+				}
 			}
 
 			return true;

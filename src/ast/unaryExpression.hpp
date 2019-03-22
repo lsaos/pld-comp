@@ -80,6 +80,20 @@ namespace ast
 	public:
 		virtual bool checkSemantic()
 		{
+			if (!expr) {
+				error(Error::InvalidStatement, this);
+				return false;
+			}
+
+			if (!expr->checkSemantic()) {
+				return false;
+			}
+
+			if (expr->getType() == Type::Void) {
+				error(Error::InvalidStatement, expr.get());
+				return false;
+			}
+
 			return true;
 		}
 
