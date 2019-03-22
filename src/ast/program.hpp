@@ -17,9 +17,9 @@ namespace ast
 	public:
 		Function* getFunction(const string& name)
 		{
-			for (const Instruction* instr : instructions) {
-				if (instr->isFunction() && ((Function*)instr)->getName() == name) {
-					return (Function*)instr;
+			for (const auto& instr : instructions) {
+				if (instr->isFunction() && ((Function*)instr.get())->getName() == name) {
+					return (Function*)instr.get();
 				}
 			}
 
@@ -33,11 +33,11 @@ namespace ast
 
 		vector<Function*> getFunctions()
 		{
-			vector< Function*> funcs;
+			vector<Function*> funcs;
 
-			for (const Instruction* instr : instructions) {
+			for (const auto& instr : instructions) {
 				if (instr->isFunction()) {
-					funcs.push_back((Function*)instr);
+					funcs.push_back((Function*)instr.get());
 				}
 			}
 
@@ -48,7 +48,7 @@ namespace ast
 		{
 			size_t cnt = 0;
 
-			for (const Instruction* instr : instructions) {
+			for (const auto& instr : instructions) {
 				if (instr->isFunction()) {
 					cnt++;
 				}
@@ -58,10 +58,55 @@ namespace ast
 		}
 
 	public:
+		virtual bool checkSemantic()
+		{
+			// Check the program has a main function
+			if (!getMain()) {
+				error(Error::NoMain, this);
+			}
+
+			// Check we have only functions or global variables
+			for (const auto& instr : instructions) {
+				if (!instr->isFunction() && !(instr->isVariable() && ((const Variable*)instr.get())->getScope() == Scope::Global)) {
+					error(Error::InvalidStatement, instr.get());
+					return false;
+				}
+			}
+
+			// Check we don't have duplicated function names
+			vector<string> funcs;
+			for (const auto& instr : instructions) {
+				if (instr->isFunction()) {
+					const string& name(((Function*)instr.get())->getName());
+					if (find(funcs.begin(), funcs.end(), name) != funcs.end()) {
+						error(Error::DuplicatedSymbolName, instr.get());
+						return false;
+					}
+					funcs.push_back(name);
+				}
+			}
+
+			// Base block check
+			return Block::checkSemantic();
+		}
+
+		virtual void toTextualRepresentation(ostream& out, size_t i = 0)
+		{
+			cout << "Program {" << endl;
+
+			for (auto& instr : instructions) {
+				instr->toTextualRepresentation(out, i + 1);
+			}
+
+			out << '}' << endl;
+		}
+
+	public:
 		virtual void add(Instruction* instr)
 		{
 			assert(instr);
 
+			// If it's a variable, it has a global scope
 			if (instr->isVariable()) {
 				((Variable*)instr)->setScope(Scope::Global);
 			}

@@ -20,12 +20,12 @@ namespace ast
 		{
 			assert(expression);
 			expression->setParent(this);
-			expr = expression;
+			expr = unique_ptr<Expression>(expression);
 		}
 
 		Expression* getExpression()
 		{
-			return expr;
+			return expr.get();
 		}
 
 		void setOperator(UnaryOperator ope)
@@ -36,6 +36,16 @@ namespace ast
 		UnaryOperator getOperator() const
 		{
 			return op;
+		}
+
+		string getOperatorName() const
+		{
+			switch (op)
+			{
+			case UnaryOperator::Minus: return "-";
+			case UnaryOperator::Not: return "!";
+			default: return "error";
+			}
 		}
 
 	public:
@@ -67,8 +77,34 @@ namespace ast
 			return expr->isConstant();
 		}
 
+	public:
+		virtual bool checkSemantic()
+		{
+			if (!expr->checkSemantic()) {
+				return false;
+			}
+
+			if (expr->getType() == Type::Void) {
+				error(Error::InvalidStatement, expr.get());
+				return false;
+			}
+
+			return true;
+		}
+
+		virtual void toTextualRepresentation(ostream& out, size_t i)
+		{
+			for (size_t j = 0; j < i; j++) { out << ' '; }
+			out << getOperatorName() << " {" << endl;
+
+			expr->toTextualRepresentation(out, i + 1);
+
+			for (size_t j = 0; j < i; j++) { out << ' '; }
+			out << '}' << endl;
+		}
+
 	private:
 		UnaryOperator op;
-		Expression* expr;
+		unique_ptr<Expression> expr;
 	};
 }

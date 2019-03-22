@@ -21,14 +21,14 @@ namespace ast
 		{
 			assert(expression);
 			expression->setParent(this);
-			left = expression;
+			left = unique_ptr<Expression>(expression);
 		}
 
 		void setRightExpression(Expression* expression)
 		{
 			assert(expression);
 			expression->setParent(this);
-			right = expression;
+			right = unique_ptr<Expression>(expression);
 		}
 
 		void setOperator(BinaryOperator ope)
@@ -38,17 +38,38 @@ namespace ast
 
 		Expression* getLeftExpression()
 		{
-			return left;
+			return left.get();
 		}
 
 		Expression* getRightExpression()
 		{
-			return right;
+			return right.get();
 		}
 
 		BinaryOperator getOperator() const
 		{
 			return op;
+		}
+
+		string getOperatorName() const
+		{
+			switch (op)
+			{
+			case BinaryOperator::Add: return "+";
+			case BinaryOperator::Substract: return "-";
+			case BinaryOperator::Multiply: return "*";
+			case BinaryOperator::Divide: return "/";
+			case BinaryOperator::LogicalAnd: return "&";
+			case BinaryOperator::LogicalOr: return "|";
+			case BinaryOperator::LogicalXor: return "^";
+			case BinaryOperator::Equals: return "==";
+			case BinaryOperator::DifferentThan: return "!=";
+			case BinaryOperator::GreaterThan: return ">";
+			case BinaryOperator::LowerThan: return "<";
+			case BinaryOperator::GreaterThanOrEquals: return ">=";
+			case BinaryOperator::LowerThanOrEquals: return "<=";
+			default: return "error";
+			}
 		}
 
 	public:
@@ -74,7 +95,7 @@ namespace ast
 				return l * r;
 			case BinaryOperator::Divide:
 				if (r == 0) {
-					error(Error::DivisionByZero, right);
+					error(Error::DivisionByZero, right.get());
 				}
 				return l / r;
 
@@ -110,9 +131,41 @@ namespace ast
 			return left->isConstant() && right->isConstant();
 		}
 
+	public:
+		virtual bool checkSemantic()
+		{
+			if (!left->checkSemantic() || !right->checkSemantic()) {
+				return false;
+			}
+
+			if (left->getType() == Type::Void) {
+				error(Error::InvalidStatement, left.get());
+				return false;
+			}
+
+			if (right->getType() == Type::Void) {
+				error(Error::InvalidStatement, right.get());
+				return false;
+			}
+
+			return true;
+		}
+
+		virtual void toTextualRepresentation(ostream& out, size_t i)
+		{
+			for (size_t j = 0; j < i; j++) { out << ' '; }
+			out << getOperatorName() << " {" << endl;
+
+			left->toTextualRepresentation(out, i + 1);
+			right->toTextualRepresentation(out, i + 1);
+
+			for (size_t j = 0; j < i; j++) { out << ' '; }
+			out << '}' << endl;
+		}
+
 	private:
 		BinaryOperator op;
-		Expression* left;
-		Expression* right;
+		unique_ptr<Expression> left;
+		unique_ptr<Expression> right;
 	};
 }

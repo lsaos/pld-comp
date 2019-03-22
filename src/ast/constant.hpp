@@ -42,6 +42,31 @@ namespace ast
 			return true;
 		}
 
+		virtual bool checkSemantic()
+		{
+			if (type == Type::Void) {
+				error(Error::InvalidStatement, this);
+				return false;
+			}
+
+			return true;
+		}
+
+		virtual void toTextualRepresentation(ostream& out, size_t i)
+		{
+			for (size_t j = 0; j < i; j++) { out << ' '; }
+			out << "Const(";
+
+			switch (type)
+			{
+			case Type::Character: out << '\'' << (char)value << '\''; break;
+			case Type::Integer: out << value; break;
+			default: out << "error"; break;
+			}
+
+			out << ')' << endl;
+		}
+
 	private:
 		Type type;
 		int value;

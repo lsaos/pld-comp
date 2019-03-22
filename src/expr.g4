@@ -23,17 +23,17 @@ expression: VAR #variable
 		  | '('SPACE* expression SPACE* ')' #parenthesis
 		  | expression SPACE* OPMUL SPACE* expression #mult
 		  | expression SPACE* OPADD SPACE* expression #add
-		  | UNARYOP expression #unary
 		  | expression SPACE* OPBIN SPACE* expression #bin
+		  | UNARYOP expression #unary
 		  ;
 
 funcType: 'int'|'void';
 varType: 'int'|'char';
 SPACE: [ \t\r\n];
-UNARYOP: ('-'|'!');
 OPMUL: ('*'|'/');
 OPADD: ('+'|'-');
 OPBIN: ('&'|'^'|'|'); 
+UNARYOP: ('-'|'!');
 INT: [0-9]+;
 LIB: [a-zA-Z]+ '.h';
 CHAR: '\'' [a-zA-Z0-9] '\'';
