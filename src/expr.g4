@@ -6,7 +6,7 @@ prog: preproc SPACE* main;
 preproc: (SPACE* include)*;
 include: '#include' SPACE* '<' LIB '>';
 
-main: funcType SPACE+ 'main' SPACE* '(' SPACE* ')' SPACE* '{' SPACE* (declaration SPACE*)* (instruction SPACE*)* ret SPACE* '}' SPACE*;
+main: funcType SPACE+ 'main' SPACE* '(' SPACE* ')' SPACE* '{' SPACE* (declaration SPACE*)* (instruction SPACE*)* ret? SPACE* '}' SPACE*;
 ret: 'return' SPACE+ expression SPACE* ';' #retExpr
 	| 'return' SPACE* ';' #retNoExpr
 	;

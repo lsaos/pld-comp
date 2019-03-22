@@ -60,9 +60,11 @@ antlrcpp::Any Visiteur::visitMain(exprParser::MainContext *ctx) {
 	for (int i = 0; i < ctx->instruction().size(); i++) {
 		func->add((Instruction*)visit(ctx->instruction(i)));
 	}
-	Return* ret = (Return*)visit(ctx->ret());
-	func->add(ret);
-	func->setName("main");
+    if(ctx->getRuleContexts<exprParser::RetContext>().size()!=0){
+    	Return* ret = (Return*)visit(ctx->ret());
+	    func->add(ret);
+    }    
+    func->setName("main");
 	func->setType(Type::Integer);
 #ifdef TREEVISIT
 	jump(); cout << ")" << endl;
