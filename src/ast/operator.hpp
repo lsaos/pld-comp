@@ -9,7 +9,7 @@ namespace ast
 		Multiply,
 		Divide,
 
-		LogicialAnd,
+		LogicalAnd,
 		LogicalOr,
 		LogicalXor,
 

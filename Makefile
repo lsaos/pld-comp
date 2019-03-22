@@ -19,7 +19,11 @@ ifeq ($(DEBUG),yes)
 	CFLAGS=-ansi -g
 	LDFLAGS=$(ANTLRRUNTIME)/lib/libantlr4-runtime.a
 else
-	CONST=
+	ifeq ($(TREE),yes)
+		CONST=-DTREEVISIT
+	else
+		CONST=
+	endif
 	CFLAGS=-ansi -std=c++11
 	LDFLAGS=$(ANTLRRUNTIME)/lib/libantlr4-runtime.a
 endif
