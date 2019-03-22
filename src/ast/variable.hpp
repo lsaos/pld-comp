@@ -39,7 +39,6 @@ namespace ast
 
 	public:
 		virtual bool isVariable() const { return true; }
-		virtual bool isIdentifiable() const { return true; }
 
 	private:
 		Scope scope;
