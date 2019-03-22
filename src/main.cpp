@@ -82,9 +82,11 @@ int main(int argc, char* argv[])
 
 		Visiteur visitor;
 		Program* prog = (Program*)visitor.visit(tree);
-		prog->checkSemantic();
-		prog->toTextualRepresentation(cout);
-		cout << "Le programme s'est fini correctement" << endl;
+		if (prog->checkSemantic()) {
+			prog->toTextualRepresentation(cout);
+			cout << "Le programme s'est fini correctement" << endl;
+		}
+
 		system("pause");
 	}
 	else

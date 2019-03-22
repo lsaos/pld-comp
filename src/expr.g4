@@ -20,9 +20,9 @@ expression: VAR #variable
 		  | INT #int
 		  | CHAR #char
 		  | '('SPACE* expression SPACE* ')' #parenthesis
-		  | UNARYOP expression #unary
 		  | expression SPACE* OPMUL SPACE* expression #mult
 		  | expression SPACE* OPADD SPACE* expression #add
+		  | UNARYOP expression #unary
 		  | expression SPACE* OPBIN SPACE* expression #bin
 		  ;
 

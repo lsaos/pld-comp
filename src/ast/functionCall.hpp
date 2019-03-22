@@ -33,11 +33,28 @@ namespace ast
 		}
 
 	public:
+		virtual bool checkSemantic()
+		{
+			if (!identifier->checkSemantic()) {
+				return false;
+			}
+
+			// The identifier must reference an existing function
+			if (!identifier->isReferencingFunction()) {
+				error(Error::InvalidStatement, identifier.get());
+				return false;
+			}
+
+			return true;
+		}
+
 		virtual Type getType() const
 		{
 			assert(identifier);
 			return identifier->getType();
 		}
+
+		virtual bool isFunctionCall() const { return true; }
 
 	private:
 		vector<Expression*> args;

@@ -38,7 +38,7 @@ namespace ast
 			return nullptr;
 		}
 
-		vector<Variable*> getVariables()
+		vector<Variable*> getVariables(bool withAncestors)
 		{
 			vector<Variable*> vars;
 
@@ -48,12 +48,41 @@ namespace ast
 				}
 			}
 
+			if (withAncestors) {
+				Block* parentBlock = getParentBlock();
+				if (parentBlock) {
+					vector<Variable*> parentVars(parentBlock->getVariables(true));
+					vars.insert(vars.end(), parentVars.begin(), parentVars.end());
+				}
+			}
+
 			return vars;
+		}
+
+		// Get block instructions which are NOT variable declarations.
+		vector<Instruction*> getInstructions()
+		{
+			vector<Instruction*> instrs;
+
+			for (const auto& instr : instructions) {
+				if (!instr->isVariable()) {
+					instrs.push_back(instr.get());
+				}
+			}
+
+			return instrs;
 		}
 
 	public:
 		virtual bool checkSemantic()
 		{
+			// Check children semantic
+			for (auto& instr : instructions) {
+				if (!instr->checkSemantic()) {
+					return false;
+				}
+			}
+
 			return true;
 		}
 
