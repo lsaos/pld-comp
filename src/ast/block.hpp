@@ -50,6 +50,11 @@ namespace ast
 			return vars;
 		}
 
+		vector<Instruction*> getInstructions()
+		{
+			return instructions;
+		}
+
 	public:
 		virtual void add(Instruction* instr)
 		{
