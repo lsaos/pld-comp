@@ -153,6 +153,12 @@ namespace ast
 				return false;
 			}
 
+			// Special case: division by zero
+			if (op == BinaryOperator::Divide && right->isConstant() && right->getValue() == 0) {
+				error(Error::DivisionByZero, right.get());
+				return false;
+			}
+
 			return true;
 		}
 
