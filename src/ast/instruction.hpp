@@ -95,7 +95,6 @@ namespace ast
 	public:
 		virtual bool isFunction() const { return false; }
 		virtual bool isVariable() const { return false; }
-		virtual bool isIdentifiable() const { return false; }
 		virtual bool isBlock() const { return false; }
 		virtual bool isProgram() const { return false; }
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "block.hpp"
+#include "function.hpp"
 
 namespace ast
 {
@@ -17,13 +17,13 @@ namespace ast
 	public:
 		Function* getFunction(const string& name)
 		{
-			const Instruction* ident = (Instruction*)getIdentifiable(name, false);
-			if (ident && ident->isFunction()) {
-				return (Function*)ident;
+			for (const Instruction* instr : instructions) {
+				if (instr->isFunction() && ((Function*)instr)->getName() == name) {
+					return (Function*)instr;
+				}
 			}
-			else {
-				return nullptr;
-			}
+
+			return nullptr;
 		}
 
 		Function* getMain()

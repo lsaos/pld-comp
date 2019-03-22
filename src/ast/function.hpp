@@ -57,6 +57,5 @@ namespace ast
 
 	public:
 		virtual bool isFunction() const { return true; }
-		virtual bool isIdentifiable() const { return true; }
 	};
 }

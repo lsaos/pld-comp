@@ -20,6 +20,7 @@ expression: VAR #variable
 		  | INT #int
 		  | CHAR #char
 		  | '('SPACE* expression SPACE* ')' #parenthesis
+		  | UNARYOP expression #unary
 		  | expression SPACE* OPMUL SPACE* expression #mult
 		  | expression SPACE* OPADD SPACE* expression #add
 		  | expression SPACE* OPBIN SPACE* expression #bin
@@ -27,6 +28,7 @@ expression: VAR #variable
 
 type: 'int'|'char';
 SPACE: [ \t\r\n];
+UNARYOP: ('-'|'!');
 OPMUL: ('*'|'/');
 OPADD: ('+'|'-');
 OPBIN: ('&'|'^'|'|'); 
