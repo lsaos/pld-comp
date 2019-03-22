@@ -21,28 +21,16 @@ namespace ast
 	public:
 		Variable* getVariable(const string& name, bool withAncestors)
 		{
-			Instruction* ident = (Instruction*)getIdentifiable(name, withAncestors);
-
-			if (ident && ident->isVariable()) {
-				return (Variable*)ident;
-			}
-			else {
-				return nullptr;
-			}
-		}
-
-		Identifiable* getIdentifiable(const string& name, bool withAncestors)
-		{
 			for (const Instruction* instr : instructions) {
-				if (instr->isIdentifiable() && ((Identifiable*)instr)->getName() == name) {
-					return (Identifiable*)instr;
+				if (instr->isVariable() && ((Variable*)instr)->getName() == name) {
+					return (Variable*)instr;
 				}
 			}
 
 			if (withAncestors) {
 				Block* parentBlock = getParentBlock();
 				if (parentBlock) {
-					return parentBlock->getIdentifiable(name, true);
+					return parentBlock->getVariable(name, true);
 				}
 			}
 
