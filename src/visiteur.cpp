@@ -64,7 +64,7 @@ antlrcpp::Any Visiteur::visitMain(exprParser::MainContext *ctx){
 }
 
 antlrcpp::Any Visiteur::visitPreproc(exprParser::PreprocContext *ctx){
-//nothing
+    //nothing
 }
 
 antlrcpp::Any Visiteur::visitInclude(exprParser::IncludeContext *ctx){
@@ -114,6 +114,7 @@ antlrcpp::Any Visiteur::visitDeclaration(exprParser::DeclarationContext *ctx){
 	Variable* variable = new Variable(pos);
 	variable->setType(type);
 	variable->setName(ctx->VAR()->getText());
+    variable->setScope(Scope::Parameter);
 	#ifdef TREEVISIT
 		jump(); cout <<")"<<endl;
 		indent--;
@@ -131,8 +132,8 @@ antlrcpp::Any Visiteur::visitDefinition(exprParser::DefinitionContext *ctx){
 	Variable* variable = new Variable(pos);
 	variable->setType(type);
 	variable->setName(ctx->VAR()->getText());
+    variable->setScope(Scope::Block);
 	Expression* expression = (Expression*)visit(ctx->expression());
-	//FIXME : is this correct ?
 	Assignment* assignment = new Assignment(pos);
 	assignment->setValue(expression);
 	Identifier* identifier = new Identifier(pos);
@@ -158,7 +159,6 @@ antlrcpp::Any Visiteur::visitAssignment(exprParser::AssignmentContext *ctx){
 	identifiable->setName(ctx->VAR()->getText());
 	Identifier* identifier = new Identifier(pos);
 	identifier->setIdentifiable(identifiable);
-	//FIXME  : do we create a variable ?
 	assignment->setValue(expression);
 	assignment->setIdentifier(identifier);
 	#ifdef TREEVISIT
@@ -167,6 +167,31 @@ antlrcpp::Any Visiteur::visitAssignment(exprParser::AssignmentContext *ctx){
 	#endif
 	return (Instruction*)assignment;
 
+}
+
+antlrcpp::Any Visiteur::visitUnary(exprParser::UnaryContext *context){
+    #ifdef TREEVISIT
+        jump();
+        cout << "UNAIRE("<<endl;
+        indent++;
+    #endif
+    char opUnary = ctx->UNARYOP()->getText().at(0)
+    Expression* expr =(Expression*) visit(ctx->expression());
+    UnaryExpression* unary = new UnaryExpression(expr->getPosition());
+    unary->setExpression(unary);
+    switch(opUnary){
+        case '-':
+            unary->setOperator(UnaryOperator::Minus);
+            break;
+        case '!':
+            unary->setOperator(UnaryOperator::Not);
+            break;
+    }
+    #ifdef TREEVISIT
+        jump(); cout << ")" << endl;
+        indent--;
+    #endif
+    return (Expression*)unary;
 }
 
 antlrcpp::Any Visiteur::visitBin(exprParser::BinContext *ctx){
@@ -250,6 +275,19 @@ antlrcpp::Any Visiteur::visitMult(exprParser::MultContext *ctx){
 	return (Expression*)binExp;
 }
 
+antlrcpp::Any Visiteur::visitParenthesis(exprParser::ParenthesisContext *ctx){
+	#ifdef TREEVISIT
+		jump(); cout << "PARENTHESIS("<<endl;
+		indent++;
+	#endif
+	Expression* expr = (Expression*)visit(ctx->expression());
+	#ifdef TREEVISIT
+		jump(); cout <<")"<<endl;
+		indent--;
+	#endif
+	return expr;
+}
+
 antlrcpp::Any Visiteur::visitVariable(exprParser::VariableContext *ctx){
 	#ifdef TREEVISIT
 		jump(); cout << "VAR"<<endl;
@@ -273,19 +311,6 @@ antlrcpp::Any Visiteur::visitChar(exprParser::CharContext *ctx){
 	constant->setType(Type::Character);
 	constant->setValue(value); 
 	return (Expression*)constant;
-}
-
-antlrcpp::Any Visiteur::visitParenthesis(exprParser::ParenthesisContext *ctx){
-	#ifdef TREEVISIT
-		jump(); cout << "PARENTHESIS("<<endl;
-		indent++;
-	#endif
-	Expression* expr = (Expression*)visit(ctx->expression());
-	#ifdef TREEVISIT
-		jump(); cout <<")"<<endl;
-		indent--;
-	#endif
-	return expr;
 }
 
 antlrcpp::Any Visiteur::visitInt(exprParser::IntContext *ctx){

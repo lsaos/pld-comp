@@ -1,5 +1,5 @@
 
-// Generated from src/expr.g4 by ANTLR 4.7.1
+// Generated from src/expr.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -48,6 +48,8 @@ public:
     virtual antlrcpp::Any visitVariable(exprParser::VariableContext *context) = 0;
 
     virtual antlrcpp::Any visitChar(exprParser::CharContext *context) = 0;
+
+    virtual antlrcpp::Any visitUnary(exprParser::UnaryContext *context) = 0;
 
     virtual antlrcpp::Any visitParenthesis(exprParser::ParenthesisContext *context) = 0;
 

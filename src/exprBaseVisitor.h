@@ -1,5 +1,5 @@
 
-// Generated from src/expr.g4 by ANTLR 4.7.1
+// Generated from src/expr.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -72,6 +72,10 @@ public:
   }
 
   virtual antlrcpp::Any visitChar(exprParser::CharContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitUnary(exprParser::UnaryContext *ctx) override {
     return visitChildren(ctx);
   }
 
