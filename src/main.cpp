@@ -80,9 +80,8 @@ int main(int argc, char* argv[])
 	cout << endl << endl;*/
 	Visiteur visitor;
 	Program* prog = (Program*)visitor.visit(tree);
-	Function* func = prog->getMain();
-	cout << func->getName() << endl;
-	cout << "Le programme s'est fini correctement" << endl;
+	prog->checkSemantic();
+	prog->toTextualRepresentation(cout);
 	system("pause");
 
 	return 0;

@@ -22,7 +22,7 @@ namespace ast
 		{
 			assert(ident);
 			ident->setParent(this);
-			identifier = ident;
+			identifier = unique_ptr<Identifier>(ident);
 		}
 
 		void addArgument(Expression* arg)
@@ -41,6 +41,6 @@ namespace ast
 
 	private:
 		vector<Expression*> args;
-		Identifier* identifier;
+		unique_ptr<Identifier> identifier;
 	};
 }

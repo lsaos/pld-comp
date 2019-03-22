@@ -18,13 +18,12 @@ namespace ast
 		void setIdentifiable(Identifiable* ident)
 		{
 			assert(ident);
-			((Instruction*)ident)->setParent(this);
-			identifiable = ident;
+			identifiable = unique_ptr<Identifiable>(ident);
 		}
 
 		Identifiable* getIdentifiable()
 		{
-			return identifiable;
+			return identifiable.get();
 		}
 
 	public:
@@ -34,7 +33,23 @@ namespace ast
 			return identifiable->getType();
 		}
 
+		virtual bool checkSemantic()
+		{
+			if (!identifiable || identifiable->getName().empty()) {
+				error(Error::InvalidInstruction, this);
+				return false;
+			}
+
+			return true;
+		}
+
+		virtual void toTextualRepresentation(ostream& out, size_t i)
+		{
+			for (size_t j = 0; j < i; j++) { out << ' '; }
+			out << "Ident(" << identifiable->getName() << ')' << endl;
+		}
+
 	private:
-		Identifiable* identifiable;
+		unique_ptr<Identifiable> identifiable;
 	};
 }
