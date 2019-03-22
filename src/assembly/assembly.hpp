@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <fstream>
-#include <map>
+#include <unordered_map>
 #include "../ast/variable.hpp"
 #include "../ast/program.hpp"
 #include "../ast/function.hpp"
@@ -12,21 +12,17 @@ using namespace std;
 
 namespace assembly {
 
-	enum class SizeType
-	{
-		Character = 1,
-		Integer = 4
-	};
-
 	class AssemblyGenerator {
 		public:
 			AssemblyGenerator(string fileName);
 			~AssemblyGenerator() {}
 			void generateAssembly(ast::Program* prog);
+			unordered_map<ast::Variable*, int>* getAddressTable() const;
+			ofstream getFile();
 
 		protected:
 			ofstream file;
-			map<ast::Variable, int> addressTable;
+			unordered_map<ast::Variable*, int> addressTable;
 
 	};
 }

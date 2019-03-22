@@ -51,7 +51,7 @@ namespace ast
 			return vars;
 		}
 
-		vector<Instruction*> getInstructions()
+		vector<unique_ptr<Instruction>> getInstructions()
 		{
 			return instructions;
 		}
