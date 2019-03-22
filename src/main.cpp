@@ -84,5 +84,6 @@ int main(int argc, char* argv[])
 	cout << func->getName() << endl;
 	cout << "Le programme s'est fini correctement" << endl;
 	system("pause");
+
 	return 0;
 }
