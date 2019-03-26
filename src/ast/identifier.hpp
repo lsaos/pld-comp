@@ -2,6 +2,7 @@
 
 #include "expression.hpp"
 #include "identifiable.hpp"
+#include "variable.hpp"
 
 namespace ast
 {

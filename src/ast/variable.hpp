@@ -21,50 +21,16 @@ namespace ast
 	class Variable : public Instruction, public Identifiable
 	{
 	public:
-		Variable(const ItemPosition& position)
-			: Instruction(position),
-			scope(Scope::Block)
-		{
-		}
+		Variable(const ItemPosition& position);
 
-	public:
-		void setScope(Scope s)
-		{
-			scope = s;
-		}
+		void setScope(Scope s);
 
-		Scope getScope() const
-		{
-			return scope;
-		}
+		Scope getScope() const;
 
-	public:
-		virtual bool checkSemantic()
-		{
-			if (getName().empty() || getType() == Type::Void) {
-				error(Error::InvalidStatement, this);
-				return false;
-			}
+		virtual bool checkSemantic();
 
-			return true;
-		}
+		virtual void toTextualRepresentation(ostream& out, size_t i);
 
-		virtual void toTextualRepresentation(ostream& out, size_t i)
-		{
-			for (size_t j = 0; j < i; j++) { out << ' '; }
-			out << "Var {" << endl;
-
-			for (size_t j = 0; j < i + 1; j++) { out << ' '; }
-			out << getTypeName() << endl;
-
-			for (size_t j = 0; j < i + 1; j++) { out << ' '; }
-			out << "Ident(" << getName() << ')' << endl;
-
-			for (size_t j = 0; j < i; j++) { out << ' '; }
-			out << '}' << endl;
-		}
-
-	public:
 		virtual bool isVariable() const { return true; }
 
 	private:
