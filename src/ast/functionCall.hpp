@@ -22,7 +22,7 @@ namespace ast
 		{
 			assert(ident);
 			ident->setParent(this);
-			identifier = ident;
+			identifier = unique_ptr<Identifier>(ident);
 		}
 
 		void addArgument(Expression* arg)
@@ -33,14 +33,36 @@ namespace ast
 		}
 
 	public:
+		virtual bool checkSemantic()
+		{
+			if (!identifier) {
+				error(Error::InvalidStatement, this);
+				return false;
+			}
+
+			if (!identifier->checkSemantic()) {
+				return false;
+			}
+
+			// The identifier must reference an existing function
+			if (!identifier->isReferencingFunction()) {
+				error(Error::InvalidStatement, identifier.get());
+				return false;
+			}
+
+			return true;
+		}
+
 		virtual Type getType() const
 		{
 			assert(identifier);
 			return identifier->getType();
 		}
 
+		virtual bool isFunctionCall() const { return true; }
+
 	private:
 		vector<Expression*> args;
-		Identifier* identifier;
+		unique_ptr<Identifier> identifier;
 	};
 }

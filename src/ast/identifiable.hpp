@@ -39,6 +39,17 @@ namespace ast
 			return type;
 		}
 
+		string getTypeName() const
+		{
+			switch (type)
+			{
+			case Type::Integer: return "int";
+			case Type::Character: return "char";
+			case Type::Void: return "void";
+			default: return "error";
+			}
+		}
+
 	private:
 		string name;
 		Type type;

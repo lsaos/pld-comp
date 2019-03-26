@@ -13,15 +13,15 @@ class  exprParser : public antlr4::Parser {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, SPACE = 14, 
-    UNARYOP = 15, OPMUL = 16, OPADD = 17, OPBIN = 18, INT = 19, LIB = 20, 
-    CHAR = 21, VAR = 22
+    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
+    T__14 = 15, SPACE = 16, OPMUL = 17, OPADD = 18, OPBIN = 19, UNARYOP = 20, 
+    INT = 21, LIB = 22, CHAR = 23, VAR = 24
   };
 
   enum {
     RuleProg = 0, RulePreproc = 1, RuleInclude = 2, RuleMain = 3, RuleRet = 4, 
-    RuleBlock = 5, RuleInstruction = 6, RuleDeclaration = 7, RuleDefinition = 8, 
-    RuleAssignment = 9, RuleExpression = 10, RuleType = 11
+    RuleBlock = 5, RuleInstruction = 6, RuleDeclaration = 7, RuleNewVar = 8, 
+    RuleAssignment = 9, RuleExpression = 10, RuleFuncType = 11, RuleVarType = 12
   };
 
   exprParser(antlr4::TokenStream *input);
@@ -42,10 +42,11 @@ public:
   class BlockContext;
   class InstructionContext;
   class DeclarationContext;
-  class DefinitionContext;
+  class NewVarContext;
   class AssignmentContext;
   class ExpressionContext;
-  class TypeContext; 
+  class FuncTypeContext;
+  class VarTypeContext; 
 
   class  ProgContext : public antlr4::ParserRuleContext {
   public:
@@ -98,9 +99,12 @@ public:
   public:
     MainContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    FuncTypeContext *funcType();
     RetContext *ret();
     std::vector<antlr4::tree::TerminalNode *> SPACE();
     antlr4::tree::TerminalNode* SPACE(size_t i);
+    std::vector<DeclarationContext *> declaration();
+    DeclarationContext* declaration(size_t i);
     std::vector<InstructionContext *> instruction();
     InstructionContext* instruction(size_t i);
 
@@ -114,14 +118,35 @@ public:
   class  RetContext : public antlr4::ParserRuleContext {
   public:
     RetContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+   
+    RetContext() = default;
+    void copyFrom(RetContext *context);
+    using antlr4::ParserRuleContext::copyFrom;
+
     virtual size_t getRuleIndex() const override;
+
+   
+  };
+
+  class  RetExprContext : public RetContext {
+  public:
+    RetExprContext(RetContext *ctx);
+
     ExpressionContext *expression();
     std::vector<antlr4::tree::TerminalNode *> SPACE();
     antlr4::tree::TerminalNode* SPACE(size_t i);
 
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  RetNoExprContext : public RetContext {
+  public:
+    RetNoExprContext(RetContext *ctx);
+
+    std::vector<antlr4::tree::TerminalNode *> SPACE();
+    antlr4::tree::TerminalNode* SPACE(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-   
   };
 
   RetContext* ret();
@@ -146,10 +171,6 @@ public:
   public:
     InstructionContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    DeclarationContext *declaration();
-    std::vector<antlr4::tree::TerminalNode *> SPACE();
-    antlr4::tree::TerminalNode* SPACE(size_t i);
-    DefinitionContext *definition();
     AssignmentContext *assignment();
 
 
@@ -163,8 +184,9 @@ public:
   public:
     DeclarationContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    TypeContext *type();
-    antlr4::tree::TerminalNode *VAR();
+    VarTypeContext *varType();
+    std::vector<NewVarContext *> newVar();
+    NewVarContext* newVar(size_t i);
     std::vector<antlr4::tree::TerminalNode *> SPACE();
     antlr4::tree::TerminalNode* SPACE(size_t i);
 
@@ -175,22 +197,41 @@ public:
 
   DeclarationContext* declaration();
 
-  class  DefinitionContext : public antlr4::ParserRuleContext {
+  class  NewVarContext : public antlr4::ParserRuleContext {
   public:
-    DefinitionContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    NewVarContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+   
+    NewVarContext() = default;
+    void copyFrom(NewVarContext *context);
+    using antlr4::ParserRuleContext::copyFrom;
+
     virtual size_t getRuleIndex() const override;
-    TypeContext *type();
+
+   
+  };
+
+  class  ValuedNewVariableContext : public NewVarContext {
+  public:
+    ValuedNewVariableContext(NewVarContext *ctx);
+
     antlr4::tree::TerminalNode *VAR();
     ExpressionContext *expression();
     std::vector<antlr4::tree::TerminalNode *> SPACE();
     antlr4::tree::TerminalNode* SPACE(size_t i);
 
-
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-   
   };
 
-  DefinitionContext* definition();
+  class  PlainNewVariableContext : public NewVarContext {
+  public:
+    PlainNewVariableContext(NewVarContext *ctx);
+
+    antlr4::tree::TerminalNode *VAR();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  NewVarContext* newVar();
 
   class  AssignmentContext : public antlr4::ParserRuleContext {
   public:
@@ -310,9 +351,9 @@ public:
 
   ExpressionContext* expression();
   ExpressionContext* expression(int precedence);
-  class  TypeContext : public antlr4::ParserRuleContext {
+  class  FuncTypeContext : public antlr4::ParserRuleContext {
   public:
-    TypeContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    FuncTypeContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
 
 
@@ -320,7 +361,19 @@ public:
    
   };
 
-  TypeContext* type();
+  FuncTypeContext* funcType();
+
+  class  VarTypeContext : public antlr4::ParserRuleContext {
+  public:
+    VarTypeContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  VarTypeContext* varType();
 
 
   virtual bool sempred(antlr4::RuleContext *_localctx, size_t ruleIndex, size_t predicateIndex) override;

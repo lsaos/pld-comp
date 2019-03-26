@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <ostream>
 
 using namespace std;
 
@@ -46,12 +47,12 @@ namespace ast
 			parent = parentInstruction;
 		}
 
-		Instruction* getParent()
+		Instruction* getParent() const
 		{
 			return parent;
 		}
 
-		Block* getParentBlock()
+		Block* getParentBlock() const
 		{
 			if (parent) {
 				if (parent->isBlock()) {
@@ -65,7 +66,7 @@ namespace ast
 			return nullptr;
 		}
 
-		Function* getParentFunction()
+		Function* getParentFunction() const
 		{
 			if (parent) {
 				if (parent->isFunction()) {
@@ -79,7 +80,7 @@ namespace ast
 			return nullptr;
 		}
 
-		Program* getProgram()
+		Program* getProgram() const
 		{
 			if (isProgram()) {
 				return (Program*)this;
@@ -93,10 +94,15 @@ namespace ast
 		}
 
 	public:
+		virtual bool checkSemantic() = 0;
+		virtual void toTextualRepresentation(ostream& out, size_t i) {}
+
+	public:
 		virtual bool isFunction() const { return false; }
 		virtual bool isVariable() const { return false; }
 		virtual bool isBlock() const { return false; }
 		virtual bool isProgram() const { return false; }
+		virtual bool isFunctionCall() const { return false; }
 
 	protected:
 		void error(Error error, const Instruction* instruction) const
@@ -110,18 +116,16 @@ namespace ast
 
 			switch (error)
 			{
-			case Error::None:
-				cout << "none";
-				break;
-			case Error::InvalidInstruction:
-				cout << "invalid instruction";
-				break;
-			case Error::DivisionByZero:
-				cout << "division by zero";
-				break;
-			case Error::NotConstant:
-				cout << "not constant";
-				break;
+			case Error::None: cout << "none"; break;
+			case Error::InvalidInstruction: cout << "invalid instruction"; break;
+			case Error::DivisionByZero: cout << "division by zero"; break;
+			case Error::NotConstant: cout << "not constant"; break;
+			case Error::NoMain: cout << "no main function"; break;
+			case Error::InvalidStatement: cout << "invalid statement"; break;
+			case Error::DuplicatedSymbolName: cout << "duplicated symbol name"; break;
+			case Error::ExpectingExpression: cout << "excepting an expression"; break;
+			case Error::UnknownIdentifier: cout << "unknown identifier"; break;
+			default: cout << "unknown error"; break;
 			}
 
 			cout << endl;

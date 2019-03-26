@@ -20,24 +20,24 @@ namespace ast
 		{
 			assert(ident);
 			ident->setParent(this);
-			identifier = ident;
+			identifier = unique_ptr<Identifier>(ident);
 		}
 
 		void setValue(Expression* expression)
 		{
 			assert(expression);
 			expression->setParent(this);
-			expr = expression;
+			expr = unique_ptr<Expression>(expression);
 		}
 
 		Identifier* getIdentifier()
 		{
-			return identifier;
+			return identifier.get();
 		}
 
 		Expression* getExpression()
 		{
-			return expr;
+			return expr.get();
 		}
 
 	public:
@@ -47,8 +47,52 @@ namespace ast
 			return expr->getType();
 		}
 
+		virtual bool checkSemantic()
+		{
+			if (!identifier || !expr) {
+				error(Error::InvalidStatement, this);
+				return false;
+			}
+
+			if (!identifier->checkSemantic() || !expr->checkSemantic()) {
+				return false;
+			}
+
+			// We can't assign a value to a function
+			if (!identifier->isReferencingVariable()) {
+				error(Error::InvalidStatement, identifier.get());
+				return false;
+			}
+
+			// We can't assign a value to something void
+			if (identifier->getType() == Type::Void) {
+				error(Error::InvalidStatement, identifier.get());
+				return false;
+			}
+
+			// Something void can't be assigned
+			if (expr->getType() == Type::Void) {
+				error(Error::InvalidStatement, expr.get());
+				return false;
+			}
+
+			return true;
+		}
+
+		virtual void toTextualRepresentation(ostream& out, size_t i)
+		{
+			for (size_t j = 0; j < i; j++) { out << ' '; }
+			out << "Assignment {" << endl;
+
+			identifier->toTextualRepresentation(out, i + 1);
+			expr->toTextualRepresentation(out, i + 1);
+
+			for (size_t j = 0; j < i; j++) { out << ' '; }
+			out << '}' << endl;
+		}
+
 	private:
-		Identifier* identifier;
-		Expression* expr;
+		unique_ptr<Identifier> identifier;
+		unique_ptr<Expression> expr;
 	};
 }

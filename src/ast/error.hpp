@@ -7,6 +7,11 @@ namespace ast
 		None,
 		InvalidInstruction,
 		DivisionByZero,
-		NotConstant
+		NotConstant,
+		NoMain,
+		InvalidStatement,
+		DuplicatedSymbolName,
+		ExpectingExpression,
+		UnknownIdentifier
 	};
 }
