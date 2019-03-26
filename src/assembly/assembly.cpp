@@ -39,6 +39,7 @@ void AssemblyGenerator::generateAssembly(ast::Program* program)
 	for (auto instr : instructions) 
 	{
 		//instr->generateAssembly(this);
+		//instr->generateAssembly(this->file, this->addressTable);
 	}
 
 	//Epilogue

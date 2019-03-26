@@ -16,6 +16,8 @@ namespace ast
 	public:
 		virtual Type getType() const = 0;
 
+		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) = 0;
+
 		virtual int getValue() const
 		{
 			error(Error::NotConstant, this);

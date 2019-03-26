@@ -28,5 +28,7 @@ namespace ast
 		virtual void toTextualRepresentation(ostream& out, size_t i);
 
 		virtual bool isFunction() const;
+
+		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
 	};
 }

@@ -3,6 +3,7 @@
 #include <cassert>
 #include <iostream>
 #include <ostream>
+#include <unordered_map>
 
 using namespace std;
 
@@ -13,6 +14,7 @@ namespace ast
 	class Block;
 	class Program;
 	class Function;
+	class Variable;
 
 	struct ItemPosition
 	{
@@ -43,6 +45,8 @@ namespace ast
 
 			virtual bool checkSemantic() = 0;
 			virtual void toTextualRepresentation(ostream& out, size_t i) {}
+
+			virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) = 0;
 
 			virtual bool isFunction() const { return false; }
 			virtual bool isVariable() const { return false; }

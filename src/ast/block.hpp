@@ -33,6 +33,8 @@ namespace ast
 
 		virtual bool isBlock() const { return true; }
 
+		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
+
 	protected:
 		vector<unique_ptr<Instruction>> instructions;
 	};

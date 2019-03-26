@@ -95,6 +95,8 @@ namespace ast
 			out << "Ident(" << ident << ')' << endl;
 		}
 
+		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
+
 	private:
 		string ident;
 	};

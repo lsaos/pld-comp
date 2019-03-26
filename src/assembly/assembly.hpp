@@ -17,7 +17,14 @@ namespace assembly
 	{
 		public:
 			AssemblyGenerator(string fileName);
-			~AssemblyGenerator() { delete addressTable;  }
+
+			~AssemblyGenerator() 
+			{
+				file->close();
+				delete file;
+				delete addressTable;  
+			}
+
 			void generateAssembly(ast::Program* prog);
 			unordered_map<ast::Variable*, int>* getAddressTable() const;
 			ofstream* getFile();
