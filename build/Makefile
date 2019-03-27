@@ -1,5 +1,5 @@
 #Set project directory one level above Makefile directory
-PROJDIR := $(realpath $(CURDIR))
+PROJDIR := $(realpath $(CURDIR)/..)
 SOURCEDIR := $(PROJDIR)/src
 BUILDDIR := $(PROJDIR)/build
 GRAMMARFILE := $(PROJDIR)/sources/parser/expr.g4
