@@ -100,13 +100,13 @@ public:
     MainContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     FuncTypeContext *funcType();
-    RetContext *ret();
     std::vector<antlr4::tree::TerminalNode *> SPACE();
     antlr4::tree::TerminalNode* SPACE(size_t i);
     std::vector<DeclarationContext *> declaration();
     DeclarationContext* declaration(size_t i);
     std::vector<InstructionContext *> instruction();
     InstructionContext* instruction(size_t i);
+    RetContext *ret();
 
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
