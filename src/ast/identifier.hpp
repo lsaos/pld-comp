@@ -54,7 +54,7 @@ namespace ast
 		virtual void toTextualRepresentation(ostream& out, size_t i) const;
 		virtual string getStringRepresentation() const { return ident; }
 		
-		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) {}
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable);
 
 		virtual bool isIdentifier() const { return true; }
 

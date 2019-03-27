@@ -60,4 +60,9 @@ namespace ast
 		for (size_t j = 0; j < i; j++) { out << ' '; }
 		out << "Const(" << getStringRepresentation() << ')' << endl;
 	}
+
+	void Constant::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable)
+	{
+		f << "\tmovl $" << value << ", %eax" << endl;
+	}
 }

@@ -49,6 +49,6 @@ namespace ast
 		int value; // Value of the constant.
 	
 	public:
-		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) {}
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable);
 	};
 }

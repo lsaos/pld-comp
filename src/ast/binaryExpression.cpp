@@ -211,4 +211,52 @@ namespace ast
 			return nullptr;
 		}
 	}
+
+	void BinaryExpression::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable) 
+	{
+		switch (op)
+		{
+			case BinaryOperator::Add :
+				/*if (left->isConstant() && right->isConstant()) {
+					int a = left->getValue() + right->getValue();
+					cout << a << endl;
+					f << "\tmovl $" << a << ", %eax" << endl;
+				}*/
+				left->generateAssembly(f, addressTable);
+				f << "\tmovl %eax, %edx" << endl;
+				right->generateAssembly(f, addressTable);
+				f << "\taddl %edx, %eax" << endl;
+				break;
+			case BinaryOperator::Substract :
+				left->generateAssembly(f, addressTable);
+				f << "\tmovl %eax, %edx" << endl;
+				right->generateAssembly(f, addressTable);
+				f << "\tsubl %edx, %eax" << endl;
+				break;
+			case BinaryOperator::Multiply :
+				left->generateAssembly(f, addressTable);
+				f << "\tmovl %eax, %edx" << endl;
+				right->generateAssembly(f, addressTable);
+				f << "\timul %edx, %eax" << endl;
+				break;
+			case BinaryOperator::BitwiseAnd:
+				left->generateAssembly(f, addressTable);
+				f << "\tmovl %eax, %edx" << endl;
+				right->generateAssembly(f, addressTable);
+				f << "\tandl %edx, %eax" << endl;
+				break;
+			case BinaryOperator::BitwiseOr:
+				left->generateAssembly(f, addressTable);
+				f << "\tmovl %eax, %edx" << endl;
+				right->generateAssembly(f, addressTable);
+				f << "\torl %edx, %eax" << endl;
+				break;
+			case BinaryOperator::BitwiseXor:
+				left->generateAssembly(f, addressTable);
+				f << "\tmovl %eax, %edx" << endl;
+				right->generateAssembly(f, addressTable);
+				f << "\txorl %edx, %eax" << endl;
+				break;
+		}
+	}
 }
