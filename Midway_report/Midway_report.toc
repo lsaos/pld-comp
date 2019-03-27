@@ -1,0 +1,24 @@
+\select@language {french}
+\contentsline {section}{\numberline {1}Fonctionalit\IeC {\'e}s impl\IeC {\'e}ment\IeC {\'e}es}{2}{section.0.1}
+\contentsline {subsection}{\numberline {1.1}Ce que le front peut lire}{2}{subsection.0.1.1}
+\contentsline {subsection}{\numberline {1.2}La v\IeC {\'e}rification s\IeC {\'e}mantique}{3}{subsection.0.1.2}
+\contentsline {paragraph}{Pour le programme complet}{3}{section*.4}
+\contentsline {paragraph}{Pour une fonction}{3}{section*.5}
+\contentsline {paragraph}{Pour les expressions arithm\IeC {\'e}tiques}{3}{section*.6}
+\contentsline {subsection}{\numberline {1.3}Ce que le back peut \IeC {\'e}crire}{3}{subsection.0.1.3}
+\contentsline {section}{\numberline {2}Structure du compilateur}{3}{section.0.2}
+\contentsline {subsection}{\numberline {2.1}R\IeC {\'e}partition des packages}{3}{subsection.0.2.1}
+\contentsline {paragraph}{Remarque :}{4}{section*.7}
+\contentsline {subsubsection}{ast}{4}{section*.8}
+\contentsline {subsubsection}{assembly}{4}{section*.9}
+\contentsline {subsubsection}{lib}{4}{section*.10}
+\contentsline {subsubsection}{parser}{4}{section*.11}
+\contentsline {subsubsection}{main}{4}{section*.12}
+\contentsline {subsection}{\numberline {2.2}Structure de l'ast}{4}{subsection.0.2.2}
+\contentsline {paragraph}{Variables, fonctions et identifiants}{5}{section*.13}
+\contentsline {section}{\numberline {3}Compiler le compilateur}{6}{section.0.3}
+\contentsline {subsection}{\numberline {3.1}Compiler sur Linux}{6}{subsection.0.3.1}
+\contentsline {subsection}{\numberline {3.2}Compiler sur Windows}{6}{subsection.0.3.2}
+\contentsline {section}{\numberline {4}Gestion de projet}{6}{section.0.4}
+\contentsline {subsubsection}{Officiellement}{6}{section*.14}
+\contentsline {subsubsection}{Officieusement}{6}{section*.15}
