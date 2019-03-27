@@ -1,8 +1,8 @@
 #pragma once
 
 #include "antlr4-runtime.h"
-#include "exprBaseVisitor.h"
-#include "instruction.hpp"
+#include "../parser/exprBaseVisitor.h"
+#include "../ast/instruction.hpp"
 
 #include <string>
 #ifdef TREEVISIT
