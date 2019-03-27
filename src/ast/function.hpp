@@ -1,34 +1,50 @@
+//
+// (c) 2019 The Super 4404 C Compiler
+// A.Belin, A.Nahid, L.Ohl, L.Saos, A.Verrier, I.Zemmouri
+// INSA Lyon
+//
+
 #pragma once
 
 #include <string>
-#include <vector>
 
 using namespace std;
 
 #include "type.hpp"
-#include "identifiable.hpp"
 #include "block.hpp"
+#include "identifiable.hpp"
 
 namespace ast
 {
+	class Block;
 
-	class Variable;
-
+	// Represents a C function.
+	// It has a block of code and is an identifiable.
 	class Function : public Block, public Identifiable
 	{
 	public:
+		// Create a function.
 		Function(const ItemPosition& position);
 
+	public:
+		// Add the specified variable as a parameter of the function.
 		void addParameter(Variable* var);
 
-		vector<Variable*> getParameters();
+	public:
+		// Get the list of parameters.
+		vector<Variable*> getParameters() const;
 
-		size_t getParametersCount();
+		// Get the number of parameters.
+		size_t getParametersCount() const;
 
-		virtual void toTextualRepresentation(ostream& out, size_t i);
+	public:
+		virtual void toTextualRepresentation(ostream& out, size_t i) const;
+		virtual string getStringRepresentation() const;
 
-		virtual bool isFunction() const;
+	public:
+		virtual bool isFunction() const { return true; }
 
+	public:
 		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
 	};
 }

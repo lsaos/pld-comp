@@ -1,29 +1,29 @@
 #include <antlr4-runtime.h>
 #include <string>
 #include <iostream>
-#include "unistd.h"
-#include "exprLexer.h"
-#include "exprParser.h"
-#include "exprBaseVisitor.h"
-#include "visiteur.hpp"
+#include "../lib/unistd.h"
+#include "../parser/exprLexer.h"
+#include "../parser/exprParser.h"
+#include "../parser/exprBaseVisitor.h"
+#include "../parser/visiteur.hpp"
 
-#include "program.hpp"
-#include "assignment.hpp"
-#include "binaryExpression.hpp"
-#include "block.hpp"
-#include "constant.hpp"
-#include "controlStructure.hpp"
-#include "expression.hpp"
-#include "functionCall.hpp"
-#include "function.hpp"
-#include "instruction.hpp"
-#include "operator.hpp"
-#include "program.hpp"
-#include "type.hpp"
-#include "unaryExpression.hpp"
-#include "variable.hpp"
-#include "error.hpp"
-#include "return.hpp"
+#include "../ast/program.hpp"
+#include "../ast/assignment.hpp"
+#include "../ast/binaryExpression.hpp"
+#include "../ast/block.hpp"
+#include "../ast/constant.hpp"
+#include "../ast/controlStructure.hpp"
+#include "../ast/expression.hpp"
+#include "../ast/functionCall.hpp"
+#include "../ast/function.hpp"
+#include "../ast/instruction.hpp"
+#include "../ast/operator.hpp"
+#include "../ast/program.hpp"
+#include "../ast/type.hpp"
+#include "../ast/unaryExpression.hpp"
+#include "../ast/variable.hpp"
+#include "../ast/error.hpp"
+#include "../ast/return.hpp"
 
 using namespace antlr4;
 using namespace std;
@@ -50,7 +50,17 @@ int main(int argc, char* argv[])
 
 	int opt;
 	bool optionA = false, optionC = false, optionO = false;
-	while ((opt = getopt(argc, argv, "oca")) != -1) {
+	cout << "options : " << getopt(argc, argv, "o:c:a");
+	for (int i = 0; i < argc; i++) {
+		cout << argv[i] << endl;
+		if (!strcmp(argv[i], "-c")) {
+			cout << "Il y aura génération de code assembleur" << endl;
+			optionC = true;
+			break;
+		}
+	}
+
+	while ((opt = getopt(argc, argv, "o:c:a:")) != -1) {
 		switch (opt) {
 		case 'o':
 			cout << "Il y aura optimisation" << endl;
@@ -75,16 +85,32 @@ int main(int argc, char* argv[])
 
 	exprParser parser(&tokens);
 	tree::ParseTree* tree = parser.prog();
-	int nbErrors = parser.getNumberOfSyntaxErrors();
+	size_t nbErrors = parser.getNumberOfSyntaxErrors();
 
 	if (nbErrors == 0)
 	{
 
 		Visiteur visitor;
 		Program* prog = (Program*)visitor.visit(tree);
-		if (prog->checkSemantic()) {
+
+		try
+		{
+			prog->checkSemantic(optionA);
 			prog->toTextualRepresentation(cout);
+
+			if (optionO) {
+				cout << "-------------------------------" << endl
+					<< " After optimization"
+					<< "-------------------------------" << endl;
+
+				prog->optimize();
+				prog->toTextualRepresentation(cout);
+			}
+
 			cout << "Le programme s'est fini correctement" << endl;
+		}
+		catch (...)
+		{
 		}
 
 		system("pause");

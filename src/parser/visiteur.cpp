@@ -1,27 +1,27 @@
 #include "visiteur.hpp"
 
-#include "program.hpp"
-#include "assignment.hpp"
-#include "binaryExpression.hpp"
-#include "block.hpp"
-#include "constant.hpp"
-#include "controlStructure.hpp"
-#include "expression.hpp"
-#include "functionCall.hpp"
-#include "function.hpp"
-#include "instruction.hpp"
-#include "operator.hpp"
-#include "program.hpp"
-#include "type.hpp"
-#include "unaryExpression.hpp"
-#include "variable.hpp"
-#include "error.hpp"
-#include "return.hpp"
+#include "../ast/program.hpp"
+#include "../ast/assignment.hpp"
+#include "../ast/binaryExpression.hpp"
+#include "../ast/block.hpp"
+#include "../ast/constant.hpp"
+#include "../ast/controlStructure.hpp"
+#include "../ast/expression.hpp"
+#include "../ast/functionCall.hpp"
+#include "../ast/function.hpp"
+#include "../ast/instruction.hpp"
+#include "../ast/operator.hpp"
+#include "../ast/program.hpp"
+#include "../ast/type.hpp"
+#include "../ast/unaryExpression.hpp"
+#include "../ast/variable.hpp"
+#include "../ast/error.hpp"
+#include "../ast/return.hpp"
 #include <vector>
 
 using namespace ast;
 
-ItemPosition Visiteur::buildPos(int line, int column) {
+ItemPosition Visiteur::buildPos(size_t line, size_t column) {
 	ItemPosition pos;
 	pos.line = line;
 	pos.offset = column;
@@ -227,7 +227,7 @@ antlrcpp::Any Visiteur::visitUnary(exprParser::UnaryContext *ctx){
             unary->setOperator(UnaryOperator::Minus);
             break;
         case '!':
-            unary->setOperator(UnaryOperator::Not);
+            unary->setOperator(UnaryOperator::LogicalNot);
             break;
     }
     #ifdef TREEVISIT
@@ -250,13 +250,13 @@ antlrcpp::Any Visiteur::visitBin(exprParser::BinContext *ctx){
 	binExp->setRightExpression(right);
 	switch (opbin) {
 	case '&':
-		binExp->setOperator(BinaryOperator::LogicalAnd);
+		binExp->setOperator(BinaryOperator::BitwiseAnd);
 		break;
 	case '^':
-		binExp->setOperator(BinaryOperator::LogicalXor);
+		binExp->setOperator(BinaryOperator::BitwiseXor);
 		break;
 	case '|':
-		binExp->setOperator(BinaryOperator::LogicalOr);
+		binExp->setOperator(BinaryOperator::BitwiseOr);
 		break;
 	}
 #ifdef TREEVISIT
