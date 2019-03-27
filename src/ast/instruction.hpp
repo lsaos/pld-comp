@@ -47,13 +47,14 @@ namespace ast
 			virtual bool checkSemantic() = 0;
 			virtual void toTextualRepresentation(ostream& out, size_t i) {}
 
-			virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) = 0;
+			virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) = 0;
 
 			virtual bool isFunction() const { return false; }
 			virtual bool isVariable() const { return false; }
 			virtual bool isBlock() const { return false; }
 			virtual bool isProgram() const { return false; }
 			virtual bool isFunctionCall() const { return false; }
+			virtual bool isIdentifier() const { return false; }
 
 		protected:
 			void error(Error error, const Instruction* instruction) const;
