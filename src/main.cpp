@@ -25,9 +25,12 @@
 #include "ast/error.hpp"
 #include "ast/return.hpp"
 
+#include "assembly/assembly.hpp"
+
 using namespace antlr4;
 using namespace std;
 using namespace ast;
+using namespace assembly;
 
 int main(int argc, char* argv[])
 {
@@ -52,18 +55,18 @@ int main(int argc, char* argv[])
 	bool optionA = false, optionC = false, optionO = false;
 	while ((opt = getopt(argc, argv, "oca")) != -1) {
 		switch (opt) {
-		case 'o':
-			cout << "Il y aura optimisation" << endl;
-			optionO = true;
-			break;
-		case 'c':
-			cout << "Il y aura génération de code assembleur" << endl;
-			optionC = true;
-			break;
-		case 'a':
-			cout << "Il y aura analyse statique" << endl;
-			optionA = true;
-			break;
+			case 'o':
+				cout << "Il y aura optimisation" << endl;
+				optionO = true;
+				break;
+			case 'c':
+				cout << "Il y aura génération de code assembleur" << endl;
+				optionC = true;
+				break;
+			case 'a':
+				cout << "Il y aura analyse statique" << endl;
+				optionA = true;
+				break;
 		}
 	}
 
@@ -85,6 +88,11 @@ int main(int argc, char* argv[])
 		if (prog->checkSemantic()) {
 			prog->toTextualRepresentation(cout);
 			cout << "Le programme s'est fini correctement" << endl;
+
+			if (optionC) {
+				AssemblyGenerator ag("C:\\Users\\Aurelien Belin\\Documents\\INSA\\IF\\4IF\\PLD Comp\\pld-comp\\testAss");
+				ag.generateAssembly(prog);
+			}
 		}
 
 		system("pause");

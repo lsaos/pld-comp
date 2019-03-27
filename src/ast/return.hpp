@@ -74,9 +74,19 @@ namespace ast
 		}
 
 		virtual void generateAssembly(ofstream* f, unordered_map<ast::Variable*, int>* addressTable) 
-		{
-			expr->generateAssembly(f,addressTable);
-			
+		{			
+			if (expr->isVariable()) 
+			{
+				*f << "movl " << addressTable->at((Variable*)(expr.get())) << ", %eax" << endl;
+			}
+			else if (expr->isConstant()) 
+			{
+				*f << "movl $" << expr->getValue() << ", %eax" << endl;
+			}
+			else 
+			{
+				expr->generateAssembly(f, addressTable);
+			}
 		}
 
 	private:
