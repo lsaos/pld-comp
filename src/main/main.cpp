@@ -50,7 +50,17 @@ int main(int argc, char* argv[])
 
 	int opt;
 	bool optionA = false, optionC = false, optionO = false;
-	while ((opt = getopt(argc, argv, "oca")) != -1) {
+	cout << "options : " << getopt(argc, argv, "o:c:a");
+	for (int i = 0; i < argc; i++) {
+		cout << argv[i] << endl;
+		if (!strcmp(argv[i], "-c")) {
+			cout << "Il y aura génération de code assembleur" << endl;
+			optionC = true;
+			break;
+		}
+	}
+
+	while ((opt = getopt(argc, argv, "o:c:a:")) != -1) {
 		switch (opt) {
 		case 'o':
 			cout << "Il y aura optimisation" << endl;
