@@ -2,7 +2,7 @@
 
 #include "antlr4-runtime.h"
 #include "exprBaseVisitor.h"
-#include "ast/instruction.hpp"
+#include "instruction.hpp"
 
 #include <string>
 #ifdef TREEVISIT
