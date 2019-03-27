@@ -22,6 +22,9 @@ namespace ast
 		// Get the type of the value returned.
 		virtual Type getType() const = 0;
 
+		// Generate the assembly code for the current Expression
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) = 0;
+
 		// Precompute the value if the expression, if possible.
 		virtual int getValue() const;
 
@@ -32,8 +35,5 @@ namespace ast
 
 	public:
 		virtual bool isExpression() const { return true; }
-
-	public:
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) = 0;
 	};
 }

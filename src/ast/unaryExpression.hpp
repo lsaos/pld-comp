@@ -59,6 +59,6 @@ namespace ast
 		unique_ptr<Expression> expr; // Unary operand.
 
 	public:
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) {}
 	};
 }

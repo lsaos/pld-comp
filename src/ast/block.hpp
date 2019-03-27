@@ -49,10 +49,9 @@ namespace ast
 	public:
 		virtual bool isBlock() const { return true; }
 
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) {}
+
 	protected:
 		vector<unique_ptr<Instruction>> instructions; // List of instructions in the block.
-
-	public:
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
 	};
 }

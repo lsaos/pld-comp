@@ -11,6 +11,7 @@
 #include <ostream>
 #include <string>
 #include <unordered_map>
+#include <fstream>
 
 using namespace std;
 
@@ -96,6 +97,9 @@ namespace ast
 		// The method can return a new instruction which replaces
 		// the current instruction in the AST.
 		virtual Instruction* optimize() { return nullptr; }
+		
+	public:
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) = 0;
 
 	public:
 		// Get a string representation of the instruction.
@@ -121,6 +125,9 @@ namespace ast
 
 		// Return true if the current instruction is an expression.
 		virtual bool isExpression() const { return false; }
+		
+		// Return true if the current instruction is an Identifier
+		virtual bool isIdentifier() const { return false; }
 
 	protected:
 		// Report the specified error for the specified instruction.
@@ -133,8 +140,5 @@ namespace ast
 	private:
 		const ItemPosition pos; // Instruction's position in the source code.
 		Instruction* parent; // Parent's instruction.
-
-	public:
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) = 0;
 	};
 }

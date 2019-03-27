@@ -6,6 +6,7 @@
 
 #include "return.hpp"
 #include "function.hpp"
+#include "identifier.hpp"
 
 namespace ast
 {
@@ -80,5 +81,25 @@ namespace ast
 
 		// We can't optimize the return itself
 		return nullptr;
+	}
+
+	void Return::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable)
+	{
+		cout << "Variable : " << expr->isVariable() << endl;
+
+		if (expr->isIdentifier())
+		{
+			f << "\tmovl " << addressTable[((Identifier*)(expr.get()))->getReferencedVariable()] << "(%rbp), %eax" << endl;
+		}
+		else if (expr->isConstant())
+		{
+			cout << "RETURN : CONSTANTE" << endl; // DEBUG
+			f << "\tmovl $" << expr->getValue() << ", %eax" << endl;
+		}
+		else
+		{
+			cout << "RETURN : RIEN" << endl; // DEBUG
+			expr->generateAssembly(f, addressTable);
+		}
 	}
 }
