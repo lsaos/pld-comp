@@ -1,112 +1,62 @@
+//
+// (c) 2019 The Super 4404 C Compiler
+// A.Belin, A.Nahid, L.Ohl, L.Saos, A.Verrier, I.Zemmouri
+// INSA Lyon
+//
+
 #pragma once
+
+#include <string>
+
+using namespace std;
 
 #include "expression.hpp"
 #include "operator.hpp"
 
 namespace ast
 {
+	// Represents an operation with only one operand.
 	class UnaryExpression : public Expression
 	{
 	public:
-		UnaryExpression(const ItemPosition& position)
-			: Expression(position),
-			op(UnaryOperator::Minus),
-			expr(nullptr)
-		{
-		}
+		// Create an unary expression.
+		UnaryExpression(const ItemPosition& position);
 
 	public:
-		void setExpression(Expression* expression)
-		{
-			assert(expression);
-			expression->setParent(this);
-			expr = unique_ptr<Expression>(expression);
-		}
+		// Set the operand.
+		void setExpression(Expression* expression);
 
-		Expression* getExpression()
-		{
+		// Set the operator.
+		void setOperator(UnaryOperator ope);
+
+	public:
+		// Get the operand.
+		Expression* getExpression() const {
 			return expr.get();
 		}
 
-		void setOperator(UnaryOperator ope)
-		{
-			op = ope;
-		}
-
-		UnaryOperator getOperator() const
-		{
+		// Get the operator.
+		UnaryOperator getOperator() const {
 			return op;
 		}
 
-		string getOperatorName() const
-		{
-			switch (op)
-			{
-			case UnaryOperator::Minus: return "-";
-			case UnaryOperator::Not: return "!";
-			default: return "error";
-			}
-		}
+		// Get the operator as a string.
+		string getOperatorName() const;
 
 	public:
-		virtual Type getType() const
-		{
-			assert(expr);
-			return expr->getType();
-		}
-
-		virtual int getValue() const
-		{
-			assert(expr);
-
-			switch (op)
-			{
-			case UnaryOperator::Minus:
-				return -expr->getValue();
-			case UnaryOperator::Not:
-				return expr->getValue() ? 0 : 1;
-			default:
-				assert(false);
-				return 0;
-			}
-		}
-
-		virtual bool isConstant() const
-		{
-			assert(expr);
-			return expr->isConstant();
-		}
+		virtual Type getType() const;
+		virtual int getValue() const;
+		virtual bool isConstant() const;
 
 	public:
-		virtual bool checkSemantic()
-		{
-			if (!expr) {
-				error(Error::InvalidStatement, this);
-				return false;
-			}
+		virtual void checkSemantic(bool advanced) const;
+		virtual void toTextualRepresentation(ostream& out, size_t i) const;
+		virtual string getStringRepresentation() const { return getOperatorName(); }
+		virtual Instruction* optimize();
 
-			if (!expr->checkSemantic()) {
-				return false;
-			}
-
-			if (expr->getType() == Type::Void) {
-				error(Error::InvalidStatement, expr.get());
-				return false;
-			}
-
-			return true;
-		}
-
-		virtual void toTextualRepresentation(ostream& out, size_t i)
-		{
-			for (size_t j = 0; j < i; j++) { out << ' '; }
-			out << getOperatorName() << " {" << endl;
-
-			expr->toTextualRepresentation(out, i + 1);
-
-			for (size_t j = 0; j < i; j++) { out << ' '; }
-			out << '}' << endl;
-		}
+	private:
+		UnaryOperator op; // Unary operator.
+		unique_ptr<Expression> expr; // Unary operand.
 
 		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) {}
 

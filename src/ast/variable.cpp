@@ -1,48 +1,54 @@
-#pragma once
+//
+// (c) 2019 The Super 4404 C Compiler
+// A.Belin, A.Nahid, L.Ohl, L.Saos, A.Verrier, I.Zemmouri
+// INSA Lyon
+//
 
 #include "variable.hpp"
 
-using namespace ast;
-
-Variable::Variable(const ItemPosition& position)
-	: Instruction(position),
-	scope(Scope::Block)
+namespace ast
 {
-}
+	//
+	// Variable
+	//
 
-void Variable::setScope(Scope s)
-{
-	scope = s;
-}
-
-Scope Variable::getScope() const
-{
-	return scope;
-}
-
-bool Variable::checkSemantic()
-{
-	if (getName().empty() || getType() == Type::Void) {
-		error(Error::InvalidStatement, this);
-		return false;
+	Variable::Variable(const ItemPosition& position)
+		: Instruction(position),
+		scope(Scope::Block)
+	{
 	}
 
-	return true;
-}
+	void Variable::setScope(Scope s)
+	{
+		scope = s;
+	}
 
-void Variable::toTextualRepresentation(ostream& out, size_t i)
-{
-	for (size_t j = 0; j < i; j++) { out << ' '; }
-	out << "Var {" << endl;
+	void Variable::checkSemantic(bool advanced) const
+	{
+		if (getName().empty() || getType() == Type::Void) {
+			error(Error::InvalidStatement, this);
+		}
+	}
 
-	for (size_t j = 0; j < i + 1; j++) { out << ' '; }
-	out << getTypeName() << endl;
+	void Variable::toTextualRepresentation(ostream& out, size_t i) const
+	{
+		for (size_t j = 0; j < i; j++) { out << ' '; }
+		out << "Var {" << endl;
 
-	for (size_t j = 0; j < i + 1; j++) { out << ' '; }
-	out << "Ident(" << getName() << ')' << endl;
+		for (size_t j = 0; j < i + 1; j++) { out << ' '; }
+		out << getTypeName() << endl;
 
-	for (size_t j = 0; j < i; j++) { out << ' '; }
-	out << '}' << endl;
+		for (size_t j = 0; j < i + 1; j++) { out << ' '; }
+		out << "Ident(" << getName() << ')' << endl;
+
+		for (size_t j = 0; j < i; j++) { out << ' '; }
+		out << '}' << endl;
+	}
+
+	string Variable::getStringRepresentation() const
+	{
+		return getTypeName() + ' ' + getName();
+	}
 }
 
 void Variable::generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) 

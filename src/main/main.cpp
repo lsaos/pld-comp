@@ -53,7 +53,16 @@ int main(int argc, char* argv[])
 
 	int opt;
 	bool optionA = false, optionC = false, optionO = false;
-	cout << "NB ARG : " << argc << endl;
+
+	cout << "options : " << getopt(argc, argv, "o:c:a");
+	for (int i = 0; i < argc; i++) {
+		cout << argv[i] << endl;
+		if (!strcmp(argv[i], "-c")) {
+			cout << "Il y aura génération de code assembleur" << endl;
+			optionC = true;
+			break;
+		}
+	}
 
 	while ((opt = getopt(argc, argv, "o:c:a:")) != -1) {
 		switch (opt) {
@@ -80,7 +89,7 @@ int main(int argc, char* argv[])
 
 	exprParser parser(&tokens);
 	tree::ParseTree* tree = parser.prog();
-	int nbErrors = parser.getNumberOfSyntaxErrors();
+	size_t nbErrors = parser.getNumberOfSyntaxErrors();
 
 	//Pour tester l'assemblage
 	optionC = true;
@@ -90,14 +99,30 @@ int main(int argc, char* argv[])
 
 		Visiteur visitor;
 		Program* prog = (Program*)visitor.visit(tree);
-		if (prog->checkSemantic()) {
+
+		try
+		{
+			prog->checkSemantic(optionA);
 			prog->toTextualRepresentation(cout);
+
+			if (optionO) {
+				cout << "-------------------------------" << endl
+					<< " After optimization"
+					<< "-------------------------------" << endl;
+
+				prog->optimize();
+				prog->toTextualRepresentation(cout);
+			}
+
 			cout << "Le programme s'est fini correctement" << endl;
 
 			if (optionC) {
 				AssemblyGenerator ag(argv[1]);
 				ag.generateAssembly(prog);
 			}
+		}
+		catch (...)
+		{
 		}
 
 		system("pause");

@@ -1,3 +1,9 @@
+//
+// (c) 2019 The Super 4404 C Compiler
+// A.Belin, A.Nahid, L.Ohl, L.Saos, A.Verrier, I.Zemmouri
+// INSA Lyon
+//
+
 #pragma once
 
 #include "expression.hpp"
@@ -5,91 +11,42 @@
 
 namespace ast
 {
+	// Represents an assignment (operator =).
+	// It returns the value of the assigned variable.
 	class Assignment : public Expression
 	{
 	public:
-		Assignment(const ItemPosition& position)
-			: Expression(position),
-			identifier(nullptr),
-			expr(nullptr)
-		{
-		}
+		// Create an assignment.
+		Assignment(const ItemPosition& position);
 
 	public:
-		void setIdentifier(Identifier* ident)
-		{
-			assert(ident);
-			ident->setParent(this);
-			identifier = unique_ptr<Identifier>(ident);
-		}
+		// Set the left value.
+		void setIdentifier(Identifier* ident);
 
-		void setValue(Expression* expression)
-		{
-			assert(expression);
-			expression->setParent(this);
-			expr = unique_ptr<Expression>(expression);
-		}
+		// Set the right value.
+		void setValue(Expression* expression);
 
-		Identifier* getIdentifier()
-		{
+	public:
+		// Get the left-value.
+		Identifier* getIdentifier() const {
 			return identifier.get();
 		}
 
-		Expression* getExpression()
-		{
+		// Get the right value.
+		Expression* getExpression() const {
 			return expr.get();
 		}
 
 	public:
-		virtual Type getType() const
-		{
-			assert(expr);
-			return expr->getType();
-		}
+		virtual Type getType() const;
+		virtual void checkSemantic(bool advanced) const;
+		virtual void toTextualRepresentation(ostream& out, size_t i) const;
+		virtual string getStringRepresentation() const { return "="; }
+		virtual Instruction* optimize();
 
-		virtual bool checkSemantic()
-		{
-			if (!identifier || !expr) {
-				error(Error::InvalidStatement, this);
-				return false;
-			}
-
-			if (!identifier->checkSemantic() || !expr->checkSemantic()) {
-				return false;
-			}
-
-			// We can't assign a value to a function
-			if (!identifier->isReferencingVariable()) {
-				error(Error::InvalidStatement, identifier.get());
-				return false;
-			}
-
-			// We can't assign a value to something void
-			if (identifier->getType() == Type::Void) {
-				error(Error::InvalidStatement, identifier.get());
-				return false;
-			}
-
-			// Something void can't be assigned
-			if (expr->getType() == Type::Void) {
-				error(Error::InvalidStatement, expr.get());
-				return false;
-			}
-
-			return true;
-		}
-
-		virtual void toTextualRepresentation(ostream& out, size_t i)
-		{
-			for (size_t j = 0; j < i; j++) { out << ' '; }
-			out << "Assignment {" << endl;
-
-			identifier->toTextualRepresentation(out, i + 1);
-			expr->toTextualRepresentation(out, i + 1);
-
-			for (size_t j = 0; j < i; j++) { out << ' '; }
-			out << '}' << endl;
-		}
+	private:
+		unique_ptr<Identifier> identifier; // Identifier of the assigned variable.
+		unique_ptr<Expression> expr; // Expression of the value to assign.
 
 		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable)
 		{

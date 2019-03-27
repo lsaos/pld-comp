@@ -1,31 +1,46 @@
+//
+// (c) 2019 The Super 4404 C Compiler
+// A.Belin, A.Nahid, L.Ohl, L.Saos, A.Verrier, I.Zemmouri
+// INSA Lyon
+//
+
 #pragma once
 
-#include "function.hpp"
 #include "block.hpp"
 
 namespace ast
 {
+	class Function;
 
+	// The program is the root of the AST.
+	// It contains global variables and functions.
 	class Program : public Block
 	{
+	public:
+		// Create a program.
+		Program();
 
-		public:
-			Program();
+	public:
+		// Get the function with the specified name.
+		// Returns null if the function doesn't exist.
+		Function* getFunction(const string& name) const;
 
-			Function* getFunction(const string& name);
+		// Get the list of functions contained in the program.
+		vector<Function*> getFunctions() const;
 
-			Function* getMain();
+		// Get the number of function the program contains.
+		size_t getFunctionsCount() const;
 
-			vector<Function*> getFunctions();
+		// Get the main function of the program.
+		Function* getMain() const {
+			return getFunction("main");
+		}
 
-			size_t getFunctionsCount();
+	public:
+		virtual void checkSemantic(bool advanced) const;
+		virtual void toTextualRepresentation(ostream& out, size_t i = 0) const;
 
-			virtual bool checkSemantic();
-
-			virtual void toTextualRepresentation(ostream& out, size_t i = 0);
-
-			virtual void add(Instruction* instr);
-
-			virtual bool isProgram() const;
+	public:
+		virtual bool isProgram() const { return true; }
 	};
 }

@@ -1,178 +1,71 @@
+//
+// (c) 2019 The Super 4404 C Compiler
+// A.Belin, A.Nahid, L.Ohl, L.Saos, A.Verrier, I.Zemmouri
+// INSA Lyon
+//
+
 #pragma once
+
+#include <string>
+
+using namespace std;
 
 #include "expression.hpp"
 #include "operator.hpp"
 
 namespace ast
 {
+	// Represents an operation with 2 operands.
 	class BinaryExpression : public Expression
 	{
 	public:
-		BinaryExpression(const ItemPosition& position)
-			: Expression(position),
-			op(BinaryOperator::Add),
-			left(nullptr),
-			right(nullptr)
-		{
-		}
+		// Create a binary expression.
+		BinaryExpression(const ItemPosition& position);
 
 	public:
-		void setLeftExpression(Expression* expression)
-		{
-			assert(expression);
-			expression->setParent(this);
-			left = unique_ptr<Expression>(expression);
-		}
+		// Set the left operand.
+		void setLeftExpression(Expression* expression);
 
-		void setRightExpression(Expression* expression)
-		{
-			assert(expression);
-			expression->setParent(this);
-			right = unique_ptr<Expression>(expression);
-		}
+		// Set the right operand.
+		void setRightExpression(Expression* expression);
 
-		void setOperator(BinaryOperator ope)
-		{
-			op = ope;
-		}
+		// Set the operator.
+		void setOperator(BinaryOperator ope);
 
-		Expression* getLeftExpression()
-		{
+	public:
+		// Get the operator as a string.
+		string getOperatorName() const;
+
+		// Get the left operand.
+		Expression* getLeftExpression() const {
 			return left.get();
 		}
 
-		Expression* getRightExpression()
-		{
+		// Get the right operand.
+		Expression* getRightExpression() const {
 			return right.get();
 		}
 
-		BinaryOperator getOperator() const
-		{
+		// Get the operator.
+		BinaryOperator getOperator() const {
 			return op;
 		}
 
-		string getOperatorName() const
-		{
-			switch (op)
-			{
-			case BinaryOperator::Add: return "+";
-			case BinaryOperator::Substract: return "-";
-			case BinaryOperator::Multiply: return "*";
-			case BinaryOperator::Divide: return "/";
-			case BinaryOperator::LogicalAnd: return "&";
-			case BinaryOperator::LogicalOr: return "|";
-			case BinaryOperator::LogicalXor: return "^";
-			case BinaryOperator::Equals: return "==";
-			case BinaryOperator::DifferentThan: return "!=";
-			case BinaryOperator::GreaterThan: return ">";
-			case BinaryOperator::LowerThan: return "<";
-			case BinaryOperator::GreaterThanOrEquals: return ">=";
-			case BinaryOperator::LowerThanOrEquals: return "<=";
-			default: return "error";
-			}
-		}
+	public:
+		virtual Type getType() const;
+		virtual int getValue() const;
+		virtual bool isConstant() const;
 
 	public:
-		virtual Type getType() const
-		{
-			return Type::Integer;
-		}
+		virtual void checkSemantic(bool advanced) const;
+		virtual void toTextualRepresentation(ostream& out, size_t i) const;
+		virtual string getStringRepresentation() const { return getOperatorName(); }
+		virtual Instruction* optimize();
 
-		virtual int getValue() const
-		{
-			assert(left && right);
-
-			const int l = left->getValue();
-			const int r = right->getValue();
-
-			switch (op)
-			{
-			case BinaryOperator::Add:
-				return l + r;
-			case BinaryOperator::Substract:
-				return l - r;
-			case BinaryOperator::Multiply:
-				return l * r;
-			case BinaryOperator::Divide:
-				if (r == 0) {
-					error(Error::DivisionByZero, right.get());
-				}
-				return l / r;
-
-			case BinaryOperator::LogicalAnd:
-				return l & r;
-			case BinaryOperator::LogicalOr:
-				return l | r;
-			case BinaryOperator::LogicalXor:
-				return l ^ r;
-
-			case BinaryOperator::Equals:
-				return l == r;
-			case BinaryOperator::DifferentThan:
-				return l != r;
-			case BinaryOperator::GreaterThan:
-				return l > r;
-			case BinaryOperator::LowerThan:
-				return l < r;
-			case BinaryOperator::GreaterThanOrEquals:
-				return l >= r;
-			case BinaryOperator::LowerThanOrEquals:
-				return l <= r;
-
-			default:
-				assert(false);
-				return 0;
-			}
-		}
-
-		virtual bool isConstant() const
-		{
-			assert(left && right);
-			return left->isConstant() && right->isConstant();
-		}
-
-	public:
-		virtual bool checkSemantic()
-		{
-			if (!left || !right) {
-				error(Error::InvalidStatement, this);
-				return false;
-			}
-
-			if (!left->checkSemantic() || !right->checkSemantic()) {
-				return false;
-			}
-
-			if (left->getType() == Type::Void) {
-				error(Error::InvalidStatement, left.get());
-				return false;
-			}
-
-			if (right->getType() == Type::Void) {
-				error(Error::InvalidStatement, right.get());
-				return false;
-			}
-
-			// Special case: division by zero
-			if (op == BinaryOperator::Divide && right->isConstant() && right->getValue() == 0) {
-				error(Error::DivisionByZero, right.get());
-				return false;
-			}
-
-			return true;
-		}
-
-		virtual void toTextualRepresentation(ostream& out, size_t i)
-		{
-			for (size_t j = 0; j < i; j++) { out << ' '; }
-			out << getOperatorName() << " {" << endl;
-
-			left->toTextualRepresentation(out, i + 1);
-			right->toTextualRepresentation(out, i + 1);
-
-			for (size_t j = 0; j < i; j++) { out << ' '; }
-			out << '}' << endl;
-		}
+	private:
+		BinaryOperator op; // Binary operator.
+		unique_ptr<Expression> left; // Left operand.
+		unique_ptr<Expression> right; // Right operand.
 
 		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) {}
 
