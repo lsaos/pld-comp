@@ -1,3 +1,9 @@
+//
+// (c) 2019 The Super 4404 C Compiler
+// A.Belin, A.Nahid, L.Ohl, L.Saos, A.Verrier, I.Zemmouri
+// INSA Lyon
+//
+
 #pragma once
 
 #include <vector>
@@ -8,63 +14,32 @@ using namespace std;
 
 namespace ast
 {
+	// Represents a call to a function.
 	class FunctionCall : public Expression
 	{
 	public:
-		FunctionCall(const ItemPosition& position)
-			: Expression(position),
-			identifier(nullptr)
-		{
-		}
+		// Create a function call.
+		FunctionCall(const ItemPosition& position);
 
 	public:
-		void setIdentifier(Identifier* ident)
-		{
-			assert(ident);
-			ident->setParent(this);
-			identifier = unique_ptr<Identifier>(ident);
-		}
+		// Set the function identifier.
+		void setIdentifier(Identifier* ident);
 
-		void addArgument(Expression* arg)
-		{
-			assert(arg);
-			arg->setParent(this);
-			args.push_back(arg);
-		}
+		// Add an argument to the function.
+		void addArgument(Expression* arg);
 
 	public:
-		virtual bool checkSemantic()
-		{
-			if (!identifier) {
-				error(Error::InvalidStatement, this);
-				return false;
-			}
+		virtual Type getType() const;
+		virtual void checkSemantic(bool advanced) const;
 
-			if (!identifier->checkSemantic()) {
-				return false;
-			}
-
-			// The identifier must reference an existing function
-			if (!identifier->isReferencingFunction()) {
-				error(Error::InvalidStatement, identifier.get());
-				return false;
-			}
-
-			return true;
-		}
-
-		virtual Type getType() const
-		{
-			assert(identifier);
-			return identifier->getType();
-		}
-
+	public:
 		virtual bool isFunctionCall() const { return true; }
 
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
-
 	private:
-		vector<Expression*> args;
-		unique_ptr<Identifier> identifier;
+		vector<unique_ptr<Expression>> args; // Arguments to pass to the function.
+		unique_ptr<Identifier> identifier; // Identifier referencing the called function.
+
+	public:
+		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
 	};
 }

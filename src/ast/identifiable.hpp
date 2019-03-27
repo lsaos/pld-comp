@@ -1,3 +1,9 @@
+//
+// (c) 2019 The Super 4404 C Compiler
+// A.Belin, A.Nahid, L.Ohl, L.Saos, A.Verrier, I.Zemmouri
+// INSA Lyon
+//
+
 #pragma once
 
 #include <cassert>
@@ -9,49 +15,37 @@ using namespace std;
 
 namespace ast
 {
+	// Represents an identifiable symbol with a name and a type.
+	// It can be a Function or a Variable.
 	class Identifiable
 	{
 	public:
-		Identifiable()
-			: type(Type::Void)
-		{
-		}
+		// Create an identifiable.
+		Identifiable();
 
 	public:
-		void setName(const string& n)
-		{
-			assert(!n.empty());
-			name = n;
-		}
+		// Set the identifiable name.
+		void setName(const string& n);
 
-		const string& getName() const
-		{
+		// Set the identifiable type.
+		void setType(Type t);
+
+	public:
+		// Get the identifiable name.
+		const string& getName() const {
 			return name;
 		}
 
-		void setType(Type t)
-		{
-			type = t;
-		}
-
-		Type getType() const
-		{
+		// Get the identifiable type.
+		Type getType() const {
 			return type;
 		}
 
-		string getTypeName() const
-		{
-			switch (type)
-			{
-			case Type::Integer: return "int";
-			case Type::Character: return "char";
-			case Type::Void: return "void";
-			default: return "error";
-			}
-		}
+		// Get the identifiable type as a string.
+		string getTypeName() const;
 
 	private:
-		string name;
-		Type type;
+		string name; // Identifier name.
+		Type type; // Variable type or function return type.
 	};
 }

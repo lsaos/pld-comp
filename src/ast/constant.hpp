@@ -1,3 +1,9 @@
+//
+// (c) 2019 The Super 4404 C Compiler
+// A.Belin, A.Nahid, L.Ohl, L.Saos, A.Verrier, I.Zemmouri
+// INSA Lyon
+//
+
 #pragma once
 
 #include "expression.hpp"
@@ -5,72 +11,44 @@
 
 namespace ast
 {
+	// Represents a constant value.
 	class Constant : public Expression
 	{
 	public:
-		Constant(const ItemPosition& position)
-			: Expression(position),
-			type(Type::Void),
-			value(0)
-		{
-		}
+		// Create a constant.
+		Constant(const ItemPosition& position);
 
 	public:
-		void setValue(int val)
-		{
-			value = val;
-		}
+		// Set the value of the constant.
+		void setValue(int val);
 
-		void setType(Type t)
-		{
-			type = t;
-		}
+		// Set the type of the constant.
+		void setType(Type t);
 
 	public:
-		virtual Type getType() const
-		{
+		// Get the type of the constant.
+		virtual Type getType() const {
 			return type;
 		}
 
-		virtual int getValue() const
-		{
+		// Get the value of the constant.
+		virtual int getValue() const {
 			return value;
 		}
 
-		virtual bool isConstant() const
-		{
-			return true;
-		}
+	public:
+		virtual void checkSemantic(bool advanced) const;
+		virtual void toTextualRepresentation(ostream& out, size_t i) const;
+		virtual string getStringRepresentation() const;
 
-		virtual bool checkSemantic()
-		{
-			if (type == Type::Void) {
-				error(Error::InvalidStatement, this);
-				return false;
-			}
-
-			return true;
-		}
-
-		virtual void toTextualRepresentation(ostream& out, size_t i)
-		{
-			for (size_t j = 0; j < i; j++) { out << ' '; }
-			out << "Const(";
-
-			switch (type)
-			{
-			case Type::Character: out << '\'' << (char)value << '\''; break;
-			case Type::Integer: out << value; break;
-			default: out << "error"; break;
-			}
-
-			out << ')' << endl;
-		}
-
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
+	public:
+		virtual bool isConstant() const { return true; }
 
 	private:
-		Type type;
-		int value;
+		Type type; // Type of the constant.
+		int value; // Value of the constant.
+
+	public:
+		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
 	};
 }

@@ -75,16 +75,32 @@ int main(int argc, char* argv[])
 
 	exprParser parser(&tokens);
 	tree::ParseTree* tree = parser.prog();
-	int nbErrors = parser.getNumberOfSyntaxErrors();
+	size_t nbErrors = parser.getNumberOfSyntaxErrors();
 
 	if (nbErrors == 0)
 	{
 
 		Visiteur visitor;
 		Program* prog = (Program*)visitor.visit(tree);
-		if (prog->checkSemantic()) {
+
+		try
+		{
+			prog->checkSemantic(optionA);
 			prog->toTextualRepresentation(cout);
+
+			if (optionO) {
+				cout << "-------------------------------" << endl
+					<< " After optimization"
+					<< "-------------------------------" << endl;
+
+				prog->optimize();
+				prog->toTextualRepresentation(cout);
+			}
+
 			cout << "Le programme s'est fini correctement" << endl;
+		}
+		catch (...)
+		{
 		}
 
 		system("pause");

@@ -1,64 +1,76 @@
-#pragma once
+//
+// (c) 2019 The Super 4404 C Compiler
+// A.Belin, A.Nahid, L.Ohl, L.Saos, A.Verrier, I.Zemmouri
+// INSA Lyon
+//
 
 #include "function.hpp"
 #include "variable.hpp"
 
-using namespace ast;
-
-Function::Function(const ItemPosition& position) : Block(position) { }
-
-void Function::addParameter(Variable* var)
+namespace ast
 {
-	assert(var);
+	//
+	// Function
+	//
 
-	var->setScope(Scope::Parameter);
-	add(var);
-}
-
-vector<Variable*> Function::getParameters()
-{
-	vector<Variable*> params;
-
-	for (auto& instr : instructions) {
-		if (instr->isVariable() && ((Variable*)instr.get())->getScope() == Scope::Parameter) {
-			params.push_back((Variable*)instr.get());
-		}
+	Function::Function(const ItemPosition& position)
+		: Block(position)
+	{
 	}
 
-	return params;
-}
+	void Function::addParameter(Variable* var)
+	{
+		assert(var);
 
-size_t Function::getParametersCount()
-{
-	size_t cnt = 0;
-
-	for (auto& instr : instructions) {
-		if (instr->isVariable() && ((Variable*)instr.get())->getScope() == Scope::Parameter) {
-			cnt++;
-		}
+		var->setScope(Scope::Parameter);
+		add(var);
 	}
 
-	return cnt;
-}
+	vector<Variable*> Function::getParameters() const
+	{
+		vector<Variable*> params;
 
-void Function::toTextualRepresentation(ostream& out, size_t i)
-{
-	for (size_t j = 0; j < i; j++) { out << ' '; }
-	out << "DefFun {" << endl;
+		for (const auto& instr : instructions) {
+			if (instr->isVariable() && ((Variable*)instr.get())->getScope() == Scope::Parameter) {
+				params.push_back((Variable*)instr.get());
+			}
+		}
 
-	for (size_t j = 0; j < i + 1; j++) { out << ' '; }
-	out << getTypeName() << endl;
+		return params;
+	}
 
-	for (size_t j = 0; j < i + 1; j++) { out << ' '; }
-	out << "Ident(" << getName() << ')' << endl;
+	size_t Function::getParametersCount() const
+	{
+		size_t cnt = 0;
 
-	Block::toTextualRepresentation(out, i + 1);
+		for (const auto& instr : instructions) {
+			if (instr->isVariable() && ((Variable*)instr.get())->getScope() == Scope::Parameter) {
+				cnt++;
+			}
+		}
 
-	for (size_t j = 0; j < i; j++) { out << ' '; }
-	out << '}' << endl;
-}
+		return cnt;
+	}
 
-bool Function::isFunction() const 
-{ 
-	return true; 
+	void Function::toTextualRepresentation(ostream& out, size_t i) const
+	{
+		for (size_t j = 0; j < i; j++) { out << ' '; }
+		out << "DefFun {" << endl;
+
+		for (size_t j = 0; j < i + 1; j++) { out << ' '; }
+		out << getTypeName() << endl;
+
+		for (size_t j = 0; j < i + 1; j++) { out << ' '; }
+		out << "Ident(" << getName() << ')' << endl;
+
+		Block::toTextualRepresentation(out, i + 1);
+
+		for (size_t j = 0; j < i; j++) { out << ' '; }
+		out << '}' << endl;
+	}
+
+	string Function::getStringRepresentation() const
+	{
+		return getTypeName() + ' ' + getName() + "()";
+	}
 }
