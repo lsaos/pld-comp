@@ -108,7 +108,7 @@ namespace ast
 			out << '}' << endl;
 		}
 
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) {}
 
 	private:
 		UnaryOperator op;

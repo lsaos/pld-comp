@@ -25,7 +25,7 @@
 #include "../ast/error.hpp"
 #include "../ast/return.hpp"
 
-#include "assembly/assembly.hpp"
+#include "../assembly/assembly.hpp"
 
 using namespace antlr4;
 using namespace std;
@@ -53,7 +53,9 @@ int main(int argc, char* argv[])
 
 	int opt;
 	bool optionA = false, optionC = false, optionO = false;
-	while ((opt = getopt(argc, argv, "oca")) != -1) {
+	cout << "NB ARG : " << argc << endl;
+
+	while ((opt = getopt(argc, argv, "o:c:a:")) != -1) {
 		switch (opt) {
 			case 'o':
 				cout << "Il y aura optimisation" << endl;
@@ -80,6 +82,9 @@ int main(int argc, char* argv[])
 	tree::ParseTree* tree = parser.prog();
 	int nbErrors = parser.getNumberOfSyntaxErrors();
 
+	//Pour tester l'assemblage
+	optionC = true;
+
 	if (nbErrors == 0)
 	{
 
@@ -90,7 +95,7 @@ int main(int argc, char* argv[])
 			cout << "Le programme s'est fini correctement" << endl;
 
 			if (optionC) {
-				AssemblyGenerator ag("C:\\Users\\Aurelien Belin\\Documents\\INSA\\IF\\4IF\\PLD Comp\\pld-comp\\testAss");
+				AssemblyGenerator ag(argv[1]);
 				ag.generateAssembly(prog);
 			}
 		}

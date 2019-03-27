@@ -45,3 +45,7 @@ void Variable::toTextualRepresentation(ostream& out, size_t i)
 	out << '}' << endl;
 }
 
+void Variable::generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) 
+{
+	f << "\tmovl " << addressTable[this] << "(%rbp), %eax" << endl;
+}

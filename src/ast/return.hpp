@@ -73,18 +73,22 @@ namespace ast
 			out << '}' << endl;
 		}
 
-		virtual void generateAssembly(ofstream* f, unordered_map<ast::Variable*, int>* addressTable) 
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) 
 		{			
-			if (expr->isVariable()) 
+			cout << "Variable : " << expr->isVariable() << endl;
+
+			if (expr->isIdentifier()) 
 			{
-				*f << "movl " << addressTable->at((Variable*)(expr.get())) << ", %eax" << endl;
+				f << "\tmovl " << addressTable[((Identifier*)(expr.get()))->getReferencedVariable()] << "(%rbp), %eax" << endl;
 			}
 			else if (expr->isConstant()) 
 			{
-				*f << "movl $" << expr->getValue() << ", %eax" << endl;
+				cout << "RETURN : CONSTANTE" << endl; // DEBUG
+				f << "\tmovl $" << expr->getValue() << ", %eax" << endl;
 			}
 			else 
 			{
+				cout << "RETURN : RIEN" << endl; // DEBUG
 				expr->generateAssembly(f, addressTable);
 			}
 		}

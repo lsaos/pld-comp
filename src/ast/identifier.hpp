@@ -95,7 +95,9 @@ namespace ast
 			out << "Ident(" << ident << ')' << endl;
 		}
 
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) {}
+
+		virtual bool isIdentifier() const { return true; }
 
 	private:
 		string ident;
