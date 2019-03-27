@@ -4,28 +4,29 @@ using namespace assembly;
 
 AssemblyGenerator::AssemblyGenerator(string fileName)
 {
-	this.file = new ofstream(fileName.substr(0, fileName.size() - 1) + "s", ios::out);
+	file = new ofstream(fileName.substr(0, fileName.size() - 1) + "s", ios::out);
+	addressTable = new unordered_map<ast::Variable*, int>();
 }
 
 void AssemblyGenerator::generateAssembly(ast::Program* program)
 {
 	ast::Function* main = program->getMain();
-	vector<unique_ptr<ast::Instruction> instructions = main->getInstructions();
-	vector<ast::Variable*> variables = main->getVariables();
+	vector<ast::Instruction*> instructions = main->getInstructions();
+	vector<ast::Variable*> variables = main->getVariables(false);
 	int rbp = 0;
 
 	for (auto i : variables)
 	{
 		switch (i->getType()) 
 		{
-			case ast::Type.Integer :
+			case ast::Type::Integer :
 				rbp -= 4;
 				break;
-			case ast::Type.Character :
+			case ast::Type::Character :
 				rbp -= 1;
 				break;
 		}
-		addressTable[i] = rbp;
+		addressTable->at(i) = rbp;
 	}
 
 	//Prologue
@@ -38,6 +39,7 @@ void AssemblyGenerator::generateAssembly(ast::Program* program)
 	for (auto instr : instructions) 
 	{
 		//instr->generateAssembly(this);
+		//instr->generateAssembly(this->file, this->addressTable);
 	}
 
 	//Epilogue
@@ -46,10 +48,10 @@ void AssemblyGenerator::generateAssembly(ast::Program* program)
 
 unordered_map<ast::Variable*, int>* AssemblyGenerator::getAddressTable() const
 {
-	return &addressTable;
+	return addressTable;
 }
 
-ofstream AssemblyGenerator::getFile() 
+ofstream* AssemblyGenerator::getFile() 
 {
 	return file;
 }

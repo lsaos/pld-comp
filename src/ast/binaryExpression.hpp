@@ -174,6 +174,8 @@ namespace ast
 			out << '}' << endl;
 		}
 
+		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
+
 	private:
 		BinaryOperator op;
 		unique_ptr<Expression> left;

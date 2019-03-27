@@ -108,6 +108,8 @@ namespace ast
 			out << '}' << endl;
 		}
 
+		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
+
 	private:
 		UnaryOperator op;
 		unique_ptr<Expression> expr;

@@ -2,6 +2,7 @@
 
 #include "expression.hpp"
 #include "identifiable.hpp"
+#include "variable.hpp"
 
 namespace ast
 {
@@ -93,6 +94,8 @@ namespace ast
 			for (size_t j = 0; j < i; j++) { out << ' '; }
 			out << "Ident(" << ident << ')' << endl;
 		}
+
+		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
 
 	private:
 		string ident;

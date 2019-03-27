@@ -10,19 +10,28 @@
 
 using namespace std;
 
-namespace assembly {
+namespace assembly 
+{
 
-	class AssemblyGenerator {
+	class AssemblyGenerator 
+	{
 		public:
 			AssemblyGenerator(string fileName);
-			~AssemblyGenerator() {}
+
+			~AssemblyGenerator() 
+			{
+				file->close();
+				delete file;
+				delete addressTable;  
+			}
+
 			void generateAssembly(ast::Program* prog);
 			unordered_map<ast::Variable*, int>* getAddressTable() const;
-			ofstream getFile();
+			ofstream* getFile();
 
 		protected:
-			ofstream file;
-			unordered_map<ast::Variable*, int> addressTable;
+			ofstream* file;
+			unordered_map<ast::Variable*, int>* addressTable;
 
 	};
 }
