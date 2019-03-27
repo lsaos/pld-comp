@@ -58,10 +58,7 @@ namespace ast
 		UnaryOperator op; // Unary operator.
 		unique_ptr<Expression> expr; // Unary operand.
 
+	public:
 		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) {}
-
-	private:
-		UnaryOperator op;
-		unique_ptr<Expression> expr;
 	};
 }

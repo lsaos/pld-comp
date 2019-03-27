@@ -73,22 +73,17 @@ namespace ast
 	{
 		return getTypeName() + ' ' + getName() + "()";
 	}
-}
 
-bool Function::isFunction() const 
-{ 
-	return true; 
-}
+	void Function::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable)
+	{
+		f << this->getName() << ":" << endl;
+		f << "\tpushq %rbp" << endl;
+		f << "\tmovq %rsp, %rbp" << endl;
 
-void Function::generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) 
-{
-	f << this->getName() << ":" << endl;
-	f << "\tpushq %rbp" << endl;
-	f << "\tmovq %rsp, %rbp" << endl;
+		for (auto i : getInstructions()) {
+			i->generateAssembly(f, addressTable);
+		}
 
-	for (auto i : getInstructions()) {
-		i->generateAssembly(f, addressTable);
+		f << "\tpopq %rbp" << endl << "\tret" << endl;
 	}
-
-	f << "\tpopq %rbp" << endl << "\tret" << endl;
 }

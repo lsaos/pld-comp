@@ -53,8 +53,5 @@ namespace ast
 
 	protected:
 		vector<unique_ptr<Instruction>> instructions; // List of instructions in the block.
-
-	public:
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
 	};
 }

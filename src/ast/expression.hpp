@@ -35,8 +35,5 @@ namespace ast
 
 	public:
 		virtual bool isExpression() const { return true; }
-
-	public:
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) = 0;
 	};
 }

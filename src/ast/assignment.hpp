@@ -48,21 +48,7 @@ namespace ast
 		unique_ptr<Identifier> identifier; // Identifier of the assigned variable.
 		unique_ptr<Expression> expr; // Expression of the value to assign.
 
-		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable)
-		{
-			if (expr->isConstant())
-			{
-				f << "\tmovl $" << expr->getValue() << ", " << addressTable[identifier->getReferencedVariable()] << "(%rbp)" << endl;
-			}
-			else
-			{
-				expr->generateAssembly(f, addressTable);
-				f << "\tmovl %eax, " << addressTable[identifier->getReferencedVariable()] << "(%rbp)" << endl;
-			}
-		}
-
-	private:
-		unique_ptr<Identifier> identifier;
-		unique_ptr<Expression> expr;
+	public:
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable);
 	};
 }

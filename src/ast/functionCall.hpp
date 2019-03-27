@@ -40,8 +40,5 @@ namespace ast
 	private:
 		vector<unique_ptr<Expression>> args; // Arguments to pass to the function.
 		unique_ptr<Identifier> identifier; // Identifier referencing the called function.
-
-	public:
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
 	};
 }

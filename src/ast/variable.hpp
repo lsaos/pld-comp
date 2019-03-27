@@ -50,11 +50,9 @@ namespace ast
 		virtual bool isVariable() const { return true; }
 
 		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable);
+
 	private:
 		Scope scope; // Scope of the variable.
-
-	public:
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
 	};
 }
 

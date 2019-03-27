@@ -90,4 +90,17 @@ namespace ast
 		// We can't optimize the assignment itself
 		return nullptr;
 	}
+
+	void Assignment::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable)
+	{
+		if (expr->isConstant())
+		{
+			f << "\tmovl $" << expr->getValue() << ", " << addressTable[identifier->getReferencedVariable()] << "(%rbp)" << endl;
+		}
+		else
+		{
+			expr->generateAssembly(f, addressTable);
+			f << "\tmovl %eax, " << addressTable[identifier->getReferencedVariable()] << "(%rbp)" << endl;
+		}
+	}
 }
