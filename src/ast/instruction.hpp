@@ -12,6 +12,8 @@
 #include <string>
 #include <unordered_map>
 #include <fstream>
+#include <memory>
+#include <algorithm>
 
 using namespace std;
 
