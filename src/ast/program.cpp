@@ -1,113 +1,99 @@
-#pragma once
+//
+// (c) 2019 The Super 4404 C Compiler
+// A.Belin, A.Nahid, L.Ohl, L.Saos, A.Verrier, I.Zemmouri
+// INSA Lyon
+//
 
 #include "program.hpp"
 #include "function.hpp"
 #include "variable.hpp"
 
-using namespace ast;
-
-Program::Program(): Block(ItemPosition())
+namespace ast
 {
-}
+	//
+	// Program
+	//
 
-Function* Program::getFunction(const string& name)
-{
-	for (const auto& instr : instructions) {
-		if (instr->isFunction() && ((Function*)instr.get())->getName() == name) {
-			return (Function*)instr.get();
-		}
+	Program::Program()
+		: Block(ItemPosition())
+	{
 	}
 
-	return nullptr;
-}
-
-Function* Program::getMain()
-{
-	return getFunction("main");
-}
-
-vector<Function*> Program::getFunctions()
-{
-	vector<Function*> funcs;
-
-	for (const auto& instr : instructions) {
-		if (instr->isFunction()) {
-			funcs.push_back((Function*)instr.get());
-		}
-	}
-
-	return funcs;
-}
-
-size_t Program::getFunctionsCount()
-{
-	size_t cnt = 0;
-
-	for (const auto& instr : instructions) {
-		if (instr->isFunction()) {
-			cnt++;
-		}
-	}
-
-	return cnt;
-}
-
-bool Program::checkSemantic()
-{
-	// Check the program has a main function
-	if (!getMain()) {
-		error(Error::NoMain, this);
-	}
-
-	// Check we have only functions or global variables
-	for (const auto& instr : instructions) {
-		if (!instr->isFunction() && !(instr->isVariable() && ((const Variable*)instr.get())->getScope() == Scope::Global)) {
-			error(Error::InvalidStatement, instr.get());
-			return false;
-		}
-	}
-
-	// Check we don't have duplicated function names
-	vector<string> funcs;
-	for (const auto& instr : instructions) {
-		if (instr->isFunction()) {
-			const string& name(((Function*)instr.get())->getName());
-			if (find(funcs.begin(), funcs.end(), name) != funcs.end()) {
-				error(Error::DuplicatedSymbolName, instr.get());
-				return false;
+	Function* Program::getFunction(const string& name) const
+	{
+		for (const auto& instr : instructions) {
+			if (instr->isFunction() && ((const Function*)instr.get())->getName() == name) {
+				return (Function*)instr.get();
 			}
-			funcs.push_back(name);
+		}
+
+		return nullptr;
+	}
+
+	vector<Function*> Program::getFunctions() const
+	{
+		vector<Function*> funcs;
+
+		for (const auto& instr : instructions) {
+			if (instr->isFunction()) {
+				funcs.push_back((Function*)instr.get());
+			}
+		}
+
+		return funcs;
+	}
+
+	size_t Program::getFunctionsCount() const
+	{
+		size_t cnt = 0;
+
+		for (const auto& instr : instructions) {
+			if (instr->isFunction()) {
+				cnt++;
+			}
+		}
+
+		return cnt;
+	}
+
+	void Program::checkSemantic(bool advanced) const
+	{
+		// Check we have only functions or global variables
+		for (const auto& instr : instructions) {
+			if (!instr->isFunction() && !(instr->isVariable() && ((const Variable*)instr.get())->getScope() == Scope::Global)) {
+				error(Error::InvalidStatement, instr.get());
+			}
+		}
+
+		// Check we don't have duplicated function names
+		vector<string> funcs;
+		for (const auto& instr : instructions) {
+			if (instr->isFunction()) {
+				const string& name(((Function*)instr.get())->getName());
+				if (find(funcs.begin(), funcs.end(), name) != funcs.end()) {
+					error(Error::DuplicatedSymbolName, instr.get());
+				}
+				funcs.push_back(name);
+			}
+		}
+
+		// Base block check
+		Block::checkSemantic(advanced);
+
+		// Check the program has a main function
+		if (!getMain()) {
+			error(Error::NoMain, this);
 		}
 	}
 
-	// Base block check
-	return Block::checkSemantic();
-}
+	void Program::toTextualRepresentation(ostream& out, size_t i) const
+	{
+		cout << "Program {" << endl;
 
-void Program::toTextualRepresentation(ostream& out, size_t i)
-{
-	cout << "Program {" << endl;
+		for (const auto& instr : instructions) {
+			instr->toTextualRepresentation(out, i + 1);
+		}
 
-	for (auto& instr : instructions) {
-		instr->toTextualRepresentation(out, i + 1);
+		out << '}' << endl;
 	}
-
-	out << '}' << endl;
-}
-
-void Program::add(Instruction* instr)
-{
-	assert(instr);
-
-	// If it's a variable, it has a global scope
-	if (instr->isVariable()) {
-		((Variable*)instr)->setScope(Scope::Global);
-	}
-
-	Block::add(instr);
-}
-
-bool Program::isProgram() const 
-{ 
-	return true; 
 }

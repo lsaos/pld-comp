@@ -1,3 +1,9 @@
+//
+// (c) 2019 The Super 4404 C Compiler
+// A.Belin, A.Nahid, L.Ohl, L.Saos, A.Verrier, I.Zemmouri
+// INSA Lyon
+//
+
 #pragma once
 
 #include <string>
@@ -7,35 +13,47 @@ using namespace std;
 #include "type.hpp"
 #include "instruction.hpp"
 #include "identifiable.hpp"
-#include "program.hpp"
 
 namespace ast
 {
+	// Variable scope.
 	enum class Scope
 	{
-		Global,
-		Parameter,
-		Block
+		Global, // Global variable in the program.
+		Parameter, // Parameter variable in a function.
+		Block // Standard variable in a block.
 	};
 
+	// Represents a memory allocation with a name and a type.
 	class Variable : public Instruction, public Identifiable
 	{
 	public:
+		// Create a variable.
 		Variable(const ItemPosition& position);
 
+	public:
+		// Set the variable scope.
 		void setScope(Scope s);
 
-		Scope getScope() const;
+	public:
+		// Get the variable scope.
+		Scope getScope() const {
+			return scope;
+		}
 
-		virtual bool checkSemantic();
+	public:
+		virtual void checkSemantic(bool advanced) const;
+		virtual void toTextualRepresentation(ostream& out, size_t i) const;
+		virtual string getStringRepresentation() const;
 
-		virtual void toTextualRepresentation(ostream& out, size_t i);
-
+	public:
 		virtual bool isVariable() const { return true; }
 
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
-
 	private:
-		Scope scope;
+		Scope scope; // Scope of the variable.
+
+	public:
+		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
 	};
 }
+

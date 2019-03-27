@@ -21,7 +21,7 @@
 
 using namespace ast;
 
-ItemPosition Visiteur::buildPos(int line, int column) {
+ItemPosition Visiteur::buildPos(size_t line, size_t column) {
 	ItemPosition pos;
 	pos.line = line;
 	pos.offset = column;
@@ -227,7 +227,7 @@ antlrcpp::Any Visiteur::visitUnary(exprParser::UnaryContext *ctx){
             unary->setOperator(UnaryOperator::Minus);
             break;
         case '!':
-            unary->setOperator(UnaryOperator::Not);
+            unary->setOperator(UnaryOperator::LogicalNot);
             break;
     }
     #ifdef TREEVISIT
@@ -250,13 +250,13 @@ antlrcpp::Any Visiteur::visitBin(exprParser::BinContext *ctx){
 	binExp->setRightExpression(right);
 	switch (opbin) {
 	case '&':
-		binExp->setOperator(BinaryOperator::LogicalAnd);
+		binExp->setOperator(BinaryOperator::BitwiseAnd);
 		break;
 	case '^':
-		binExp->setOperator(BinaryOperator::LogicalXor);
+		binExp->setOperator(BinaryOperator::BitwiseXor);
 		break;
 	case '|':
-		binExp->setOperator(BinaryOperator::LogicalOr);
+		binExp->setOperator(BinaryOperator::BitwiseOr);
 		break;
 	}
 #ifdef TREEVISIT

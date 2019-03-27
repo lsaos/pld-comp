@@ -1,81 +1,48 @@
+//
+// (c) 2019 The Super 4404 C Compiler
+// A.Belin, A.Nahid, L.Ohl, L.Saos, A.Verrier, I.Zemmouri
+// INSA Lyon
+//
+
 #pragma once
 
 #include "expression.hpp"
 
 namespace ast
 {
+	// Return instruction in a function.
+	// A return has an expression if it returns a value.
 	class Return : public Instruction
 	{
 	public:
-		Return(const ItemPosition& position)
-			: Instruction(position),
-			expr(nullptr)
-		{
-		}
+		// Create a return instruction.
+		Return(const ItemPosition& position);
 
 	public:
-		void setExpression(Expression* expression)
-		{
-			assert(expression);
-			expression->setParent(this);
-			expr = unique_ptr<Expression>(expression);
-		}
+		// Set the value expression of the return.
+		// The return takes the ownership of the specified pointer.
+		void setExpression(Expression* expression);
 
-		Expression* getExpression()
-		{
+	public:
+		// Get the value expression.
+		// Returns null if the return has no value.
+		Expression* getExpression() const {
 			return expr.get();
 		}
 
 	public:
-		virtual bool checkSemantic()
-		{
-			Function* parentFunc = getParentFunction();
+		virtual void checkSemantic(bool advanced) const;
+		virtual void toTextualRepresentation(ostream& out, size_t i) const;
+		virtual Instruction* optimize();
 
-			if (parentFunc->getType() == Type::Void) {
-				if (expr) {
-					error(Error::InvalidStatement, expr.get());
-					return false;
-				}
-			}
-			else {
-				if (!expr) {
-					error(Error::ExpectingExpression, this);
-					return false;
-				}
-
-				if (!expr->checkSemantic()) {
-					return false;
-				}
-
-				if (expr->getType() == Type::Void) {
-					error(Error::InvalidStatement, expr.get());
-					return false;
-				}
-			}
-
-			return true;
-		}
-
-		virtual void toTextualRepresentation(ostream& out, size_t i)
-		{
-			for (size_t j = 0; j < i; j++) { out << ' '; }
-			out << "Ret {" << endl;
-
-			if (expr) {
-				expr->toTextualRepresentation(out, i + 1);
-			}
-			else {
-				for (size_t j = 0; j < i + 1; j++) { out << ' '; }
-				out << "void" << endl;
-			}
-
-			for (size_t j = 0; j < i; j++) { out << ' '; }
-			out << '}' << endl;
-		}
-
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
+	public:
+		virtual string getStringRepresentation() const { return "return"; }
+		virtual bool isReturn() const { return true; }
 
 	private:
-		unique_ptr<Expression> expr;
+		unique_ptr<Expression> expr; // Value expression.
+
+	public:
+		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
 	};
 }
