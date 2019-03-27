@@ -7,6 +7,7 @@ using namespace std;
 #include "type.hpp"
 #include "instruction.hpp"
 #include "identifiable.hpp"
+#include "program.hpp"
 
 namespace ast
 {
@@ -20,46 +21,19 @@ namespace ast
 	class Variable : public Instruction, public Identifiable
 	{
 	public:
-		Variable(const ItemPosition& position)
-			: Instruction(position),
-			scope(Scope::Block)
-		{
-		}
+		Variable(const ItemPosition& position);
 
-	public:
-		void setScope(Scope s)
-		{
-			scope = s;
-		}
+		void setScope(Scope s);
 
-		Scope getScope() const
-		{
-			return scope;
-		}
+		Scope getScope() const;
 
-	public:
-		virtual bool checkSemantic()
-		{
-			return true;
-		}
+		virtual bool checkSemantic();
 
-		virtual void toTextualRepresentation(ostream& out, size_t i)
-		{
-			for (size_t j = 0; j < i; j++) { out << ' '; }
-			out << "Var {" << endl;
+		virtual void toTextualRepresentation(ostream& out, size_t i);
 
-			for (size_t j = 0; j < i + 1; j++) { out << ' '; }
-			out << getTypeName() << endl;
-
-			for (size_t j = 0; j < i + 1; j++) { out << ' '; }
-			out << "Ident(" << getName() << ')' << endl;
-
-			for (size_t j = 0; j < i; j++) { out << ' '; }
-			out << '}' << endl;
-		}
-
-	public:
 		virtual bool isVariable() const { return true; }
+
+		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
 
 	private:
 		Scope scope;

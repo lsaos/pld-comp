@@ -31,7 +31,11 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitRet(exprParser::RetContext *ctx) override {
+  virtual antlrcpp::Any visitRetExpr(exprParser::RetExprContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitRetNoExpr(exprParser::RetNoExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -47,7 +51,11 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitDefinition(exprParser::DefinitionContext *ctx) override {
+  virtual antlrcpp::Any visitPlainNewVariable(exprParser::PlainNewVariableContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitValuedNewVariable(exprParser::ValuedNewVariableContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -87,7 +95,11 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitType(exprParser::TypeContext *ctx) override {
+  virtual antlrcpp::Any visitFuncType(exprParser::FuncTypeContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitVarType(exprParser::VarTypeContext *ctx) override {
     return visitChildren(ctx);
   }
 

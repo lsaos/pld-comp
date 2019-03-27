@@ -46,6 +46,11 @@ namespace ast
 				if (!expr->checkSemantic()) {
 					return false;
 				}
+
+				if (expr->getType() == Type::Void) {
+					error(Error::InvalidStatement, expr.get());
+					return false;
+				}
 			}
 
 			return true;
@@ -67,6 +72,8 @@ namespace ast
 			for (size_t j = 0; j < i; j++) { out << ' '; }
 			out << '}' << endl;
 		}
+
+		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
 
 	private:
 		unique_ptr<Expression> expr;

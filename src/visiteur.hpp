@@ -29,13 +29,17 @@ class Visiteur : public exprBaseVisitor{
 
 		virtual antlrcpp::Any visitBlock(exprParser::BlockContext *ctx);
 		
-		virtual antlrcpp::Any visitRet(exprParser::RetContext *ctx);
+		virtual antlrcpp::Any visitRetExpr(exprParser::RetExprContext *context);
+
+        virtual antlrcpp::Any visitRetNoExpr(exprParser::RetNoExprContext *context);
 
 		virtual antlrcpp::Any visitInstruction(exprParser::InstructionContext *ctx);
 
 		virtual antlrcpp::Any visitDeclaration(exprParser::DeclarationContext *ctx);
 
-		virtual antlrcpp::Any visitDefinition(exprParser::DefinitionContext *ctx);
+        virtual antlrcpp::Any visitPlainNewVariable(exprParser::PlainNewVariableContext *context);
+
+        virtual antlrcpp::Any visitValuedNewVariable(exprParser::ValuedNewVariableContext *context);
 		
 		virtual antlrcpp::Any visitAssignment(exprParser::AssignmentContext *ctx);
 
@@ -55,7 +59,9 @@ class Visiteur : public exprBaseVisitor{
 
 		virtual antlrcpp::Any visitInt(exprParser::IntContext *ctx);
 
-		virtual antlrcpp::Any visitType(exprParser::TypeContext *ctx);
+        virtual antlrcpp::Any visitFuncType(exprParser::FuncTypeContext *context);
+
+		virtual antlrcpp::Any visitVarType(exprParser::VarTypeContext *ctx);
 		
 		virtual ~Visiteur(){}
 		

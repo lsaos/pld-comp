@@ -134,6 +134,31 @@ namespace ast
 	public:
 		virtual bool checkSemantic()
 		{
+			if (!left || !right) {
+				error(Error::InvalidStatement, this);
+				return false;
+			}
+
+			if (!left->checkSemantic() || !right->checkSemantic()) {
+				return false;
+			}
+
+			if (left->getType() == Type::Void) {
+				error(Error::InvalidStatement, left.get());
+				return false;
+			}
+
+			if (right->getType() == Type::Void) {
+				error(Error::InvalidStatement, right.get());
+				return false;
+			}
+
+			// Special case: division by zero
+			if (op == BinaryOperator::Divide && right->isConstant() && right->getValue() == 0) {
+				error(Error::DivisionByZero, right.get());
+				return false;
+			}
+
 			return true;
 		}
 
@@ -148,6 +173,8 @@ namespace ast
 			for (size_t j = 0; j < i; j++) { out << ' '; }
 			out << '}' << endl;
 		}
+
+		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
 
 	private:
 		BinaryOperator op;

@@ -80,6 +80,20 @@ namespace ast
 	public:
 		virtual bool checkSemantic()
 		{
+			if (!expr) {
+				error(Error::InvalidStatement, this);
+				return false;
+			}
+
+			if (!expr->checkSemantic()) {
+				return false;
+			}
+
+			if (expr->getType() == Type::Void) {
+				error(Error::InvalidStatement, expr.get());
+				return false;
+			}
+
 			return true;
 		}
 
@@ -93,6 +107,8 @@ namespace ast
 			for (size_t j = 0; j < i; j++) { out << ' '; }
 			out << '}' << endl;
 		}
+
+		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
 
 	private:
 		UnaryOperator op;

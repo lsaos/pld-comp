@@ -6,32 +6,34 @@ prog: preproc SPACE* main;
 preproc: (SPACE* include)*;
 include: '#include' SPACE* '<' LIB '>';
 
-main: 'int' SPACE+ 'main' SPACE* '(' SPACE* ')' SPACE* '{' SPACE* (instruction SPACE*)* ret SPACE* '}' SPACE*;
-ret: 'return' SPACE+ expression SPACE* ';';
+main: funcType SPACE+ 'main' SPACE* '(' SPACE* ')' SPACE* '{' SPACE* (declaration SPACE*)* (instruction SPACE*)* ret? SPACE* '}' SPACE*;
+ret: 'return' SPACE+ expression SPACE* ';' #retExpr
+	| 'return' SPACE* ';' #retNoExpr
+	;
 block: (instruction SPACE*)+;
-instruction: declaration SPACE* ';'
-		   | definition SPACE* ';'
-		   | assignment SPACE* ';'
-		   ;
-declaration: type SPACE* VAR;
-definition: type SPACE* VAR SPACE* '=' SPACE* expression;
-assignment: VAR SPACE* '=' SPACE* expression;
+instruction: assignment;
+declaration: varType SPACE* newVar SPACE* (',' newVar SPACE*)* ';';
+newVar: VAR #plainNewVariable
+	| VAR SPACE* '=' SPACE* expression #valuedNewVariable
+	;
+assignment: VAR SPACE* '=' SPACE* expression ';';
 expression: VAR #variable
 		  | INT #int
 		  | CHAR #char
 		  | '('SPACE* expression SPACE* ')' #parenthesis
-		  | UNARYOP expression #unary
 		  | expression SPACE* OPMUL SPACE* expression #mult
 		  | expression SPACE* OPADD SPACE* expression #add
 		  | expression SPACE* OPBIN SPACE* expression #bin
+		  | UNARYOP expression #unary
 		  ;
 
-type: 'int'|'char';
+funcType: 'int'|'void';
+varType: 'int'|'char';
 SPACE: [ \t\r\n];
-UNARYOP: ('-'|'!');
 OPMUL: ('*'|'/');
 OPADD: ('+'|'-');
 OPBIN: ('&'|'^'|'|'); 
+UNARYOP: ('-'|'!');
 INT: [0-9]+;
 LIB: [a-zA-Z]+ '.h';
 CHAR: '\'' [a-zA-Z0-9] '\'';

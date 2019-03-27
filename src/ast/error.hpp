@@ -11,6 +11,7 @@ namespace ast
 		NoMain,
 		InvalidStatement,
 		DuplicatedSymbolName,
-		ExpectingExpression
+		ExpectingExpression,
+		UnknownIdentifier
 	};
 }
