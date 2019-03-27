@@ -53,11 +53,13 @@ namespace ast
 		virtual void checkSemantic(bool advanced) const;
 		virtual void toTextualRepresentation(ostream& out, size_t i) const;
 		virtual string getStringRepresentation() const { return ident; }
+		virtual void prepare();
+
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) {}
+
+		virtual bool isIdentifier() const { return true; }
 
 	private:
 		string ident; // Identifier string.
-
-	public:
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
 	};
 }

@@ -45,14 +45,14 @@ namespace ast
 		virtual void checkSemantic(bool advanced) const;
 		virtual void toTextualRepresentation(ostream& out, size_t i) const;
 		virtual Instruction* optimize();
+		virtual void prepare();
 
 	public:
 		virtual bool isBlock() const { return true; }
 
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) {}
+
 	protected:
 		vector<unique_ptr<Instruction>> instructions; // List of instructions in the block.
-
-	public:
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
 	};
 }

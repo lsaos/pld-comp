@@ -47,8 +47,8 @@ namespace ast
 	private:
 		Type type; // Type of the constant.
 		int value; // Value of the constant.
-
+	
 	public:
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) {}
 	};
 }

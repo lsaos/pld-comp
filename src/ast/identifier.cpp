@@ -24,14 +24,6 @@ namespace ast
 	{
 		assert(!str.empty());
 		ident = str;
-
-		// Mark the variable used if it exists
-		if (getParentBlock()) {
-			Variable* var = getParentBlock()->getVariable(str, true);
-			if (var) {
-				var->markUsed();
-			}
-		}
 	}
 
 	Variable* Identifier::getReferencedVariable() const
@@ -78,6 +70,16 @@ namespace ast
 		// A function identifier can only be in a function call
 		if (refFunction && !getParent()->isFunctionCall()) {
 			error(Error::InvalidInstruction, this);
+		}
+	}
+
+	void Identifier::prepare()
+	{
+		if (getParentBlock()) {
+			Variable* var = getReferencedVariable();
+			if (var) {
+				var->markUsed();
+			}
 		}
 	}
 

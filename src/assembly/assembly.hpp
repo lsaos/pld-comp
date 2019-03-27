@@ -20,18 +20,16 @@ namespace assembly
 
 			~AssemblyGenerator() 
 			{
-				file->close();
-				delete file;
-				delete addressTable;  
+				file.close(); 
 			}
 
-			void generateAssembly(ast::Program* prog);
-			unordered_map<ast::Variable*, int>* getAddressTable() const;
-			ofstream* getFile();
+			void generateAssembly(ast::Program* program);
+			unordered_map<ast::Variable*, int>& getAddressTable();
+			ofstream& getFile();
 
 		protected:
-			ofstream* file;
-			unordered_map<ast::Variable*, int>* addressTable;
+			ofstream file;
+			unordered_map<ast::Variable*, int> addressTable;
 
 	};
 }

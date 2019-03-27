@@ -211,4 +211,15 @@ namespace ast
 			return nullptr;
 		}
 	}
+
+	void BinaryExpression::prepare()
+	{
+		if (left) {
+			left->prepare();
+		}
+
+		if (right) {
+			right->prepare();
+		}
+	}
 }

@@ -119,4 +119,11 @@ namespace ast
 			return nullptr;
 		}
 	}
+
+	void UnaryExpression::prepare()
+	{
+		if (expr) {
+			expr->prepare();
+		}
+	}
 }

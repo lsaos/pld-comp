@@ -145,4 +145,11 @@ namespace ast
 		// We can't optimize the block itself
 		return nullptr;
 	}
+
+	void Block::prepare()
+	{
+		for (auto& instr : instructions) {
+			instr->prepare();
+		}
+	}
 }
