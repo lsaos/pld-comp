@@ -58,6 +58,11 @@ int main(int argc, char* argv[])
 			optionC = true;
 			break;
 		}
+		if (!strcmp(argv[i], "-a")) {
+			cout << "Il y aura analyse statique" << endl;
+			optionA = true;
+			break;
+		}
 	}
 
 	while ((opt = getopt(argc, argv, "o:c:a:")) != -1) {

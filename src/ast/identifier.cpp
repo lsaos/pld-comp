@@ -24,6 +24,14 @@ namespace ast
 	{
 		assert(!str.empty());
 		ident = str;
+
+		// Mark the variable used if it exists
+		if (getParentBlock()) {
+			Variable* var = getParentBlock()->getVariable(str, true);
+			if (var) {
+				var->markUsed();
+			}
+		}
 	}
 
 	Variable* Identifier::getReferencedVariable() const

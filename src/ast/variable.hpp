@@ -35,6 +35,9 @@ namespace ast
 		// Set the variable scope.
 		void setScope(Scope s);
 
+		// Mark the variable as used.
+		void markUsed();
+
 	public:
 		// Get the variable scope.
 		Scope getScope() const {
@@ -51,9 +54,9 @@ namespace ast
 
 	private:
 		Scope scope; // Scope of the variable.
+		bool used; // True if the variable is used.
 
 	public:
 		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
 	};
 }
-
