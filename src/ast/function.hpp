@@ -29,6 +29,6 @@ namespace ast
 
 		virtual bool isFunction() const;
 
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
+		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*);
 	};
 }

@@ -31,19 +31,21 @@ void AssemblyGenerator::generateAssembly(ast::Program* program)
 
 	//Prologue
 	*file << ".text" << endl << ".global main" << endl;
-	*file << "main:" << endl;
+	/**file << "main:" << endl;
 	*file << "pushq %rbp" << endl;
-	*file << "movq %rsp, %rbp" << endl;
+	*file << "movq %rsp, %rbp" << endl;*/
 
 	//Corps du programme
-	for (auto instr : instructions) 
+	/*for (auto instr : instructions) 
 	{
 		//instr->generateAssembly(this);
 		//instr->generateAssembly(this->file, this->addressTable);
-	}
+	}*/
 
 	//Epilogue
-	*file << "popq %rbp" << endl << "ret" << endl;
+	//*file << "popq %rbp" << endl << "ret" << endl;
+
+	main->generateAssembly(file, addressTable);
 }
 
 unordered_map<ast::Variable*, int>* AssemblyGenerator::getAddressTable() const

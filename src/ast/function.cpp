@@ -62,3 +62,16 @@ bool Function::isFunction() const
 { 
 	return true; 
 }
+
+void Function::generateAssembly(ofstream* f, unordered_map<ast::Variable*, int>* addressTable) 
+{
+	*f << this->getName() << ":" << endl;
+	*f << "pushq %rbp" << endl;
+	*f << "movq %rsp, %rbp" << endl;
+
+	for (auto i : getInstructions()) {
+		i->generateAssembly(f, addressTable);
+	}
+
+	*f << "popq %rbp" << endl << "ret" << endl;
+}
