@@ -91,6 +91,17 @@ namespace ast
 		return nullptr;
 	}
 
+	void Assignment::prepare()
+	{
+		if (identifier) {
+			identifier->prepare();
+		}
+
+		if (expr) {
+			expr->prepare();
+		}
+	}
+
 	void Assignment::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg)
 	{
 		//cout << expr.get()->getValue() << endl;

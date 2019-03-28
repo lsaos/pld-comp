@@ -73,6 +73,16 @@ namespace ast
 		}
 	}
 
+	void Identifier::prepare()
+	{
+		if (getParentBlock()) {
+			Variable* var = getReferencedVariable();
+			if (var) {
+				var->markUsed();
+			}
+		}
+	}
+
 	void Identifier::toTextualRepresentation(ostream& out, size_t i) const
 	{
 		for (size_t j = 0; j < i; j++) { out << ' '; }

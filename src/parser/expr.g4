@@ -12,7 +12,7 @@ ret: 'return' SPACE+ expression SPACE* ';' #retExpr
 	;
 block: (instruction SPACE*)+;
 instruction: assignment;
-declaration: varType SPACE* newVar SPACE* (',' newVar SPACE*)* ';';
+declaration: varType SPACE* newVar SPACE* (',' SPACE* newVar SPACE*)* ';';
 newVar: VAR #plainNewVariable
 	| VAR SPACE* '=' SPACE* expression #valuedNewVariable
 	;

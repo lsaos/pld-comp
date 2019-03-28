@@ -45,6 +45,7 @@ namespace ast
 		virtual void checkSemantic(bool advanced) const;
 		virtual void toTextualRepresentation(ostream& out, size_t i) const;
 		virtual Instruction* optimize();
+		virtual void prepare();
 
 	public:
 		virtual bool isBlock() const { return true; }

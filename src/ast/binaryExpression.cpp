@@ -277,6 +277,15 @@ namespace ast
 			else
 				f << addressTable[((Identifier*)(right.get()))->getReferencedVariable()] << "(%rbp)";
 			f << ", ";
+}
+  
+void BinaryExpression::prepare()
+{
+		if (left) {
+			left->prepare();
 		}
-	}
+
+		if (right) {
+			right->prepare();
+		}
 }

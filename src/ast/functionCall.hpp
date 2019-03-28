@@ -31,6 +31,7 @@ namespace ast
 	public:
 		virtual Type getType() const;
 		virtual void checkSemantic(bool advanced) const;
+		virtual void prepare();
 
 	public:
 		virtual bool isFunctionCall() const { return true; }

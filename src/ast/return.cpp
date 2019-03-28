@@ -83,6 +83,13 @@ namespace ast
 		return nullptr;
 	}
 
+	void Return::prepare()
+	{
+		if (expr) {
+			expr->prepare();
+		}
+	}
+
 	void Return::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg)
 	{
 		expr->generateAssembly(f, addressTable, curReg);

@@ -130,6 +130,7 @@ namespace ast
 		switch (warning)
 		{
 		case Warning::None: cout << "none"; break;
+		case Warning::UnusedVariable: cout << "unused variable"; break;
 		default: cout << "unknown warning"; break;
 		}
 

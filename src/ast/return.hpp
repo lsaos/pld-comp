@@ -34,6 +34,7 @@ namespace ast
 		virtual void checkSemantic(bool advanced) const;
 		virtual void toTextualRepresentation(ostream& out, size_t i) const;
 		virtual Instruction* optimize();
+		virtual void prepare();
 
 	public:
 		virtual string getStringRepresentation() const { return "return"; }

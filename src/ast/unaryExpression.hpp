@@ -53,6 +53,7 @@ namespace ast
 		virtual void toTextualRepresentation(ostream& out, size_t i) const;
 		virtual string getStringRepresentation() const { return getOperatorName(); }
 		virtual Instruction* optimize();
+		virtual void prepare();
 
 	private:
 		UnaryOperator op; // Unary operator.

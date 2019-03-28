@@ -130,8 +130,13 @@ namespace ast
 			break;
 
 		case UnaryOperator::LogicalNot:
-			//Quel opérateur : ! ou ~ ?
+			//Quel opï¿½rateur : ! ou ~ ?
 			break;
+}
+    
+void UnaryExpression::prepare()
+{
+	  if (expr) {
+			expr->prepare();
 		}
-	}
 }
