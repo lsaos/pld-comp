@@ -30,6 +30,6 @@ bin/*
 *.exe
 *.out
 *.app
-
+Makefile
 #ANTLR
 .antlr
