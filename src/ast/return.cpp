@@ -90,23 +90,9 @@ namespace ast
 		}
 	}
 
-	void Return::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable)
+	void Return::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg)
 	{
-		cout << "Variable : " << expr->isVariable() << endl;
-
-		if (expr->isIdentifier())
-		{
-			f << "\tmovl " << addressTable[((Identifier*)(expr.get()))->getReferencedVariable()] << "(%rbp), %eax" << endl;
-		}
-		else if (expr->isConstant())
-		{
-			cout << "RETURN : CONSTANTE" << endl; // DEBUG
-			f << "\tmovl $" << expr->getValue() << ", %eax" << endl;
-		}
-		else
-		{
-			cout << "RETURN : RIEN" << endl; // DEBUG
-			expr->generateAssembly(f, addressTable);
-		}
+		expr->generateAssembly(f, addressTable, curReg);
+		f << "%eax" << endl;
 	}
 }

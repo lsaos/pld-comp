@@ -60,8 +60,8 @@ namespace ast
 		return getTypeName() + ' ' + getName();
 	}
 
-	void Variable::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable)
+	/*void Variable::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable)
 	{
 		f << "\tmovl " << addressTable[this] << "(%rbp), %eax" << endl;
-	}
+	}*/
 }

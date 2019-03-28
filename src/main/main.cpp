@@ -34,6 +34,7 @@ using namespace assembly;
 
 int main(int argc, char* argv[])
 {
+
 	if (argc < 2)
 	{
 		cout << "Usage: comp source_file [-a] [-o] [-c]" << endl;

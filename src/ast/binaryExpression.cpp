@@ -6,6 +6,7 @@
 
 #include "binaryExpression.hpp"
 #include "constant.hpp"
+#include "identifier.hpp"
 
 namespace ast
 {
@@ -212,8 +213,74 @@ namespace ast
 		}
 	}
 
-	void BinaryExpression::prepare()
+	void BinaryExpression::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg) 
 	{
+		string assemblyOp;
+		switch (op)
+		{
+			case BinaryOperator::Add :
+				/* A revoir pour une certaine optimisation
+				if (left->isConstant() && right->isConstant()) {
+					int a = left->getValue() + right->getValue();
+					cout << a << endl;
+					f << "\tmovl $" << a << ", %eax" << endl;
+				}*/
+				assemblyOp = "addl";
+				break;
+
+			case BinaryOperator::Substract :
+				assemblyOp = "subl";
+				break;
+			case BinaryOperator::Multiply :
+				assemblyOp = "imull";
+				break;
+			case BinaryOperator::BitwiseAnd:
+				assemblyOp = "andl";
+				break;
+			case BinaryOperator::BitwiseOr:
+				assemblyOp = "orl";
+				break;
+			case BinaryOperator::BitwiseXor:
+				assemblyOp = "xorl";
+				break;
+		}
+
+		if (!right->isFinal() && !right->isIdentifier())
+		{
+			if (!left->isFinal() && !left->isIdentifier())
+			{
+				right->generateAssembly(f, addressTable, "%edx"); 
+				f << "%edx" << endl;
+				left->generateAssembly(f, addressTable); //%eax
+				f << "%eax" << endl;
+				f << "\t" << assemblyOp << " %edx, "; //%eax
+			}
+			else
+			{
+				right->generateAssembly(f, addressTable, "%eax");
+				f << "%eax" << endl;
+				f << "\t" << assemblyOp << " ";
+				if (left->isFinal())
+					f << '$' << left->getValue();
+				else
+					f << addressTable[((Identifier*)(left.get()))->getReferencedVariable()] << "(%rbp)";
+				f << ", ";
+			}
+		}
+		else
+		{
+			left->generateAssembly(f, addressTable, curReg);
+			f << curReg << endl;
+			f << "\t" << assemblyOp << " ";
+			if (right->isFinal())
+				f << '$' << right->getValue();
+			else
+				f << addressTable[((Identifier*)(right.get()))->getReferencedVariable()] << "(%rbp)";
+			f << ", ";
+}
+  
+void BinaryExpression::prepare()
+{
 		if (left) {
 			left->prepare();
 		}
@@ -221,5 +288,4 @@ namespace ast
 		if (right) {
 			right->prepare();
 		}
-	}
 }

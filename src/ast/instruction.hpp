@@ -104,7 +104,7 @@ namespace ast
 		virtual void prepare() {}
 
 	public:
-		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable) = 0;
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable, string curReg = "%eax") = 0;
 
 	public:
 		// Get a string representation of the instruction.
@@ -133,6 +133,9 @@ namespace ast
 
 		// Return true if the current instruction is an Identifier
 		virtual bool isIdentifier() const { return false; }
+
+		// Return true if the current instruction is a Constant
+		virtual bool isFinal() const { return false; }
 
 	protected:
 		// Report the specified error for the specified instruction.

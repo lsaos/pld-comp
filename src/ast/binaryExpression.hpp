@@ -68,6 +68,7 @@ namespace ast
 		unique_ptr<Expression> left; // Left operand.
 		unique_ptr<Expression> right; // Right operand.
 
-		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) {}
+	public:
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg = "%eax");
 	};
 }
