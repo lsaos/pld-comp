@@ -73,9 +73,24 @@ namespace ast
 		}
 	}
 
+	void Identifier::prepare()
+	{
+		if (getParentBlock()) {
+			Variable* var = getReferencedVariable();
+			if (var) {
+				var->markUsed();
+			}
+		}
+	}
+
 	void Identifier::toTextualRepresentation(ostream& out, size_t i) const
 	{
 		for (size_t j = 0; j < i; j++) { out << ' '; }
 		out << "Ident(" << ident << ')' << endl;
+	}
+
+	void Identifier::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg)
+	{
+		f << "\tmovl " << addressTable[this->getReferencedVariable()] << "(%rbp), ";
 	}
 }

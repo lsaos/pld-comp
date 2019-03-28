@@ -50,4 +50,15 @@ namespace ast
 			error(Error::InvalidStatement, identifier.get());
 		}
 	}
+
+	void FunctionCall::prepare()
+	{
+		if (identifier) {
+			identifier->prepare();
+		}
+
+		for (auto& arg : args) {
+			arg->prepare();
+		}
+	}
 }

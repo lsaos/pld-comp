@@ -61,12 +61,14 @@ namespace ast
 		virtual void toTextualRepresentation(ostream& out, size_t i) const;
 		virtual string getStringRepresentation() const { return getOperatorName(); }
 		virtual Instruction* optimize();
+		virtual void prepare();
 
 	private:
 		BinaryOperator op; // Binary operator.
 		unique_ptr<Expression> left; // Left operand.
 		unique_ptr<Expression> right; // Right operand.
 
-		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) {}
+	public:
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg = "%eax");
 	};
 }

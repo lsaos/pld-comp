@@ -34,6 +34,7 @@ using namespace assembly;
 
 int main(int argc, char* argv[])
 {
+
 	if (argc < 2)
 	{
 		cout << "Usage: comp source_file [-a] [-o] [-c]" << endl;
@@ -62,22 +63,27 @@ int main(int argc, char* argv[])
 			optionC = true;
 			break;
 		}
+		if (!strcmp(argv[i], "-a")) {
+			cout << "Il y aura analyse statique" << endl;
+			optionA = true;
+			break;
+		}
 	}
 
 	while ((opt = getopt(argc, argv, "o:c:a:")) != -1) {
 		switch (opt) {
-			case 'o':
-				cout << "Il y aura optimisation" << endl;
-				optionO = true;
-				break;
-			case 'c':
-				cout << "Il y aura génération de code assembleur" << endl;
-				optionC = true;
-				break;
-			case 'a':
-				cout << "Il y aura analyse statique" << endl;
-				optionA = true;
-				break;
+		case 'o':
+			cout << "Il y aura optimisation" << endl;
+			optionO = true;
+			break;
+		case 'c':
+			cout << "Il y aura génération de code assembleur" << endl;
+			optionC = true;
+			break;
+		case 'a':
+			cout << "Il y aura analyse statique" << endl;
+			optionA = true;
+			break;
 		}
 	}
 
@@ -99,6 +105,7 @@ int main(int argc, char* argv[])
 
 		Visiteur visitor;
 		Program* prog = (Program*)visitor.visit(tree);
+		prog->prepare();
 
 		try
 		{

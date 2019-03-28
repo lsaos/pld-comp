@@ -43,12 +43,13 @@ namespace ast
 
 	public:
 		virtual bool isConstant() const { return true; }
+		virtual bool isFinal() const { return true; }
 
 	private:
 		Type type; // Type of the constant.
 		int value; // Value of the constant.
 	
 	public:
-		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) {}
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg = "%eax");
 	};
 }

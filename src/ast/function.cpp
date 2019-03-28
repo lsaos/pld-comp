@@ -74,14 +74,14 @@ namespace ast
 		return getTypeName() + ' ' + getName() + "()";
 	}
 
-	void Function::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable)
+	void Function::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg)
 	{
 		f << this->getName() << ":" << endl;
 		f << "\tpushq %rbp" << endl;
 		f << "\tmovq %rsp, %rbp" << endl;
 
 		for (auto i : getInstructions()) {
-			i->generateAssembly(f, addressTable);
+			i->generateAssembly(f, addressTable, curReg);
 		}
 
 		f << "\tpopq %rbp" << endl << "\tret" << endl;
