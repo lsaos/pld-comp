@@ -83,16 +83,9 @@ namespace ast
 		return nullptr;
 	}
 
-	void Return::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable)
+	void Return::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg)
 	{
-
-		if (expr->isConstant())
-		{
-			f << "\tmovl $" << expr->getValue() << ", %eax" << endl;
-		}
-		else
-		{
-			expr->generateAssembly(f, addressTable);
-		}
+		expr->generateAssembly(f, addressTable, curReg);
+		f << "%eax" << endl;
 	}
 }

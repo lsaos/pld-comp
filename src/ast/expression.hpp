@@ -23,7 +23,7 @@ namespace ast
 		virtual Type getType() const = 0;
 
 		// Generate the assembly code for the current Expression
-		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) = 0;
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable, string curReg = "%eax") = 0;
 
 		// Precompute the value if the expression, if possible.
 		virtual int getValue() const;

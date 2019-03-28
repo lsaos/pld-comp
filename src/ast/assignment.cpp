@@ -91,21 +91,19 @@ namespace ast
 		return nullptr;
 	}
 
-	void Assignment::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable)
+	void Assignment::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg)
 	{
 		//cout << expr.get()->getValue() << endl;
-		/*if (expr->isConstant())
+		expr->generateAssembly(f, addressTable, curReg);
+
+		if (expr->isConstant())
 		{
-			//cout << "Je suis dans assignment !" << endl;
-			f << "\tmovl $" << expr->getValue() << ", " << addressTable[identifier->getReferencedVariable()] << "(%rbp)" << endl;
+			f << addressTable[identifier->getReferencedVariable()] << "(%rbp)" << endl;
 		}
 		else
 		{
-			expr->generateAssembly(f, addressTable);
-			f << "\tmovl %eax, " << addressTable[identifier->getReferencedVariable()] << "(%rbp)" << endl;
-		}*/
-
-		expr->generateAssembly(f, addressTable);
-		f << "\tmovl %eax, " << addressTable[identifier->getReferencedVariable()] << "(%rbp)" << endl;
+			f << curReg << endl;
+			f << "\tmovl " << curReg << ", " << addressTable[identifier->getReferencedVariable()] << "(%rbp)" << endl;
+		}
 	}
 }

@@ -43,6 +43,6 @@ namespace ast
 		unique_ptr<Expression> expr; // Value expression.
 
 	public:
-		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable);
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg = "%eax");
 	};
 }

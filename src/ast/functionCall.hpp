@@ -35,7 +35,7 @@ namespace ast
 	public:
 		virtual bool isFunctionCall() const { return true; }
 
-		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable) {}
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable, string curReg = "%eax") {}
 
 	private:
 		vector<unique_ptr<Expression>> args; // Arguments to pass to the function.

@@ -61,8 +61,8 @@ namespace ast
 		out << "Const(" << getStringRepresentation() << ')' << endl;
 	}
 
-	void Constant::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable)
+	void Constant::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg)
 	{
-		f << "\tmovl $" << value << ", %eax" << endl;
+		f << "\tmovl $" << value << ", ";
 	}
 }

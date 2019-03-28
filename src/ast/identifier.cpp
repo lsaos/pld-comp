@@ -79,8 +79,8 @@ namespace ast
 		out << "Ident(" << ident << ')' << endl;
 	}
 
-	void Identifier::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable)
+	void Identifier::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg)
 	{
-		f << "\tmovl " << addressTable[this->getReferencedVariable()] << "(%rbp), %eax" << endl;
+		f << "\tmovl " << addressTable[this->getReferencedVariable()] << "(%rbp), ";
 	}
 }
