@@ -132,11 +132,13 @@ namespace ast
 		case UnaryOperator::LogicalNot:
 			//Quel op�rateur : ! ou ~ ?
 			break;
-}
-    
-void UnaryExpression::prepare()
-{
-	  if (expr) {
+		}
+	}
+
+	void UnaryExpression::prepare()
+	{
+		if (expr) {
 			expr->prepare();
 		}
+	}
 }
