@@ -249,9 +249,9 @@ namespace ast
 		{
 			if (!left->isFinal() && !left->isIdentifier())
 			{
-				right->generateAssembly(f, addressTable, "%edx");
+				right->generateAssembly(f, addressTable, "%edx"); 
 				f << "%edx" << endl;
-				left->generateAssembly(f, addressTable);
+				left->generateAssembly(f, addressTable); //%eax
 				f << "%eax" << endl;
 				f << "\t" << assemblyOp << " %edx, "; //%eax
 			}
@@ -269,7 +269,7 @@ namespace ast
 		}
 		else
 		{
-			left->generateAssembly(f, addressTable);
+			left->generateAssembly(f, addressTable, curReg);
 			f << curReg << endl;
 			f << "\t" << assemblyOp << " ";
 			if (right->isFinal())
