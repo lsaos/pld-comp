@@ -14,6 +14,8 @@ using namespace std;
 
 namespace ast
 {
+	class Function;
+
 	// Represents a call to a function.
 	class FunctionCall : public Expression
 	{
@@ -29,14 +31,25 @@ namespace ast
 		void addArgument(Expression* arg);
 
 	public:
+		// Get the function called.
+		Function* getCalledFunction() const;
+
+		// Get the number of arguments passed to the function.
+		size_t getArgumentsCount() const { return args.size(); }
+
+		// Get the list of arguments passed to the function.
+		vector<Expression*> getArguments() const;
+
+	public:
 		virtual Type getType() const;
 		virtual void checkSemantic(bool advanced) const;
 		virtual void prepare();
+		virtual string getStringRepresentation() const;
 
 	public:
 		virtual bool isFunctionCall() const { return true; }
 
-		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable, string curReg = "%eax") {}
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg = "%eax") {}
 
 	private:
 		vector<unique_ptr<Expression>> args; // Arguments to pass to the function.

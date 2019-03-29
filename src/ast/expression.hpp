@@ -19,11 +19,16 @@ namespace ast
 		Expression(const ItemPosition& position);
 
 	public:
+		// Return true if the cast of this expression
+		// to the specified type is safe or not.
+		bool isCastSafe(Type newType) const;
+
+	public:
 		// Get the type of the value returned.
 		virtual Type getType() const = 0;
 
 		// Generate the assembly code for the current Expression
-		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable, string curReg = "%eax") = 0;
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg = "%eax") = 0;
 
 		// Precompute the value if the expression, if possible.
 		virtual int getValue() const;

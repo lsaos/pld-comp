@@ -40,6 +40,8 @@ namespace ast
 	void Instruction::setParent(Instruction* parentInstruction)
 	{
 		assert(parentInstruction);
+		assert(parentInstruction != this);
+
 		parent = parentInstruction;
 	}
 
@@ -102,12 +104,17 @@ namespace ast
 		case Error::NoMain: cout << "no main function"; break;
 		case Error::InvalidStatement: cout << "invalid statement"; break;
 		case Error::DuplicatedSymbolName: cout << "duplicated symbol name"; break;
-		case Error::ExpectingExpression: cout << "excepting an expression"; break;
+		case Error::ExpectingExpression: cout << "expecting an expression"; break;
 		case Error::UnknownIdentifier: cout << "unknown identifier"; break;
+		case Error::WrongArgumentsCount: cout << "wrong number of arguments"; break;
+		case Error::MissingArraySize: cout << "missing array size"; break;
+		case Error::InvalidArraySize: cout << "invalid array size"; break;
+		case Error::MissingArrayIndex: cout << "missing array index"; break;
+		case Error::IndexOutOfBounds: cout << "index out of array bounds"; break;
 		default: cout << "unknown error"; break;
 		}
 
-		const string representation = getStringRepresentation();
+		const string representation = instruction->getStringRepresentation();
 		if (!representation.empty()) {
 			cout << " '" << representation << '\'';
 		}
@@ -131,10 +138,11 @@ namespace ast
 		{
 		case Warning::None: cout << "none"; break;
 		case Warning::UnusedVariable: cout << "unused variable"; break;
+		case Warning::UnsafeCast: cout << "cast can lose information"; break;
 		default: cout << "unknown warning"; break;
 		}
 
-		const string representation = getStringRepresentation();
+		const string representation = instruction->getStringRepresentation();
 		if (!representation.empty()) {
 			cout << " '" << representation << '\'';
 		}

@@ -2,16 +2,18 @@
 PROJDIR := $(realpath $(CURDIR))
 SOURCEDIR := $(PROJDIR)/src
 BUILDDIR := $(PROJDIR)/build
-GRAMMARFILE := $(PROJDIR)/sources/parser/expr.g4
+GRAMMARFILE := $(PROJDIR)/src/parser/expr.g4
 
 #Name fo te final executable
 TARGET = compiler
 
 #Decide whether the commands will be shown or not
-VERBOSE= TRUE
+VERBOSE= FALSE
+
+TREE= TRUE
 
 #Create the list of directories
-DIRS = ast lib main parser
+DIRS = ast lib main parser assembly
 SOURCEDIRS = $(foreach dir, $(DIRS), $(addprefix $(SOURCEDIR)/, $(dir)))
 TARGETDIRS = $(foreach dir, $(DIRS), $(addprefix $(BUILDDIR)/, $(dir)))
 
@@ -31,11 +33,16 @@ DEPS = $(OBJS:.o=.d)
 
 #Name the compiler
 CC=clang++
-ANTLR=~/Documents/Projets/ANTLR4-CPP/bin/antlr4#The path to your antlr4 executable
-ANTLRSRC=/usr/local/include/antlr4-runtime#Same, but here the runtime is located
-ANTLRRUNTIME=/usr/local/
+ANTLR=/shares/public/tp/ANTLR4-CPP/bin/antlr4#The path to your antlr4 executable
+ANTLRSRC=/shares/public/tp/ANTLR4-CPP/antlr4-runtime#Same, but here the runtime is located
+ANTLRRUNTIME=/shares/public/tp/ANTLR4-CPP
 
-CFLAGS=-ansi -std=c++11
+ifeq ($(TREE), TRUE)
+	CFLAGS=-ansi -std=c++11 -DTREEVISIT
+else
+	CFLAGS=-ansi -std=c++11
+endif
+
 LDFLAGS=$(ANTLRRUNTIME)/lib/libantlr4-runtime.a
 
 #OS specific part
