@@ -11,6 +11,9 @@
 #include <ostream>
 #include <string>
 #include <unordered_map>
+#include <fstream>
+#include <memory>
+#include <algorithm>
 
 using namespace std;
 
@@ -97,6 +100,12 @@ namespace ast
 		// the current instruction in the AST.
 		virtual Instruction* optimize() { return nullptr; }
 
+		// Prepare the instruction before checking semantic.
+		virtual void prepare() {}
+
+	public:
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable, string curReg = "%eax") = 0;
+
 	public:
 		// Get a string representation of the instruction.
 		virtual string getStringRepresentation() const { return string(); }
@@ -122,6 +131,12 @@ namespace ast
 		// Return true if the current instruction is an expression.
 		virtual bool isExpression() const { return false; }
 
+		// Return true if the current instruction is an Identifier
+		virtual bool isIdentifier() const { return false; }
+
+		// Return true if the current instruction is a Constant
+		virtual bool isFinal() const { return false; }
+
 	protected:
 		// Report the specified error for the specified instruction.
 		// Also throws an std::exception.
@@ -133,8 +148,5 @@ namespace ast
 	private:
 		const ItemPosition pos; // Instruction's position in the source code.
 		Instruction* parent; // Parent's instruction.
-
-	public:
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) = 0;
 	};
 }

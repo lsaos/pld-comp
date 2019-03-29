@@ -119,4 +119,26 @@ namespace ast
 			return nullptr;
 		}
 	}
+
+	void UnaryExpression::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg)
+	{
+		switch (op)
+		{
+		case UnaryOperator::Minus:
+			expr->generateAssembly(f, addressTable, curReg);
+			f << "\tnegl ";
+			break;
+
+		case UnaryOperator::LogicalNot:
+			//Quel op�rateur : ! ou ~ ?
+			break;
+		}
+	}
+
+	void UnaryExpression::prepare()
+	{
+		if (expr) {
+			expr->prepare();
+		}
+	}
 }

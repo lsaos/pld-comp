@@ -44,7 +44,6 @@ namespace ast
 	public:
 		virtual bool isFunction() const { return true; }
 
-	public:
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable, string curReg = "%eax");
 	};
 }

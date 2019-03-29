@@ -6,6 +6,7 @@
 
 #include "return.hpp"
 #include "function.hpp"
+#include "identifier.hpp"
 
 namespace ast
 {
@@ -80,5 +81,18 @@ namespace ast
 
 		// We can't optimize the return itself
 		return nullptr;
+	}
+
+	void Return::prepare()
+	{
+		if (expr) {
+			expr->prepare();
+		}
+	}
+
+	void Return::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg)
+	{
+		expr->generateAssembly(f, addressTable, curReg);
+		f << "%eax" << endl;
 	}
 }

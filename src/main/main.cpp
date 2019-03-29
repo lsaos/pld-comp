@@ -25,12 +25,16 @@
 #include "../ast/error.hpp"
 #include "../ast/return.hpp"
 
+#include "../assembly/assembly.hpp"
+
 using namespace antlr4;
 using namespace std;
 using namespace ast;
+using namespace assembly;
 
 int main(int argc, char* argv[])
 {
+
 	if (argc < 2)
 	{
 		cout << "Usage: comp source_file [-a] [-o] [-c]" << endl;
@@ -50,12 +54,18 @@ int main(int argc, char* argv[])
 
 	int opt;
 	bool optionA = false, optionC = false, optionO = false;
+
 	cout << "options : " << getopt(argc, argv, "o:c:a");
 	for (int i = 0; i < argc; i++) {
 		cout << argv[i] << endl;
 		if (!strcmp(argv[i], "-c")) {
 			cout << "Il y aura génération de code assembleur" << endl;
 			optionC = true;
+			break;
+		}
+		if (!strcmp(argv[i], "-a")) {
+			cout << "Il y aura analyse statique" << endl;
+			optionA = true;
 			break;
 		}
 	}
@@ -87,11 +97,15 @@ int main(int argc, char* argv[])
 	tree::ParseTree* tree = parser.prog();
 	size_t nbErrors = parser.getNumberOfSyntaxErrors();
 
+	//Pour tester l'assemblage
+	optionC = true;
+
 	if (nbErrors == 0)
 	{
 
 		Visiteur visitor;
 		Program* prog = (Program*)visitor.visit(tree);
+		prog->prepare();
 
 		try
 		{
@@ -108,6 +122,11 @@ int main(int argc, char* argv[])
 			}
 
 			cout << "Le programme s'est fini correctement" << endl;
+
+			if (optionC) {
+				AssemblyGenerator ag(argv[1]);
+				ag.generateAssembly(prog);
+			}
 		}
 		catch (...)
 		{

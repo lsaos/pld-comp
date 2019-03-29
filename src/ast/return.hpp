@@ -34,6 +34,7 @@ namespace ast
 		virtual void checkSemantic(bool advanced) const;
 		virtual void toTextualRepresentation(ostream& out, size_t i) const;
 		virtual Instruction* optimize();
+		virtual void prepare();
 
 	public:
 		virtual string getStringRepresentation() const { return "return"; }
@@ -43,6 +44,6 @@ namespace ast
 		unique_ptr<Expression> expr; // Value expression.
 
 	public:
-		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg = "%eax");
 	};
 }

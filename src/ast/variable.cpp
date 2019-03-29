@@ -14,7 +14,8 @@ namespace ast
 
 	Variable::Variable(const ItemPosition& position)
 		: Instruction(position),
-		scope(Scope::Block)
+		scope(Scope::Block),
+		used(false)
 	{
 	}
 
@@ -23,10 +24,19 @@ namespace ast
 		scope = s;
 	}
 
+	void Variable::markUsed()
+	{
+		used = true;
+	}
+
 	void Variable::checkSemantic(bool advanced) const
 	{
 		if (getName().empty() || getType() == Type::Void) {
 			error(Error::InvalidStatement, this);
+		}
+
+		if (advanced && !used) {
+			warning(Warning::UnusedVariable, this);
 		}
 	}
 
@@ -49,4 +59,9 @@ namespace ast
 	{
 		return getTypeName() + ' ' + getName();
 	}
+
+	/*void Variable::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable)
+	{
+		f << "\tmovl " << addressTable[this] << "(%rbp), %eax" << endl;
+	}*/
 }
