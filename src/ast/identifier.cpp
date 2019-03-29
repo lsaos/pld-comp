@@ -8,6 +8,7 @@
 #include "variable.hpp"
 #include "function.hpp"
 #include "program.hpp"
+#include "assignment.hpp"
 
 namespace ast
 {
@@ -133,7 +134,14 @@ namespace ast
 
 	void Identifier::prepare()
 	{
-		if (getParentBlock()) {
+		bool markVarUsed = getParentBlock() != nullptr;
+
+		// Don't mark variable used if the identifier is a basic left-value
+		if (getParent() && getParent()->isAssignment() && ((const Assignment*)getParent())->getIdentifier() == this) {
+			markVarUsed = false;
+		}
+
+		if (markVarUsed) {
 			Variable* var = getReferencedVariable();
 			if (var) {
 				var->markUsed();
