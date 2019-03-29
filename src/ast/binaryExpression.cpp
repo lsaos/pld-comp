@@ -218,31 +218,34 @@ namespace ast
 		string assemblyOp;
 		switch (op)
 		{
-		case BinaryOperator::Add:
-			/* A revoir pour une certaine optimisation
-			if (left->isConstant() && right->isConstant()) {
-				int a = left->getValue() + right->getValue();
-				cout << a << endl;
-				f << "\tmovl $" << a << ", %eax" << endl;
-			}*/
-			assemblyOp = "addl";
-			break;
+			case BinaryOperator::Add:
+				/* A revoir pour une certaine optimisation
+				if (left->isConstant() && right->isConstant()) {
+					int a = left->getValue() + right->getValue();
+					cout << a << endl;
+					f << "\tmovl $" << a << ", %eax" << endl;
+				}*/
+				assemblyOp = "addl";
+				break;
 
-		case BinaryOperator::Substract:
-			assemblyOp = "subl";
-			break;
-		case BinaryOperator::Multiply:
-			assemblyOp = "imull";
-			break;
-		case BinaryOperator::BitwiseAnd:
-			assemblyOp = "andl";
-			break;
-		case BinaryOperator::BitwiseOr:
-			assemblyOp = "orl";
-			break;
-		case BinaryOperator::BitwiseXor:
-			assemblyOp = "xorl";
-			break;
+			case BinaryOperator::Substract:
+				assemblyOp = "subl";
+				break;
+			case BinaryOperator::Multiply:
+				assemblyOp = "imull";
+				break;
+			case BinaryOperator::Divide:
+				assemblyOp = "idivl";
+				break;
+			case BinaryOperator::BitwiseAnd:
+				assemblyOp = "andl";
+				break;
+			case BinaryOperator::BitwiseOr:
+				assemblyOp = "orl";
+				break;
+			case BinaryOperator::BitwiseXor:
+				assemblyOp = "xorl";
+				break;
 		}
 
 		if (!right->isFinal() && !right->isIdentifier())
