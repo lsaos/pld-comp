@@ -92,7 +92,9 @@ namespace ast
 
 	void Return::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg)
 	{
-		expr->generateAssembly(f, addressTable, curReg);
-		f << "%eax" << endl;
+		if (expr!=nullptr){
+			expr->generateAssembly(f, addressTable, curReg);
+			f << "%eax" << endl;
+		}
 	}
 }

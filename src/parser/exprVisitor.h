@@ -1,5 +1,5 @@
 
-// Generated from expr.g4 by ANTLR 4.7.2
+// Generated from /home/lohl/Documents/COMP/src/parser/expr.g4 by ANTLR 4.7.1
 
 #pragma once
 
@@ -45,6 +45,8 @@ public:
 
     virtual antlrcpp::Any visitAdd(exprParser::AddContext *context) = 0;
 
+    virtual antlrcpp::Any visitSub(exprParser::SubContext *context) = 0;
+
     virtual antlrcpp::Any visitMult(exprParser::MultContext *context) = 0;
 
     virtual antlrcpp::Any visitBin(exprParser::BinContext *context) = 0;
@@ -52,6 +54,8 @@ public:
     virtual antlrcpp::Any visitVariable(exprParser::VariableContext *context) = 0;
 
     virtual antlrcpp::Any visitChar(exprParser::CharContext *context) = 0;
+
+    virtual antlrcpp::Any visitNegativeUnary(exprParser::NegativeUnaryContext *context) = 0;
 
     virtual antlrcpp::Any visitUnary(exprParser::UnaryContext *context) = 0;
 

@@ -1,5 +1,5 @@
 
-// Generated from expr.g4 by ANTLR 4.7.2
+// Generated from /home/lohl/Documents/COMP/src/parser/expr.g4 by ANTLR 4.7.1
 
 #pragma once
 
@@ -67,6 +67,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitSub(exprParser::SubContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitMult(exprParser::MultContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -80,6 +84,10 @@ public:
   }
 
   virtual antlrcpp::Any visitChar(exprParser::CharContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitNegativeUnary(exprParser::NegativeUnaryContext *ctx) override {
     return visitChildren(ctx);
   }
 
