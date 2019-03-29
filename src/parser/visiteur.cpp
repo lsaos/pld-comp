@@ -3,6 +3,7 @@
 #include "../ast/program.hpp"
 #include "../ast/assignment.hpp"
 #include "../ast/binaryExpression.hpp"
+#include "../ast/unaryExpression.hpp"
 #include "../ast/block.hpp"
 #include "../ast/constant.hpp"
 #include "../ast/controlStructure.hpp"
@@ -65,7 +66,8 @@ antlrcpp::Any Visiteur::visitMain(exprParser::MainContext *ctx) {
 	    func->add(ret);
     }    
     func->setName("main");
-	func->setType(Type::Integer);
+    
+	func->setType(type);
 #ifdef TREEVISIT
 	jump(); cout << ")" << endl;
 	indent--;
@@ -213,28 +215,56 @@ antlrcpp::Any Visiteur::visitAssignment(exprParser::AssignmentContext *ctx) {
 }
 
 antlrcpp::Any Visiteur::visitUnary(exprParser::UnaryContext *ctx){
-    #ifdef TREEVISIT
-        jump();
-        cout << "UNAIRE("<<endl;
-        indent++;
-    #endif
-    char opUnary = ctx->UNARYOP()->getText().at(0);
-    Expression* expr =(Expression*) visit(ctx->expression());
-    UnaryExpression* unary = new UnaryExpression(expr->getPosition());
-    unary->setExpression(unary);
-    switch(opUnary){
-        case '-':
-            unary->setOperator(UnaryOperator::Minus);
-            break;
-        case '!':
-            unary->setOperator(UnaryOperator::LogicalNot);
-            break;
-    }
-    #ifdef TREEVISIT
-        jump(); cout << ")" << endl;
-        indent--;
-    #endif
-    return (Expression*)unary;
+	#ifdef TREEVISIT
+		jump(); cout << "UNARY("<<endl;
+		indent++;
+	#endif
+	Expression* expr = (Expression*)visit(ctx->expression());
+
+	UnaryExpression* unary = new  UnaryExpression(expr->getPosition());
+	unary->setExpression(expr);
+	switch(ctx->UNARYOP()->getText().at(0)){
+		case '!':
+			unary->setOperator(UnaryOperator::LogicalNot);
+			break;
+		case '~':
+			unary->setOperator(UnaryOperator::BitwiseNot);
+			break;
+	}
+	#ifdef TREEVISIT
+		jump(); cout << ")"<<endl;
+		indent--;
+	#endif
+	return (Expression*)unary;
+}
+
+antlrcpp::Any Visiteur::visitNegativeUnary(exprParser::NegativeUnaryContext *ctx){
+	#ifdef TREEVISIT
+		jump(); cout << "UNARY("<<endl;
+		indent++;
+	#endif
+	Expression* expr = (Expression*)visit(ctx->expression());
+	Expression* toReturn;
+	if (expr->isConstant()){
+		Constant* constant = new Constant(expr->getPosition());
+		constant->setValue(-(expr->getValue()));
+		#ifdef TREEVISIT
+			jump(); cout <<" This unary turned to a negative constant" << endl;
+		#endif
+		constant->setType(expr->getType());
+		delete expr;
+		toReturn = (Expression*) constant;
+	} else {
+		UnaryExpression* unary = new  UnaryExpression(expr->getPosition());
+		unary->setExpression(expr);
+		//Unary is by defualt '-'
+		toReturn = (Expression*)unary;
+	}
+	#ifdef TREEVISIT
+		jump(); cout << ")"<<endl;
+		indent--;
+	#endif
+	return toReturn;
 }
 
 antlrcpp::Any Visiteur::visitBin(exprParser::BinContext *ctx){
@@ -271,20 +301,30 @@ antlrcpp::Any Visiteur::visitAdd(exprParser::AddContext *ctx) {
 	jump(); cout << "SOMME(" << endl;
 	indent++;
 #endif
-	char opadd = ctx->OPADD()->getText().at(0);
 	Expression* left = (Expression*)visit(ctx->expression(0));
 	Expression* right = (Expression*)visit(ctx->expression(1));
 	BinaryExpression* binExp = new BinaryExpression(left->getPosition());
 	binExp->setLeftExpression(left);
 	binExp->setRightExpression(right);
-	switch (opadd) {
-	case '+':
-		binExp->setOperator(BinaryOperator::Add);
-		break;
-	case '-':
-		binExp->setOperator(BinaryOperator::Substract);
-		break;
-	}
+	binExp->setOperator(BinaryOperator::Add);
+#ifdef TREEVISIT
+	jump(); cout << ")" << endl;
+	indent--;
+#endif
+	return (Expression*)binExp;
+}
+
+antlrcpp::Any Visiteur::visitSub(exprParser::SubContext *ctx) {
+#ifdef TREEVISIT
+	jump(); cout << "SOUSTRAC(" << endl;
+	indent++;
+#endif
+	Expression* left = (Expression*)visit(ctx->expression(0));
+	Expression* right = (Expression*)visit(ctx->expression(1));
+	BinaryExpression* binExp = new BinaryExpression(left->getPosition());
+	binExp->setLeftExpression(left);
+	binExp->setRightExpression(right);
+	binExp->setOperator(BinaryOperator::Substract);
 #ifdef TREEVISIT
 	jump(); cout << ")" << endl;
 	indent--;
@@ -336,7 +376,6 @@ antlrcpp::Any Visiteur::visitVariable(exprParser::VariableContext *ctx){
 		jump(); cout << "VAR"<<endl;
 	#endif
 	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
-	//FIXME : create variable ?
 	Identifier* identifier = new Identifier(pos);
 	identifier->setIdent(ctx->VAR()->getText());
 	return (Expression*)identifier;
