@@ -137,6 +137,9 @@ namespace ast
 		// Return true if the current instruction is a Constant
 		virtual bool isFinal() const { return false; }
 
+		// Return true if the current instruction is an assignment.
+		virtual bool isAssignment() const { return false; }
+
 	protected:
 		// Report the specified error for the specified instruction.
 		// Also throws an std::exception.
