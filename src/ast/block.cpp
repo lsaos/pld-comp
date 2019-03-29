@@ -72,11 +72,6 @@ namespace ast
 
 	void Block::checkSemantic(bool advanced) const
 	{
-		// Check children semantic
-		for (const auto& instr : instructions) {
-			instr->checkSemantic(advanced);
-		}
-
 		// Check symbols duplication
 		if (getParentBlock()) {
 			vector<string> symbols;
@@ -102,6 +97,11 @@ namespace ast
 					symbols.push_back(name);
 				}
 			}
+		}
+
+		// Check children semantic
+		for (const auto& instr : instructions) {
+			instr->checkSemantic(advanced);
 		}
 	}
 
