@@ -1,5 +1,6 @@
 #include <antlr4-runtime.h>
 #include <string>
+#include <cstring>
 #include <iostream>
 #include "../lib/unistd.h"
 #include "../parser/exprLexer.h"

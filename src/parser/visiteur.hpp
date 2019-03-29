@@ -43,11 +43,15 @@ public:
 
 	virtual antlrcpp::Any visitAssignment(exprParser::AssignmentContext *ctx);
 
-	virtual antlrcpp::Any visitUnary(exprParser::UnaryContext *context);
+	virtual antlrcpp::Any visitUnary(exprParser::UnaryContext *ctx);
+	
+	virtual antlrcpp::Any visitNegativeUnary(exprParser::NegativeUnaryContext *ctx);
 
 	virtual antlrcpp::Any visitBin(exprParser::BinContext *ctx);
 
 	virtual antlrcpp::Any visitAdd(exprParser::AddContext *ctx);
+	
+	virtual antlrcpp::Any visitSub(exprParser::SubContext *ctx);
 
 	virtual antlrcpp::Any visitMult(exprParser::MultContext *ctx);
 
