@@ -6,12 +6,10 @@
 
 #pragma once
 
-#include "block.hpp"
+#include "function.hpp"
 
 namespace ast
 {
-	class Function;
-
 	// The program is the root of the AST.
 	// It contains global variables and functions.
 	class Program : public Block
@@ -21,20 +19,27 @@ namespace ast
 		Program();
 
 	public:
+		// Add an external function to the program.
+		void addExternalFunction(Function* func);
+
+	public:
 		// Get the function with the specified name.
 		// Returns null if the function doesn't exist.
-		Function* getFunction(const string& name) const;
+		Function* getFunction(const string& name, bool withExternals = true) const;
 
 		// Get the list of functions contained in the program.
-		vector<Function*> getFunctions() const;
+		vector<Function*> getFunctions(bool withExternals = false) const;
 
 		// Get the number of function the program contains.
-		size_t getFunctionsCount() const;
+		size_t getFunctionsCount(bool withExternals = false) const;
 
 		// Get the main function of the program.
 		Function* getMain() const {
 			return getFunction("main");
 		}
+
+		// Get all external functions.
+		vector<Function*> getExternalFunctions() const;
 
 	public:
 		virtual void checkSemantic(bool advanced) const;
@@ -42,5 +47,8 @@ namespace ast
 
 	public:
 		virtual bool isProgram() const { return true; }
+
+	private:
+		vector<unique_ptr<Function>> externalFunctions; // List of external functions.
 	};
 }

@@ -14,7 +14,8 @@ namespace ast
 	//
 
 	Function::Function(const ItemPosition& position)
-		: Block(position)
+		: Block(position),
+		isExternal(false)
 	{
 	}
 
@@ -24,6 +25,11 @@ namespace ast
 
 		var->setScope(Scope::Parameter);
 		add(var);
+	}
+
+	void Function::setIsExtern()
+	{
+		isExternal = true;
 	}
 
 	vector<Variable*> Function::getParameters() const

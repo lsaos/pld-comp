@@ -45,6 +45,8 @@ namespace ast
 		virtual Instruction* optimize();
 		virtual void prepare();
 
+		virtual bool isAssignment() const { return true; }
+
 	private:
 		unique_ptr<Identifier> identifier; // Identifier of the assigned variable.
 		unique_ptr<Expression> expr; // Expression of the value to assign.

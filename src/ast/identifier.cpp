@@ -8,6 +8,7 @@
 #include "variable.hpp"
 #include "function.hpp"
 #include "program.hpp"
+#include "assignment.hpp"
 
 namespace ast
 {
@@ -26,6 +27,13 @@ namespace ast
 		ident = str;
 	}
 
+	void Identifier::setArrayIndex(Expression* expr)
+	{
+		assert(expr);
+		expr->setParent(this);
+		arrayIndex = unique_ptr<Expression>(expr);
+	}
+
 	Variable* Identifier::getReferencedVariable() const
 	{
 		return getParentBlock()->getVariable(ident, true);
@@ -34,6 +42,12 @@ namespace ast
 	Function* Identifier::getReferencedFunction() const
 	{
 		return getProgram()->getFunction(ident);
+	}
+
+	bool Identifier::isReferencingArray() const
+	{
+		const Variable* var = getReferencedVariable();
+		return var && var->isArray();
 	}
 
 	Type Identifier::getType() const
@@ -61,9 +75,10 @@ namespace ast
 		}
 
 		const bool refFunction = isReferencingFunction();
+		const Variable* refVar = getReferencedVariable();
 
 		// Check if the identifier is referencing something
-		if (!isReferencingVariable() && !refFunction) {
+		if (!refVar && !refFunction) {
 			error(Error::UnknownIdentifier, this);
 		}
 
@@ -71,15 +86,70 @@ namespace ast
 		if (refFunction && !getParent()->isFunctionCall()) {
 			error(Error::InvalidInstruction, this);
 		}
+
+		if (refVar && refVar->isArray()) {
+			if (!arrayIndex) {
+				error(Error::MissingArrayIndex, this);
+			}
+
+			if (arrayIndex->getType() == Type::Void) {
+				error(Error::InvalidInstruction, arrayIndex.get());
+			}
+
+			if (advanced && arrayIndex->isConstant()) {
+				const int index = arrayIndex->getValue();
+				if (index < 0) {
+					error(Error::IndexOutOfBounds, arrayIndex.get());
+				}
+
+				if (refVar->isArraySizeKnown()) {
+					const int arraySize = refVar->getArraySize();
+					if (index >= arraySize) {
+						error(Error::IndexOutOfBounds, arrayIndex.get());
+					}
+				}
+			}
+		}
+		else {
+			if (arrayIndex) {
+				error(Error::InvalidStatement, arrayIndex.get());
+			}
+		}
+	}
+
+	Instruction* Identifier::optimize()
+	{
+		// Try to optimize the index expression
+		if (arrayIndex) {
+			Instruction* optimized = arrayIndex->optimize();
+			if (optimized) {
+				assert(optimized != arrayIndex.get() && optimized->isExpression());
+				arrayIndex = unique_ptr<Expression>((Expression*)optimized);
+			}
+		}
+
+		// We can't optimize the identifier itself
+		return nullptr;
 	}
 
 	void Identifier::prepare()
 	{
-		if (getParentBlock()) {
+		bool markVarUsed = getParentBlock() != nullptr;
+
+		// Don't mark variable used if the identifier is a basic left-value
+		if (getParent() && getParent()->isAssignment() && ((const Assignment*)getParent())->getIdentifier() == this) {
+			markVarUsed = false;
+		}
+
+		if (markVarUsed) {
 			Variable* var = getReferencedVariable();
 			if (var) {
 				var->markUsed();
 			}
+		}
+
+		if (arrayIndex) {
+			arrayIndex->prepare();
 		}
 	}
 

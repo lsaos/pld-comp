@@ -40,6 +40,8 @@ namespace ast
 	void Instruction::setParent(Instruction* parentInstruction)
 	{
 		assert(parentInstruction);
+		assert(parentInstruction != this);
+
 		parent = parentInstruction;
 	}
 
@@ -88,31 +90,36 @@ namespace ast
 	{
 		assert(instruction);
 
-		cout << "Error SE" << (int)error
+		cerr << "Error SE" << (int)error
 			<< " on line " << instruction->getPosition().line
 			<< ", " << instruction->getPosition().offset
 			<< ": ";
 
 		switch (error)
 		{
-		case Error::None: cout << "none"; break;
-		case Error::InvalidInstruction: cout << "invalid instruction"; break;
-		case Error::DivisionByZero: cout << "division by zero"; break;
-		case Error::NotConstant: cout << "not constant"; break;
-		case Error::NoMain: cout << "no main function"; break;
-		case Error::InvalidStatement: cout << "invalid statement"; break;
-		case Error::DuplicatedSymbolName: cout << "duplicated symbol name"; break;
-		case Error::ExpectingExpression: cout << "excepting an expression"; break;
-		case Error::UnknownIdentifier: cout << "unknown identifier"; break;
-		default: cout << "unknown error"; break;
+		case Error::None: cerr << "none"; break;
+		case Error::InvalidInstruction: cerr << "invalid instruction"; break;
+		case Error::DivisionByZero: cerr << "division by zero"; break;
+		case Error::NotConstant: cerr << "not constant"; break;
+		case Error::NoMain: cerr << "no main function"; break;
+		case Error::InvalidStatement: cerr << "invalid statement"; break;
+		case Error::DuplicatedSymbolName: cerr << "duplicated symbol name"; break;
+		case Error::ExpectingExpression: cerr << "expecting an expression"; break;
+		case Error::UnknownIdentifier: cerr << "unknown identifier"; break;
+		case Error::WrongArgumentsCount: cerr << "wrong number of arguments"; break;
+		case Error::MissingArraySize: cerr << "missing array size"; break;
+		case Error::InvalidArraySize: cerr << "invalid array size"; break;
+		case Error::MissingArrayIndex: cerr << "missing array index"; break;
+		case Error::IndexOutOfBounds: cerr << "index out of array bounds"; break;
+		default: cerr << "unknown error"; break;
 		}
 
-		const string representation = getStringRepresentation();
+		const string representation = instruction->getStringRepresentation();
 		if (!representation.empty()) {
-			cout << " '" << representation << '\'';
+			cerr << " '" << representation << '\'';
 		}
 
-		cout << endl;
+		cerr << endl;
 
 		// Throw an exception to prevent further analysis
 		throw exception();
@@ -131,10 +138,11 @@ namespace ast
 		{
 		case Warning::None: cout << "none"; break;
 		case Warning::UnusedVariable: cout << "unused variable"; break;
+		case Warning::UnsafeCast: cout << "cast can lose information"; break;
 		default: cout << "unknown warning"; break;
 		}
 
-		const string representation = getStringRepresentation();
+		const string representation = instruction->getStringRepresentation();
 		if (!representation.empty()) {
 			cout << " '" << representation << '\'';
 		}
