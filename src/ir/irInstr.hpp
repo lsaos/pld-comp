@@ -21,7 +21,7 @@ namespace ir {
 			/** Actual code generation */
 			virtual void gen_asm(ostream &o) = 0; /**< x86 assembly code generation for this IR instruction */
 
-			virtual void printIR(ostream &o) = 0;
+			virtual void printIR(ostream &o) {}
 
 		protected:
 			BasicBlock* bb; /**< The BB this instruction belongs to, which provides a pointer to the CFG this instruction belong to */
