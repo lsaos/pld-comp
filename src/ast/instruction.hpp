@@ -140,6 +140,15 @@ namespace ast
 		// Return true if the current instruction is an assignment.
 		virtual bool isAssignment() const { return false; }
 
+		// Return true if the current instruction is a control structure.
+		virtual bool isControlStructure() const { return false; }
+
+		// Return true if the current instruction is an if.
+		virtual bool isIf() const { return false; }
+
+		// Return true if the current instruction is a while.
+		virtual bool isWhile() const { return false; }
+
 	protected:
 		// Report the specified error for the specified instruction.
 		// Also throws an std::exception.
