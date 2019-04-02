@@ -10,6 +10,8 @@
 #include "program.hpp"
 #include "assignment.hpp"
 #include "../ir/cfg.hpp"
+#include "../ir/irInstrLdconst.hpp"
+#include "../ir/irInstrBinaryOperation.hpp"
 
 using namespace ir;
 
@@ -174,6 +176,15 @@ namespace ast
 
 	string Identifier::buildIR(CFG* cfg)
 	{
-		return getReferencedVariable()->getName();
+		if (isLeftValue())
+		{
+			string var = cfg->create_new_tempvar(getReferencedVariable()->getType());
+			int offset = cfg->get_var_index(getReferencedVariable()->getName());
+			cfg->current_bb->add_IRInstr(new IRInstrLdconst(cfg->current_bb, var, to_string(offset)), getReferencedVariable()->getType());
+			cfg->current_bb->add_IRInstr(new IRInstrBinaryOperation(cfg->current_bb, IRInstrBinaryOperation::Operation::add, var, "!bp", var), getReferencedVariable()->getType());
+			return var;
+		}
+		else
+			return getReferencedVariable()->getName();
 	}
 }
