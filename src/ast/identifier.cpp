@@ -9,6 +9,9 @@
 #include "function.hpp"
 #include "program.hpp"
 #include "assignment.hpp"
+#include "../ir/cfg.hpp"
+
+using namespace ir;
 
 namespace ast
 {
@@ -162,5 +165,10 @@ namespace ast
 	void Identifier::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg)
 	{
 		f << "\tmovl " << addressTable[this->getReferencedVariable()] << "(%rbp), ";
+	}
+
+	string Identifier::buildIR(CFG* cfg)
+	{
+		return getReferencedVariable()->getName();
 	}
 }
