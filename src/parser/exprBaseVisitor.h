@@ -1,5 +1,5 @@
 
-// Generated from /home/louis/Documents/Projets/COMP/src/parser/expr.g4 by ANTLR 4.7.2
+// Generated from /home/lohl/Documents/COMP/src/parser/expr.g4 by ANTLR 4.7.1
 
 #pragma once
 
@@ -16,14 +16,6 @@ class  exprBaseVisitor : public exprVisitor {
 public:
 
   virtual antlrcpp::Any visitProg(exprParser::ProgContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitPreproc(exprParser::PreprocContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitInclude(exprParser::IncludeContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -67,7 +59,11 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitLoop(exprParser::LoopContext *ctx) override {
+  virtual antlrcpp::Any visitWhileLoop(exprParser::WhileLoopContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitForLoop(exprParser::ForLoopContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -83,35 +79,27 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitSub(exprParser::SubContext *ctx) override {
+  virtual antlrcpp::Any visitMinus(exprParser::MinusContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitMult(exprParser::MultContext *ctx) override {
+  virtual antlrcpp::Any visitLogicalNot(exprParser::LogicalNotContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitComparison(exprParser::ComparisonContext *ctx) override {
+  virtual antlrcpp::Any visitLowerThan(exprParser::LowerThanContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitBin(exprParser::BinContext *ctx) override {
+  virtual antlrcpp::Any visitLowerThanEquals(exprParser::LowerThanEqualsContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitVariable(exprParser::VariableContext *ctx) override {
+  virtual antlrcpp::Any visitBitwiseXor(exprParser::BitwiseXorContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitChar(exprParser::CharContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitNegativeUnary(exprParser::NegativeUnaryContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitUnary(exprParser::UnaryContext *ctx) override {
+  virtual antlrcpp::Any visitBitwiseAnd(exprParser::BitwiseAndContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -123,7 +111,59 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitLogical(exprParser::LogicalContext *ctx) override {
+  virtual antlrcpp::Any visitDifferent(exprParser::DifferentContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLogicalOr(exprParser::LogicalOrContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitBitwiseNot(exprParser::BitwiseNotContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitGreaterThanEquals(exprParser::GreaterThanEqualsContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitGreaterThan(exprParser::GreaterThanContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitEquals(exprParser::EqualsContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLogicalAnd(exprParser::LogicalAndContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitVariable(exprParser::VariableContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitChar(exprParser::CharContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitBitwiseOr(exprParser::BitwiseOrContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitMultiply(exprParser::MultiplyContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitRightShift(exprParser::RightShiftContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitSubstract(exprParser::SubstractContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLeftShift(exprParser::LeftShiftContext *ctx) override {
     return visitChildren(ctx);
   }
 

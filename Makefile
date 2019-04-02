@@ -33,9 +33,9 @@ DEPS = $(OBJS:.o=.d)
 
 #Name the compiler
 CC=clang++
-ANTLR=/shares/public/tp/ANTLR4-CPP/bin/antlr4#The path to your antlr4 executable
-ANTLRSRC=/shares/public/tp/ANTLR4-CPP/antlr4-runtime#Same, but here the runtime is located
-ANTLRRUNTIME=/shares/public/tp/ANTLR4-CPP
+ANTLR=/home/louis/Documents/Projets/ANTLR4-CPP/bin/antlr4#The path to your antlr4 executable
+ANTLRSRC=/home/louis/Documents/Projets/ANTLR4-CPP/antlr4-runtime#Same, but here the runtime is located
+ANTLRRUNTIME=/home/louis/Documents/Projets/ANTLR4-CPP
 
 ifeq ($(TREE), TRUE)
 	CFLAGS=-ansi -std=c++11 -DTREEVISIT
@@ -82,9 +82,6 @@ endef
 all: directories $(TARGET)
 
 $(TARGET): $(OBJS)
-	@echo "Path to src: $(SOURCEDIRS)"
-	@echo "Sources : $(SOURCES)"
-	@echo "OBJS : $(OBJS)"
 	$(HIDE)echo Linking $@
 	$(HIDE)$(CC) $(OBJS) $(LDFLAGS) -o $(TARGET) 
 
