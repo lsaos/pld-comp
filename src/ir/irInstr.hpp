@@ -31,7 +31,7 @@ namespace ir {
 
 
 			/**  constructor */
-			//IRInstr(BasicBlock* bb_, Operation op, Type t, vector<string> params);
+			//IRInstr(BasicBlock*, Type t);
 			IRInstr(BasicBlock*);
 
 			/** Actual code generation */
@@ -39,26 +39,14 @@ namespace ir {
 
 		private:
 			BasicBlock* bb; /**< The BB this instruction belongs to, which provides a pointer to the CFG this instruction belong to */
-			//Operation op;
-			Type t;
-			vector<string> params; /**< For 3-op instrs: d, x, y; for ldconst: d, c;  For call: label, d, params;  for wmem and rmem: choose yourself */
+			//Type t;
+			
+			/**< For 3-op instrs: d, x, y; for ldconst: d, c;  For call: label, d, params;  for wmem and rmem: choose yourself */
 			// if you subclass IRInstr, each IRInstr subclass has its parameters and the previous (very important) comment becomes useless: it would be a better design. 
 
 			/*
 				A FAIRE : créer un héritage de IRInstr en créant une classe par instruction
 					=> Plus long mais meilleur design et plus efficace pour l'héritage des méthodes de génération assembleur
 			*/
-	};
-
-	class IRInstrConst : public IRInstr
-	{
-		public :
-
-
-			virtual void gen_asm(ostream& o);
-
-		protected :
-			string dest;
-			string src;
 	};
 }

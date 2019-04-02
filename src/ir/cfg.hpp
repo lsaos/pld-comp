@@ -35,10 +35,10 @@ namespace ir {
 			void gen_asm_epilogue(ostream& o);
 
 			// symbol table methods
-			void add_to_symbol_table(Variable * var);
+			void add_to_symbol_table(string var, Type t);
 			string create_new_tempvar(Type t); //?? A quoi sert cette méthode ??
-			int get_var_index(Variable * var);
-			Type get_var_type(Variable * var);
+			int get_var_index(string var);
+			Type get_var_type(string var);
 
 			// basic block management
 			string new_BB_name();
@@ -46,8 +46,8 @@ namespace ir {
 
 		protected:
 			Function* function; /**< The AST this CFG comes from */
-			map <Variable*, Type> SymbolType; /**< part of the symbol table  */
-			map <Variable*, int> SymbolIndex; /**< part of the symbol table  */
+			map <string, Type> SymbolType; /**< part of the symbol table  */
+			map <string, int> SymbolIndex; /**< part of the symbol table  */
 			int nextFreeSymbolIndex; /**< to allocate new symbols in the symbol table */
 			int nextBBnumber; /**< just for naming */
 
