@@ -32,12 +32,12 @@ namespace ir {
 
 			/**  constructor */
 			//IRInstr(BasicBlock*, Type t);
-			IRInstr(BasicBlock*);
+			IRInstr(BasicBlock* bb) : bb(bb) {}
 
 			/** Actual code generation */
 			virtual void gen_asm(ostream &o) = 0; /**< x86 assembly code generation for this IR instruction */
 
-		private:
+		protected:
 			BasicBlock* bb; /**< The BB this instruction belongs to, which provides a pointer to the CFG this instruction belong to */
 			//Type t;
 			
