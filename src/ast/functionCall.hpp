@@ -51,7 +51,7 @@ namespace ast
 
 		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg = "%eax") {}
 
-		virtual string buildIR(ir::CFG*) {}
+		virtual string buildIR(ir::CFG*) { return string(); }
 
 	private:
 		vector<unique_ptr<Expression>> args; // Arguments to pass to the function.

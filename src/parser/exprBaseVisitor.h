@@ -1,5 +1,5 @@
 
-// Generated from /home/lohl/Documents/COMP/src/parser/expr.g4 by ANTLR 4.7.1
+// Generated from /home/louis/Documents/Projets/COMP/src/parser/expr.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -31,6 +31,18 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitDeclaration(exprParser::DeclarationContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitPlainNewVariable(exprParser::PlainNewVariableContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitValuedNewVariable(exprParser::ValuedNewVariableContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitRetExpr(exprParser::RetExprContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -47,19 +59,23 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitDeclaration(exprParser::DeclarationContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitPlainNewVariable(exprParser::PlainNewVariableContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitValuedNewVariable(exprParser::ValuedNewVariableContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
   virtual antlrcpp::Any visitAssignment(exprParser::AssignmentContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitOptional(exprParser::OptionalContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLoop(exprParser::LoopContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitCondition(exprParser::ConditionContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitControlBody(exprParser::ControlBodyContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -72,6 +88,10 @@ public:
   }
 
   virtual antlrcpp::Any visitMult(exprParser::MultContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitComparison(exprParser::ComparisonContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -100,6 +120,10 @@ public:
   }
 
   virtual antlrcpp::Any visitInt(exprParser::IntContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLogical(exprParser::LogicalContext *ctx) override {
     return visitChildren(ctx);
   }
 

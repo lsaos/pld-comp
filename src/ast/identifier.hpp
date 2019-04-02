@@ -59,6 +59,14 @@ namespace ast
 			return arrayIndex.get();
 		}
 
+		// Return true if the identifier is used as a left value in an assignment.
+		bool isLeftValue() const;
+
+		// Return true if the identifier is used as a right value.
+		bool isRightValue() const {
+			return !isLeftValue();
+		}
+
 	public:
 		virtual Type getType() const;
 		virtual void checkSemantic(bool advanced) const;
@@ -66,7 +74,7 @@ namespace ast
 		virtual string getStringRepresentation() const { return ident; }
 
 		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg = "%eax");
-		virtual string buildIR(ir::CFG*);
+		virtual string buildIR(ir::CFG*) { return string(); }
 
 		virtual void prepare();
 		virtual Instruction* optimize();

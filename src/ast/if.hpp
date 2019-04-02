@@ -41,11 +41,13 @@ namespace ast
 		virtual void checkSemantic(bool advanced) const;
 		virtual Instruction* optimize();
 		virtual void prepare();
+		virtual void toTextualRepresentation(ostream& out, size_t i) const;
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg = "%eax") {}
 
 		virtual string getStringRepresentation() const { return "if"; }
 		virtual bool isIf() const { return true; }
 
-		virtual string buildIR(ir::CFG*);
+		virtual string buildIR(ir::CFG*) { return string(); }
 
 	private:
 		unique_ptr<Instruction> alternative; // Alternative instruction to execute when the condition is false.
