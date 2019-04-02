@@ -16,6 +16,8 @@ namespace ir {
 			/** Actual code generation */
 			void gen_asm(ostream &o);
 
+			void printIR(ostream &o);
+
 		protected:
 			string dest;
 			string label;
