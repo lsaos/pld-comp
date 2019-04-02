@@ -20,6 +20,7 @@ namespace ir {
 	class CFG {
 		public:
 			CFG(ast::Function* function);
+
 			~CFG();
 
 			void generateCFG();
@@ -51,8 +52,8 @@ namespace ir {
 			bool isBBEnd(Instruction* i);*/
 
 		protected:
-			ast::Function* function; /**< The AST this CFG comes from */
-			map <string, Type> SymbolType; /**< part of the symbol table  */
+			Function* function; /**< The AST this CFG comes from */
+			map <string, ast::Type> SymbolType; /**< part of the symbol table  */
 			map <string, int> SymbolIndex; /**< part of the symbol table  */
 			int nextFreeSymbolIndex; /**< to allocate new symbols in the symbol table */
 			int nextBBnumber; /**< just for naming */
