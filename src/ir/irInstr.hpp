@@ -15,27 +15,13 @@ namespace ir {
 	class IRInstr {
 
 		public:
-			/** The instructions themselves -- feel free to subclass instead */
-			/*typedef enum {
-				ldconst,
-				add,
-				sub,
-				mul,
-				rmem,
-				wmem,
-				call,
-				cmp_eq,
-				cmp_lt,
-				cmp_le
-			} Operation;*/
-
-
 			/**  constructor */
-			//IRInstr(BasicBlock*, Type t);
 			IRInstr(BasicBlock* bb, Type t) : bb(bb), t(t) {}
 
 			/** Actual code generation */
 			virtual void gen_asm(ostream &o) = 0; /**< x86 assembly code generation for this IR instruction */
+
+			virtual void printIR(ostream &o) = 0;
 
 		protected:
 			BasicBlock* bb; /**< The BB this instruction belongs to, which provides a pointer to the CFG this instruction belong to */

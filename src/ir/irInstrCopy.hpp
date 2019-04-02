@@ -7,11 +7,11 @@ using namespace ast;
 
 namespace ir {
 
-	class IRInstrWmen : public virtual IRInstr {
+	class IRInstrCopy : public virtual IRInstr {
 
 		public:
 			/**  constructor */
-			IRInstrWmen(BasicBlock* bb, string addr, string var);
+			IRInstrCopy(BasicBlock* bb, string dest, string op1);
 
 			/** Actual code generation */
 			void gen_asm(ostream &o);
@@ -19,7 +19,7 @@ namespace ir {
 			void printIR(ostream &o);
 
 		protected:
-			string addr;
-			string var;
+			string dest;
+			string op1;
 	};
 }
