@@ -2,7 +2,7 @@
 #include <string>
 #include <cstring>
 #include <iostream>
-#include "../lib/unistd.h"
+
 #include "../parser/exprLexer.h"
 #include "../parser/exprParser.h"
 #include "../parser/exprBaseVisitor.h"
@@ -35,7 +35,6 @@ using namespace assembly;
 
 int main(int argc, char* argv[])
 {
-
 	if (argc < 2)
 	{
 		cout << "Usage: comp source_file [-a] [-o] [-c]" << endl;
@@ -53,38 +52,17 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	int opt;
 	bool optionA = false, optionC = false, optionO = false;
 
-	cout << "options : " << getopt(argc, argv, "o:c:a");
-	for (int i = 0; i < argc; i++) {
-		cout << argv[i] << endl;
-		if (!strcmp(argv[i], "-c")) {
-			cout << "Il y aura génération de code assembleur" << endl;
+	for (int i = 2; i < argc; i++) {
+		if (strcmp(argv[i], "-c") == 0) {
 			optionC = true;
-			break;
 		}
-		if (!strcmp(argv[i], "-a")) {
-			cout << "Il y aura analyse statique" << endl;
+		else if (strcmp(argv[i], "-a") == 0) {
 			optionA = true;
-			break;
 		}
-	}
-
-	while ((opt = getopt(argc, argv, "o:c:a:")) != -1) {
-		switch (opt) {
-		case 'o':
-			cout << "Il y aura optimisation" << endl;
+		else if (strcmp(argv[i], "-o") == 0) {
 			optionO = true;
-			break;
-		case 'c':
-			cout << "Il y aura génération de code assembleur" << endl;
-			optionC = true;
-			break;
-		case 'a':
-			cout << "Il y aura analyse statique" << endl;
-			optionA = true;
-			break;
 		}
 	}
 
@@ -101,44 +79,39 @@ int main(int argc, char* argv[])
 	//Pour tester l'assemblage
 	optionC = true;
 
-	if (nbErrors == 0)
-	{
-
-		Visiteur visitor;
-		Program* prog = (Program*)visitor.visit(tree);
-		prog->prepare();
-
-		try
-		{
-			prog->checkSemantic(optionA);
-			prog->toTextualRepresentation(cout);
-
-			if (optionO) {
-				cout << "-------------------------------" << endl
-					<< " After optimization"
-					<< "-------------------------------" << endl;
-
-				prog->optimize();
-				prog->toTextualRepresentation(cout);
-			}
-
-			cout << "Le programme s'est fini correctement" << endl;
-
-			if (optionC) {
-				AssemblyGenerator ag(argv[1]);
-				ag.generateAssembly(prog);
-			}
-		}
-		catch (...)
-		{
-		}
-
-		system("pause");
-	}
-	else
-	{
+	if (nbErrors != 0) {
 		cout << "Erreur de compilation" << endl;
+		return -1;
 	}
+
+	Visiteur visitor;
+	Program* prog = (Program*)visitor.visit(tree);
+	prog->prepare();
+
+	try
+	{
+		prog->checkSemantic(optionA);
+		prog->toTextualRepresentation(cout);
+	}
+	catch (...)
+	{
+	}
+
+	if (optionO) {
+		cout << "-------------------------------" << endl
+			<< " After optimization" << endl
+			<< "-------------------------------" << endl;
+
+		prog->optimize();
+		prog->toTextualRepresentation(cout);
+	}
+
+	if (optionC) {
+		AssemblyGenerator ag(argv[1]);
+		ag.generateAssembly(prog);
+	}
+
+	system("pause");
 
 	return 0;
 }

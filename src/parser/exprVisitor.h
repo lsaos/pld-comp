@@ -1,5 +1,5 @@
 
-// Generated from /home/lohl/Documents/COMP/src/parser/expr.g4 by ANTLR 4.7.1
+// Generated from /home/louis/Documents/Projets/COMP/src/parser/expr.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -27,6 +27,12 @@ public:
 
     virtual antlrcpp::Any visitMain(exprParser::MainContext *context) = 0;
 
+    virtual antlrcpp::Any visitDeclaration(exprParser::DeclarationContext *context) = 0;
+
+    virtual antlrcpp::Any visitPlainNewVariable(exprParser::PlainNewVariableContext *context) = 0;
+
+    virtual antlrcpp::Any visitValuedNewVariable(exprParser::ValuedNewVariableContext *context) = 0;
+
     virtual antlrcpp::Any visitRetExpr(exprParser::RetExprContext *context) = 0;
 
     virtual antlrcpp::Any visitRetNoExpr(exprParser::RetNoExprContext *context) = 0;
@@ -35,19 +41,23 @@ public:
 
     virtual antlrcpp::Any visitInstruction(exprParser::InstructionContext *context) = 0;
 
-    virtual antlrcpp::Any visitDeclaration(exprParser::DeclarationContext *context) = 0;
-
-    virtual antlrcpp::Any visitPlainNewVariable(exprParser::PlainNewVariableContext *context) = 0;
-
-    virtual antlrcpp::Any visitValuedNewVariable(exprParser::ValuedNewVariableContext *context) = 0;
-
     virtual antlrcpp::Any visitAssignment(exprParser::AssignmentContext *context) = 0;
+
+    virtual antlrcpp::Any visitOptional(exprParser::OptionalContext *context) = 0;
+
+    virtual antlrcpp::Any visitLoop(exprParser::LoopContext *context) = 0;
+
+    virtual antlrcpp::Any visitCondition(exprParser::ConditionContext *context) = 0;
+
+    virtual antlrcpp::Any visitControlBody(exprParser::ControlBodyContext *context) = 0;
 
     virtual antlrcpp::Any visitAdd(exprParser::AddContext *context) = 0;
 
     virtual antlrcpp::Any visitSub(exprParser::SubContext *context) = 0;
 
     virtual antlrcpp::Any visitMult(exprParser::MultContext *context) = 0;
+
+    virtual antlrcpp::Any visitComparison(exprParser::ComparisonContext *context) = 0;
 
     virtual antlrcpp::Any visitBin(exprParser::BinContext *context) = 0;
 
@@ -62,6 +72,8 @@ public:
     virtual antlrcpp::Any visitParenthesis(exprParser::ParenthesisContext *context) = 0;
 
     virtual antlrcpp::Any visitInt(exprParser::IntContext *context) = 0;
+
+    virtual antlrcpp::Any visitLogical(exprParser::LogicalContext *context) = 0;
 
     virtual antlrcpp::Any visitFuncType(exprParser::FuncTypeContext *context) = 0;
 
