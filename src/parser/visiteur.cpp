@@ -18,6 +18,8 @@
 #include "../ast/variable.hpp"
 #include "../ast/error.hpp"
 #include "../ast/return.hpp"
+#include "../ast/if.hpp"
+#include "../ast/while.hpp"
 #include <vector>
 
 using namespace ast;
@@ -42,6 +44,14 @@ antlrcpp::Any Visiteur::visitProg(exprParser::ProgContext *ctx) {
 	indent--;
 #endif
 	return prog;
+}
+
+antlrcpp::Any Visiteur::visitPreproc(exprParser::PreprocContext *ctx) {
+	return antlrcpp::Any();
+}
+
+antlrcpp::Any Visiteur::visitInclude(exprParser::IncludeContext *ctx) {
+	return antlrcpp::Any();
 }
 
 antlrcpp::Any Visiteur::visitMain(exprParser::MainContext *ctx) {
@@ -73,62 +83,6 @@ antlrcpp::Any Visiteur::visitMain(exprParser::MainContext *ctx) {
 	indent--;
 #endif
 	return (Instruction*)func;
-}
-
-
-antlrcpp::Any Visiteur::visitPreproc(exprParser::PreprocContext *ctx) {
-	return antlrcpp::Any();
-}
-
-antlrcpp::Any Visiteur::visitInclude(exprParser::IncludeContext *ctx) {
-	return antlrcpp::Any();
-}
-
-antlrcpp::Any Visiteur::visitBlock(exprParser::BlockContext *ctx) {
-	return antlrcpp::Any();
-}
-
-
-antlrcpp::Any Visiteur::visitRetExpr(exprParser::RetExprContext *ctx) {
-#ifdef TREEVISIT
-	jump(); cout << "RETURN_EXPR(" << endl;
-	indent++;
-#endif
-	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
-    Expression* expr=(Expression*)visit(ctx->expression());
-	Return* ret = new Return(pos);
-    ret->setExpression(expr);
-#ifdef TREEVISIT
-	jump(); cout << ")" << endl;
-	indent--;
-#endif
-	return ret;
-}
-
-antlrcpp::Any Visiteur::visitRetNoExpr(exprParser::RetNoExprContext *ctx){
-    #ifdef TREEVISIT
-	jump(); cout << "RETURN_NO_EXPR(" << endl;
-	indent++;
-#endif
-	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
-	Return* ret = new Return(pos);
-#ifdef TREEVISIT
-	jump(); cout << ")" << endl;
-	indent--;
-#endif
-	return ret;
-
-}
-
-antlrcpp::Any Visiteur::visitInstruction(exprParser::InstructionContext *ctx) {
-#ifdef TREEVISIT
-	jump(); cout << "INSTRUCTION [" << endl;
-#endif
-	Instruction* instr = (Instruction*)visit(ctx->children[0]);
-#ifdef TREEVISIT
-	jump(); cout << "]" << endl;
-#endif
-	return instr;
 }
 
 antlrcpp::Any Visiteur::visitDeclaration(exprParser::DeclarationContext *ctx) {
@@ -193,6 +147,72 @@ antlrcpp::Any Visiteur::visitValuedNewVariable(exprParser::ValuedNewVariableCont
 	return declaration;
 }
 
+
+antlrcpp::Any Visiteur::visitRetExpr(exprParser::RetExprContext *ctx) {
+#ifdef TREEVISIT
+	jump(); cout << "RETURN_EXPR(" << endl;
+	indent++;
+#endif
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
+    Expression* expr=(Expression*)visit(ctx->expression());
+	Return* ret = new Return(pos);
+    ret->setExpression(expr);
+#ifdef TREEVISIT
+	jump(); cout << ")" << endl;
+	indent--;
+#endif
+	return ret;
+}
+
+antlrcpp::Any Visiteur::visitRetNoExpr(exprParser::RetNoExprContext *ctx){
+    #ifdef TREEVISIT
+	jump(); cout << "RETURN_NO_EXPR(" << endl;
+	indent++;
+#endif
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
+	Return* ret = new Return(pos);
+#ifdef TREEVISIT
+	jump(); cout << ")" << endl;
+	indent--;
+#endif
+	return ret;
+
+}
+
+antlrcpp::Any Visiteur::visitBlock(exprParser::BlockContext *ctx){
+    #ifdef TREEVISIT
+	jump(); cout << "BLOCK(" << endl;
+	indent++;
+    #endif
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
+    Block* block = new Block(pos);
+    for (int i=0; i<ctx->declaration().size(); i++){
+        vector<Instruction*>* declarations = (vector<Instruction*>*)visit(ctx->declaration(i));
+        for(int j=0; j<declarations->size();j++){
+            block->add(declarations->at(j));
+        }
+    }
+	for (int i = 0; i < ctx->instruction().size(); i++) {
+		block->add((Instruction*)visit(ctx->instruction(i)));
+	}
+    #ifdef TREEVISIT
+	jump(); cout << ")" << endl;
+	indent--;
+    #endif
+    return (Instruction*)block;
+}
+
+antlrcpp::Any Visiteur::visitInstruction(exprParser::InstructionContext *ctx) {
+#ifdef TREEVISIT
+	jump(); cout << "INSTRUCTION [" << endl;
+#endif
+	Instruction* instr = (Instruction*)visit(ctx->children[0]);
+#ifdef TREEVISIT
+	jump(); cout << "]" << endl;
+#endif
+	return instr;
+}
+
 antlrcpp::Any Visiteur::visitAssignment(exprParser::AssignmentContext *ctx) {
 
 #ifdef TREEVISIT
@@ -214,87 +234,57 @@ antlrcpp::Any Visiteur::visitAssignment(exprParser::AssignmentContext *ctx) {
 
 }
 
-antlrcpp::Any Visiteur::visitUnary(exprParser::UnaryContext *ctx){
-	#ifdef TREEVISIT
-		jump(); cout << "UNARY("<<endl;
-		indent++;
-	#endif
-	Expression* expr = (Expression*)visit(ctx->expression());
-
-	UnaryExpression* unary = new  UnaryExpression(expr->getPosition());
-	unary->setExpression(expr);
-	switch(ctx->UNARYOP()->getText().at(0)){
-		case '!':
-			unary->setOperator(UnaryOperator::LogicalNot);
-			break;
-		case '~':
-			unary->setOperator(UnaryOperator::BitwiseNot);
-			break;
-	}
-	#ifdef TREEVISIT
-		jump(); cout << ")"<<endl;
-		indent--;
-	#endif
-	return (Expression*)unary;
+antlrcpp::Any Visiteur::visitOptional(exprParser::OptionalContext *ctx){
+    #ifdef TREEVISIT
+	jump(); cout << "IF(" << endl;
+	indent++;
+    #endif
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());    
+    Instruction* block = (Instruction*)visit(ctx->controlBody(0));
+    Expression* expr = (Expression*)visit(ctx->condition());
+    If* condition = new If(pos);
+    condition->setCondition(expr);
+    condition->setInstruction(block);
+    
+    if(ctx->getRuleContexts<exprParser::ControlBodyContext>().size()==2) 
+    {
+    	Instruction* blockElse = (Instruction*)visit(ctx->controlBody(1));
+        condition->setAlternative(blockElse);
+    }  
+    #ifdef TREEVISIT
+    jump(); cout << ")" << endl;
+    indent--;
+    #endif
+    return (Instruction*)condition;
 }
 
-antlrcpp::Any Visiteur::visitNegativeUnary(exprParser::NegativeUnaryContext *ctx){
-	#ifdef TREEVISIT
-		jump(); cout << "UNARY("<<endl;
-		indent++;
-	#endif
-	Expression* expr = (Expression*)visit(ctx->expression());
-	Expression* toReturn;
-	if (expr->isConstant()){
-		Constant* constant = new Constant(expr->getPosition());
-		constant->setValue(-(expr->getValue()));
-		#ifdef TREEVISIT
-			jump(); cout <<" This unary turned to a negative constant" << endl;
-		#endif
-		constant->setType(expr->getType());
-		delete expr;
-		toReturn = (Expression*) constant;
-	} else {
-		UnaryExpression* unary = new  UnaryExpression(expr->getPosition());
-		unary->setExpression(expr);
-		//Unary is by defualt '-'
-		toReturn = (Expression*)unary;
-	}
-	#ifdef TREEVISIT
-		jump(); cout << ")"<<endl;
-		indent--;
-	#endif
-	return toReturn;
+antlrcpp::Any Visiteur::visitLoop(exprParser::LoopContext *ctx){
+    #ifdef TREEVISIT
+	jump(); cout << "WHILE(" << endl;
+	indent++;
+    #endif
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());    
+    Instruction* block = (Instruction*)visit(ctx->controlBody());
+    Expression* expr = (Expression*)visit(ctx->condition());
+    While* loop = new While(pos);
+    loop->setCondition(expr);
+    loop->setInstruction(block);
+    #ifdef TREEVISIT
+    jump(); cout << ")" << endl;
+    indent--;
+    #endif
+    return (Instruction*)loop;
 }
 
-antlrcpp::Any Visiteur::visitBin(exprParser::BinContext *ctx){
-	#ifdef TREEVISIT
-		jump(); cout << "BINAIRE("<<endl;
-		indent++;
-	#endif
-	char opbin = ctx->OPBIN()->getText().at(0);
-	Expression* left = (Expression*)visit(ctx->expression(0));
-	Expression* right = (Expression*)visit(ctx->expression(1));
-	BinaryExpression* binExp = new BinaryExpression(left->getPosition());
-	binExp->setLeftExpression(left);
-	binExp->setRightExpression(right);
-	switch (opbin) {
-	case '&':
-		binExp->setOperator(BinaryOperator::BitwiseAnd);
-		break;
-	case '^':
-		binExp->setOperator(BinaryOperator::BitwiseXor);
-		break;
-	case '|':
-		binExp->setOperator(BinaryOperator::BitwiseOr);
-		break;
-	}
-#ifdef TREEVISIT
-	jump(); cout << ")" << endl;
-	indent--;
-#endif
-	return (Expression*)binExp;
+antlrcpp::Any Visiteur::visitCondition(exprParser::ConditionContext *ctx){
+   return (Expression*)visit(ctx->expression());
 }
+
+antlrcpp::Any Visiteur::visitControlBody(exprParser::ControlBodyContext *ctx){
+    return (Instruction*)visit(ctx->children[0]);
+}
+
+
 
 antlrcpp::Any Visiteur::visitAdd(exprParser::AddContext *ctx) {
 #ifdef TREEVISIT
@@ -358,17 +348,33 @@ antlrcpp::Any Visiteur::visitMult(exprParser::MultContext *ctx) {
 	return (Expression*)binExp;
 }
 
-antlrcpp::Any Visiteur::visitParenthesis(exprParser::ParenthesisContext *ctx){
+antlrcpp::Any Visiteur::visitBin(exprParser::BinContext *ctx){
 	#ifdef TREEVISIT
-		jump(); cout << "PARENTHESIS("<<endl;
+		jump(); cout << "BINAIRE("<<endl;
 		indent++;
 	#endif
-	Expression* expr = (Expression*)visit(ctx->expression());
-	#ifdef TREEVISIT
-		jump(); cout <<")"<<endl;
-		indent--;
-	#endif
-	return expr;
+	char opbin = ctx->OPBIN()->getText().at(0);
+	Expression* left = (Expression*)visit(ctx->expression(0));
+	Expression* right = (Expression*)visit(ctx->expression(1));
+	BinaryExpression* binExp = new BinaryExpression(left->getPosition());
+	binExp->setLeftExpression(left);
+	binExp->setRightExpression(right);
+	switch (opbin) {
+	case '&':
+		binExp->setOperator(BinaryOperator::BitwiseAnd);
+		break;
+	case '^':
+		binExp->setOperator(BinaryOperator::BitwiseXor);
+		break;
+	case '|':
+		binExp->setOperator(BinaryOperator::BitwiseOr);
+		break;
+	}
+#ifdef TREEVISIT
+	jump(); cout << ")" << endl;
+	indent--;
+#endif
+	return (Expression*)binExp;
 }
 
 antlrcpp::Any Visiteur::visitVariable(exprParser::VariableContext *ctx){
@@ -393,6 +399,72 @@ antlrcpp::Any Visiteur::visitChar(exprParser::CharContext *ctx) {
 	return (Expression*)constant;
 }
 
+antlrcpp::Any Visiteur::visitNegativeUnary(exprParser::NegativeUnaryContext *ctx){
+	#ifdef TREEVISIT
+		jump(); cout << "UNARY("<<endl;
+		indent++;
+	#endif
+	Expression* expr = (Expression*)visit(ctx->expression());
+	Expression* toReturn;
+	if (expr->isConstant()){
+		Constant* constant = new Constant(expr->getPosition());
+		constant->setValue(-(expr->getValue()));
+		#ifdef TREEVISIT
+			jump(); cout <<" This unary turned to a negative constant" << endl;
+		#endif
+		constant->setType(expr->getType());
+		delete expr;
+		toReturn = (Expression*) constant;
+	} else {
+		UnaryExpression* unary = new  UnaryExpression(expr->getPosition());
+		unary->setExpression(expr);
+		//Unary is by defualt '-'
+		toReturn = (Expression*)unary;
+	}
+	#ifdef TREEVISIT
+		jump(); cout << ")"<<endl;
+		indent--;
+	#endif
+	return toReturn;
+}
+
+antlrcpp::Any Visiteur::visitUnary(exprParser::UnaryContext *ctx){
+	#ifdef TREEVISIT
+		jump(); cout << "UNARY("<<endl;
+		indent++;
+	#endif
+	Expression* expr = (Expression*)visit(ctx->expression());
+
+	UnaryExpression* unary = new  UnaryExpression(expr->getPosition());
+	unary->setExpression(expr);
+	switch(ctx->UNARYOP()->getText().at(0)){
+		case '!':
+			unary->setOperator(UnaryOperator::LogicalNot);
+			break;
+		case '~':
+			unary->setOperator(UnaryOperator::BitwiseNot);
+			break;
+	}
+	#ifdef TREEVISIT
+		jump(); cout << ")"<<endl;
+		indent--;
+	#endif
+	return (Expression*)unary;
+}
+
+antlrcpp::Any Visiteur::visitParenthesis(exprParser::ParenthesisContext *ctx){
+	#ifdef TREEVISIT
+		jump(); cout << "PARENTHESIS("<<endl;
+		indent++;
+	#endif
+	Expression* expr = (Expression*)visit(ctx->expression());
+	#ifdef TREEVISIT
+		jump(); cout <<")"<<endl;
+		indent--;
+	#endif
+	return expr;
+}
+
 antlrcpp::Any Visiteur::visitInt(exprParser::IntContext *ctx) {
     #ifdef TREEVISIT
 	    jump(); cout << "INT";
@@ -406,6 +478,63 @@ antlrcpp::Any Visiteur::visitInt(exprParser::IntContext *ctx) {
 	cout << "()" << endl;
 #endif
 	return (Expression*)constante;
+}
+
+antlrcpp::Any Visiteur::visitLogical(exprParser::LogicalContext* ctx){
+    #ifdef TREEVISIT
+		jump(); cout << "LOGIQUE("<<endl;
+		indent++;
+	#endif
+	char logop = ctx->LOGICOP()->getText().at(0);
+	Expression* left = (Expression*)visit(ctx->expression(0));
+	Expression* right = (Expression*)visit(ctx->expression(1));
+	BinaryExpression* binExp = new BinaryExpression(left->getPosition());
+	binExp->setLeftExpression(left);
+	binExp->setRightExpression(right);
+	switch (logop) {
+	case '&':
+		binExp->setOperator(BinaryOperator::LogicalAnd);
+		break;
+	case '|':
+		binExp->setOperator(BinaryOperator::LogicalOr);
+		break;
+	}
+#ifdef TREEVISIT
+	jump(); cout << ")" << endl;
+	indent--;
+#endif
+	return (Expression*)binExp;
+}
+
+antlrcpp::Any Visiteur::visitComparison(exprParser::ComparisonContext* ctx){
+    #ifdef TREEVISIT
+		jump(); cout << "COMPARISON("<<endl;
+		indent++;
+	#endif
+	string compop = ctx->OPCOMP()->getText();
+	Expression* left = (Expression*)visit(ctx->expression(0));
+	Expression* right = (Expression*)visit(ctx->expression(1));
+	BinaryExpression* binExp = new BinaryExpression(left->getPosition());
+	binExp->setLeftExpression(left);
+	binExp->setRightExpression(right);
+	if(compop=="=="){
+        binExp->setOperator(BinaryOperator::Equals);
+    } else if(compop=="!="){
+        binExp->setOperator(BinaryOperator::DifferentThan);
+    } else if(compop=="<"){
+        binExp->setOperator(BinaryOperator::LowerThan);
+    } else if(compop=="<="){
+        binExp->setOperator(BinaryOperator::LowerThanOrEquals);
+    } else if(compop==">"){
+        binExp->setOperator(BinaryOperator::GreaterThan);
+    } else if(compop==">="){
+        binExp->setOperator(BinaryOperator::GreaterThanOrEquals);
+    }
+#ifdef TREEVISIT
+	jump(); cout << ")" << endl;
+	indent--;
+#endif
+	return (Expression*)binExp;
 }
 
 antlrcpp::Any Visiteur::visitFuncType(exprParser::FuncTypeContext *ctx){

@@ -1,5 +1,5 @@
 
-// Generated from /home/lohl/Documents/COMP/src/parser/expr.g4 by ANTLR 4.7.1
+// Generated from /home/louis/Documents/Projets/COMP/src/parser/expr.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -14,8 +14,9 @@ public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
-    T__14 = 15, T__15 = 16, T__16 = 17, SPACE = 18, OPMUL = 19, UNARYOP = 20, 
-    OPBIN = 21, INT = 22, LIB = 23, CHAR = 24, VAR = 25
+    T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
+    SPACE = 21, OPMUL = 22, UNARYOP = 23, OPCOMP = 24, OPBIN = 25, LOGICOP = 26, 
+    INT = 27, CHAR = 28, VAR = 29
   };
 
   exprLexer(antlr4::CharStream *input);
