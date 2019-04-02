@@ -180,7 +180,7 @@ namespace ast
 		{
 			string var = cfg->create_new_tempvar(getReferencedVariable()->getType());
 			int offset = cfg->get_var_index(getReferencedVariable()->getName());
-			cfg->current_bb->add_IRInstr(new IRInstrLdconst(cfg->current_bb, var, to_string(offset)), getReferencedVariable()->getType());
+			cfg->current_bb->add_IRInstr(new IRInstrLdconst(cfg->current_bb, getReferencedVariable()->getType(), var, to_string(offset)), getReferencedVariable()->getType());
 			cfg->current_bb->add_IRInstr(new IRInstrBinaryOperation(cfg->current_bb, IRInstrBinaryOperation::Operation::add, var, "!bp", var), getReferencedVariable()->getType());
 			return var;
 		}

@@ -73,7 +73,7 @@ namespace ast
 	string Constant::buildIR(CFG* cfg)
 	{
 		string var = cfg->create_new_tempvar(type);
-		IRInstrLdconst * instr = new IRInstrLdconst(cfg->current_bb, var, to_string(value));
+		IRInstrLdconst * instr = new IRInstrLdconst(cfg->current_bb, type, var, to_string(value));
 		cfg->current_bb->add_IRInstr(instr, type);
 		return var;
 	}

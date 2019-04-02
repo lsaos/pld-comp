@@ -319,5 +319,6 @@ namespace ast
 		//string var_3 = cfg->create_new_tempvar(getType()); //A FAIRE DANS LE FUTUR POUR PLUS DE COHERENCE !!
 		string var_3 = cfg->create_new_tempvar(getLeftExpression()->getType());
 		cfg->current_bb->add_IRInstr(new IRInstrBinaryOperation(cfg->current_bb, operation,var_3, var_1, var_2), getLeftExpression()->getType()); //getType de l'expression à la place de getLeftExpression()->getType() !!
+		return var_3;
 	}
 }
