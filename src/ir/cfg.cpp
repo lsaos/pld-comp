@@ -13,14 +13,14 @@ CFG::CFG(Function* function) : function(function), nextFreeSymbolIndex(0), nextB
 
 	for (auto i : params)
 	{
-		add_to_symbol_table(i);
+		add_to_symbol_table(i->getName(), i->getType());
 	}
 
 	vector<Variable*> vars = function->getVariables(false);
 
 	for (auto var : vars)
 	{
-		add_to_symbol_table(var);
+		add_to_symbol_table(var->getName(), var->getType());
 	}
 
 	BasicBlock* bb = new BasicBlock(this, function->getName()+"_bb_"+to_string(nextBBnumber));
@@ -40,9 +40,9 @@ Function* CFG::getFunction()
 	return function;
 }
 
-void CFG::add_to_symbol_table(Variable * var)
+void CFG::add_to_symbol_table(string var, Type t)
 {
-	switch (var->getType())
+	switch (t)
 	{
 	case Type::Character:
 		nextFreeSymbolIndex -= 1;
@@ -52,6 +52,6 @@ void CFG::add_to_symbol_table(Variable * var)
 		break;
 	}
 
-	this->SymbolType[var] = var->getType();
+	this->SymbolType[var] = t;
 	this->SymbolIndex[var] = nextFreeSymbolIndex;
 }
