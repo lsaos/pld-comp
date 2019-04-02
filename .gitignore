@@ -33,3 +33,17 @@ bin/*
 Makefile
 #ANTLR
 .antlr
+
+#Those goddamn antlr generated files
+src/parser/expr.interp
+src/parser/expr.tokens
+src/parser/exprBaseVisitor.cpp
+src/parser/exprBaseVisitor.h
+src/parser/exprLexer.cpp
+src/parser/exprLexer.h
+src/parser/exprLexer.interp
+src/parser/exprLexer.tokens
+src/parser/exprParser.cpp
+src/parser/exprParser.h
+src/parser/exprVisitor.cpp
+src/parser/exprVisitor.h

@@ -132,12 +132,17 @@ namespace ast
 		return nullptr;
 	}
 
+	bool Identifier::isLeftValue() const
+	{
+		return getParent() && getParent()->isAssignment() && ((const Assignment*)getParent())->getIdentifier() == this;
+	}
+
 	void Identifier::prepare()
 	{
 		bool markVarUsed = getParentBlock() != nullptr;
 
 		// Don't mark variable used if the identifier is a basic left-value
-		if (getParent() && getParent()->isAssignment() && ((const Assignment*)getParent())->getIdentifier() == this) {
+		if (isLeftValue()) {
 			markVarUsed = false;
 		}
 

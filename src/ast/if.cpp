@@ -54,4 +54,39 @@ namespace ast
 			alternative->prepare();
 		}
 	}
+	
+	void If::toTextualRepresentation(ostream& out, size_t i) const
+	{
+		for (size_t j = 0; j < i; j++) { out << ' '; }
+		out << "If {" << endl;
+
+		for (size_t j = 0; j < i + 1; j++) { out << ' '; }
+		out << "Cond {" << endl;
+
+		getCondition()->toTextualRepresentation(out, i + 2);
+
+		for (size_t j = 0; j < i + 1; j++) { out << ' '; }
+		out << '}' << endl;
+
+		for (size_t j = 0; j < i + 1; j++) { out << ' '; }
+		out << "Body {" << endl;
+
+		getInstruction()->toTextualRepresentation(out, i + 2);
+
+		for (size_t j = 0; j < i + 1; j++) { out << ' '; }
+		out << '}' << endl;
+
+		if (alternative) {
+			for (size_t j = 0; j < i + 1; j++) { out << ' '; }
+			out << "Alt {" << endl;
+
+			alternative->toTextualRepresentation(out, i + 2);
+
+			for (size_t j = 0; j < i + 1; j++) { out << ' '; }
+			out << '}' << endl;
+		}
+
+		for (size_t j = 0; j < i; j++) { out << ' '; }
+		out << '}' << endl;
+	}
 }

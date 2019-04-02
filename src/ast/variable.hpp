@@ -89,5 +89,6 @@ namespace ast
 
 	public:
 		virtual void generateAssembly(ofstream*, unordered_map<ast::Variable*, int>*) {}
+		virtual string buildIR(ir::CFG*) { return string(); }
 	};
 }

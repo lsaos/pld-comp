@@ -18,6 +18,11 @@
 using namespace std;
 
 #include "error.hpp"
+//#include "../ir/cfg.hpp"
+
+namespace ir {
+	class CFG;
+}
 
 namespace ast
 {
@@ -105,6 +110,7 @@ namespace ast
 
 	public:
 		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable, string curReg = "%eax") = 0;
+		virtual string buildIR(ir::CFG*) = 0;
 
 	public:
 		// Get a string representation of the instruction.
@@ -139,6 +145,15 @@ namespace ast
 
 		// Return true if the current instruction is an assignment.
 		virtual bool isAssignment() const { return false; }
+
+		// Return true if the current instruction is a control structure.
+		virtual bool isControlStructure() const { return false; }
+
+		// Return true if the current instruction is an if.
+		virtual bool isIf() const { return false; }
+
+		// Return true if the current instruction is a while.
+		virtual bool isWhile() const { return false; }
 
 	protected:
 		// Report the specified error for the specified instruction.

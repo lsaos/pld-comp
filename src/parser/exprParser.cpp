@@ -1,5 +1,5 @@
 
-// Generated from /home/louis/Documents/Projets/COMP/src/parser/expr.g4 by ANTLR 4.7.2
+// Generated from /home/lohl/Documents/COMP/src/parser/expr.g4 by ANTLR 4.7.1
 
 
 #include "exprVisitor.h"
@@ -45,7 +45,6 @@ exprParser::MainContext* exprParser::ProgContext::main() {
 size_t exprParser::ProgContext::getRuleIndex() const {
   return exprParser::RuleProg;
 }
-
 
 antlrcpp::Any exprParser::ProgContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
@@ -110,7 +109,6 @@ exprParser::RetContext* exprParser::MainContext::ret() {
 size_t exprParser::MainContext::getRuleIndex() const {
   return exprParser::RuleMain;
 }
-
 
 antlrcpp::Any exprParser::MainContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
@@ -209,7 +207,6 @@ size_t exprParser::DeclarationContext::getRuleIndex() const {
   return exprParser::RuleDeclaration;
 }
 
-
 antlrcpp::Any exprParser::DeclarationContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitDeclaration(this);
@@ -283,7 +280,6 @@ exprParser::ExpressionContext* exprParser::ValuedNewVariableContext::expression(
 
 exprParser::ValuedNewVariableContext::ValuedNewVariableContext(NewVarContext *ctx) { copyFrom(ctx); }
 
-
 antlrcpp::Any exprParser::ValuedNewVariableContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitValuedNewVariable(this);
@@ -297,7 +293,6 @@ tree::TerminalNode* exprParser::PlainNewVariableContext::VAR() {
 }
 
 exprParser::PlainNewVariableContext::PlainNewVariableContext(NewVarContext *ctx) { copyFrom(ctx); }
-
 
 antlrcpp::Any exprParser::PlainNewVariableContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
@@ -371,7 +366,6 @@ exprParser::ExpressionContext* exprParser::RetExprContext::expression() {
 
 exprParser::RetExprContext::RetExprContext(RetContext *ctx) { copyFrom(ctx); }
 
-
 antlrcpp::Any exprParser::RetExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitRetExpr(this);
@@ -381,7 +375,6 @@ antlrcpp::Any exprParser::RetExprContext::accept(tree::ParseTreeVisitor *visitor
 //----------------- RetNoExprContext ------------------------------------------------------------------
 
 exprParser::RetNoExprContext::RetNoExprContext(RetContext *ctx) { copyFrom(ctx); }
-
 
 antlrcpp::Any exprParser::RetNoExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
@@ -460,7 +453,6 @@ exprParser::InstructionContext* exprParser::BlockContext::instruction(size_t i) 
 size_t exprParser::BlockContext::getRuleIndex() const {
   return exprParser::RuleBlock;
 }
-
 
 antlrcpp::Any exprParser::BlockContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
@@ -543,7 +535,6 @@ size_t exprParser::InstructionContext::getRuleIndex() const {
   return exprParser::RuleInstruction;
 }
 
-
 antlrcpp::Any exprParser::InstructionContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitInstruction(this);
@@ -619,7 +610,6 @@ size_t exprParser::AssignmentContext::getRuleIndex() const {
   return exprParser::RuleAssignment;
 }
 
-
 antlrcpp::Any exprParser::AssignmentContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitAssignment(this);
@@ -675,7 +665,6 @@ exprParser::ControlBodyContext* exprParser::OptionalContext::controlBody(size_t 
 size_t exprParser::OptionalContext::getRuleIndex() const {
   return exprParser::RuleOptional;
 }
-
 
 antlrcpp::Any exprParser::OptionalContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
@@ -750,7 +739,6 @@ exprParser::ControlBodyContext* exprParser::WhileLoopContext::controlBody() {
 
 exprParser::WhileLoopContext::WhileLoopContext(LoopContext *ctx) { copyFrom(ctx); }
 
-
 antlrcpp::Any exprParser::WhileLoopContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitWhileLoop(this);
@@ -776,7 +764,6 @@ exprParser::ControlBodyContext* exprParser::ForLoopContext::controlBody() {
 }
 
 exprParser::ForLoopContext::ForLoopContext(LoopContext *ctx) { copyFrom(ctx); }
-
 
 antlrcpp::Any exprParser::ForLoopContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
@@ -858,7 +845,6 @@ size_t exprParser::ConditionContext::getRuleIndex() const {
   return exprParser::RuleCondition;
 }
 
-
 antlrcpp::Any exprParser::ConditionContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitCondition(this);
@@ -910,7 +896,6 @@ exprParser::InstructionContext* exprParser::ControlBodyContext::instruction() {
 size_t exprParser::ControlBodyContext::getRuleIndex() const {
   return exprParser::RuleControlBody;
 }
-
 
 antlrcpp::Any exprParser::ControlBodyContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
@@ -988,7 +973,6 @@ exprParser::ExpressionContext* exprParser::AddContext::expression(size_t i) {
 
 exprParser::AddContext::AddContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-
 antlrcpp::Any exprParser::AddContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitAdd(this);
@@ -1003,7 +987,6 @@ exprParser::ExpressionContext* exprParser::MinusContext::expression() {
 
 exprParser::MinusContext::MinusContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-
 antlrcpp::Any exprParser::MinusContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitMinus(this);
@@ -1017,7 +1000,6 @@ exprParser::ExpressionContext* exprParser::LogicalNotContext::expression() {
 }
 
 exprParser::LogicalNotContext::LogicalNotContext(ExpressionContext *ctx) { copyFrom(ctx); }
-
 
 antlrcpp::Any exprParser::LogicalNotContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
@@ -1037,7 +1019,6 @@ exprParser::ExpressionContext* exprParser::LowerThanContext::expression(size_t i
 
 exprParser::LowerThanContext::LowerThanContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-
 antlrcpp::Any exprParser::LowerThanContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitLowerThan(this);
@@ -1055,7 +1036,6 @@ exprParser::ExpressionContext* exprParser::LowerThanEqualsContext::expression(si
 }
 
 exprParser::LowerThanEqualsContext::LowerThanEqualsContext(ExpressionContext *ctx) { copyFrom(ctx); }
-
 
 antlrcpp::Any exprParser::LowerThanEqualsContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
@@ -1075,7 +1055,6 @@ exprParser::ExpressionContext* exprParser::BitwiseXorContext::expression(size_t 
 
 exprParser::BitwiseXorContext::BitwiseXorContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-
 antlrcpp::Any exprParser::BitwiseXorContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitBitwiseXor(this);
@@ -1094,7 +1073,6 @@ exprParser::ExpressionContext* exprParser::BitwiseAndContext::expression(size_t 
 
 exprParser::BitwiseAndContext::BitwiseAndContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-
 antlrcpp::Any exprParser::BitwiseAndContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitBitwiseAnd(this);
@@ -1109,7 +1087,6 @@ exprParser::ExpressionContext* exprParser::ParenthesisContext::expression() {
 
 exprParser::ParenthesisContext::ParenthesisContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-
 antlrcpp::Any exprParser::ParenthesisContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitParenthesis(this);
@@ -1123,7 +1100,6 @@ tree::TerminalNode* exprParser::IntContext::INT() {
 }
 
 exprParser::IntContext::IntContext(ExpressionContext *ctx) { copyFrom(ctx); }
-
 
 antlrcpp::Any exprParser::IntContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
@@ -1143,7 +1119,6 @@ exprParser::ExpressionContext* exprParser::DifferentContext::expression(size_t i
 
 exprParser::DifferentContext::DifferentContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-
 antlrcpp::Any exprParser::DifferentContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitDifferent(this);
@@ -1162,7 +1137,6 @@ exprParser::ExpressionContext* exprParser::LogicalOrContext::expression(size_t i
 
 exprParser::LogicalOrContext::LogicalOrContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-
 antlrcpp::Any exprParser::LogicalOrContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitLogicalOr(this);
@@ -1176,7 +1150,6 @@ exprParser::ExpressionContext* exprParser::BitwiseNotContext::expression() {
 }
 
 exprParser::BitwiseNotContext::BitwiseNotContext(ExpressionContext *ctx) { copyFrom(ctx); }
-
 
 antlrcpp::Any exprParser::BitwiseNotContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
@@ -1196,7 +1169,6 @@ exprParser::ExpressionContext* exprParser::GreaterThanEqualsContext::expression(
 
 exprParser::GreaterThanEqualsContext::GreaterThanEqualsContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-
 antlrcpp::Any exprParser::GreaterThanEqualsContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitGreaterThanEquals(this);
@@ -1214,7 +1186,6 @@ exprParser::ExpressionContext* exprParser::GreaterThanContext::expression(size_t
 }
 
 exprParser::GreaterThanContext::GreaterThanContext(ExpressionContext *ctx) { copyFrom(ctx); }
-
 
 antlrcpp::Any exprParser::GreaterThanContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
@@ -1234,7 +1205,6 @@ exprParser::ExpressionContext* exprParser::EqualsContext::expression(size_t i) {
 
 exprParser::EqualsContext::EqualsContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-
 antlrcpp::Any exprParser::EqualsContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitEquals(this);
@@ -1253,7 +1223,6 @@ exprParser::ExpressionContext* exprParser::LogicalAndContext::expression(size_t 
 
 exprParser::LogicalAndContext::LogicalAndContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-
 antlrcpp::Any exprParser::LogicalAndContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitLogicalAnd(this);
@@ -1268,7 +1237,6 @@ tree::TerminalNode* exprParser::VariableContext::VAR() {
 
 exprParser::VariableContext::VariableContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-
 antlrcpp::Any exprParser::VariableContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitVariable(this);
@@ -1282,7 +1250,6 @@ tree::TerminalNode* exprParser::CharContext::CHAR() {
 }
 
 exprParser::CharContext::CharContext(ExpressionContext *ctx) { copyFrom(ctx); }
-
 
 antlrcpp::Any exprParser::CharContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
@@ -1302,7 +1269,6 @@ exprParser::ExpressionContext* exprParser::BitwiseOrContext::expression(size_t i
 
 exprParser::BitwiseOrContext::BitwiseOrContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-
 antlrcpp::Any exprParser::BitwiseOrContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitBitwiseOr(this);
@@ -1320,7 +1286,6 @@ exprParser::ExpressionContext* exprParser::MultiplyContext::expression(size_t i)
 }
 
 exprParser::MultiplyContext::MultiplyContext(ExpressionContext *ctx) { copyFrom(ctx); }
-
 
 antlrcpp::Any exprParser::MultiplyContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
@@ -1340,7 +1305,6 @@ exprParser::ExpressionContext* exprParser::RightShiftContext::expression(size_t 
 
 exprParser::RightShiftContext::RightShiftContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-
 antlrcpp::Any exprParser::RightShiftContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitRightShift(this);
@@ -1358,7 +1322,6 @@ exprParser::ExpressionContext* exprParser::SubstractContext::expression(size_t i
 }
 
 exprParser::SubstractContext::SubstractContext(ExpressionContext *ctx) { copyFrom(ctx); }
-
 
 antlrcpp::Any exprParser::SubstractContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
@@ -1378,7 +1341,6 @@ exprParser::ExpressionContext* exprParser::LeftShiftContext::expression(size_t i
 
 exprParser::LeftShiftContext::LeftShiftContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-
 antlrcpp::Any exprParser::LeftShiftContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitLeftShift(this);
@@ -1395,7 +1357,6 @@ exprParser::ExpressionContext* exprParser::expression(int precedence) {
   size_t parentState = getState();
   exprParser::ExpressionContext *_localctx = _tracker.createInstance<ExpressionContext>(_ctx, parentState);
   exprParser::ExpressionContext *previousContext = _localctx;
-  (void)previousContext; // Silence compiler, in case the context is not used by generated code.
   size_t startState = 24;
   enterRecursionRule(_localctx, 24, exprParser::RuleExpression, precedence);
 
@@ -1749,7 +1710,6 @@ size_t exprParser::FuncTypeContext::getRuleIndex() const {
   return exprParser::RuleFuncType;
 }
 
-
 antlrcpp::Any exprParser::FuncTypeContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
     return parserVisitor->visitFuncType(this);
@@ -1799,7 +1759,6 @@ exprParser::VarTypeContext::VarTypeContext(ParserRuleContext *parent, size_t inv
 size_t exprParser::VarTypeContext::getRuleIndex() const {
   return exprParser::RuleVarType;
 }
-
 
 antlrcpp::Any exprParser::VarTypeContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<exprVisitor*>(visitor))
