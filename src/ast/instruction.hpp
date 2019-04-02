@@ -18,6 +18,11 @@
 using namespace std;
 
 #include "error.hpp"
+//#include "../ir/cfg.hpp"
+
+namespace ir {
+	class CFG;
+}
 
 namespace ast
 {
@@ -105,6 +110,7 @@ namespace ast
 
 	public:
 		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable, string curReg = "%eax") = 0;
+		virtual string buildIR(ir::CFG*) = 0;
 
 	public:
 		// Get a string representation of the instruction.

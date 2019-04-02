@@ -21,7 +21,9 @@ namespace ir {
 		public:
 			CFG(ast::Function* function);
 
-			//void generateCFG();
+			~CFG();
+
+			void generateCFG();
 
 			ast::Function* getFunction();
 
@@ -34,14 +36,20 @@ namespace ir {
 			void gen_asm_epilogue(ostream& o);
 
 			// symbol table methods
-			void add_to_symbol_table(string var, ast::Type t);
-			string create_new_tempvar(Type t); //?? A quoi sert cette méthode ??
+			void add_to_symbol_table(string var, Type t);
+			string create_new_tempvar(Type t);
 			int get_var_index(string var);
 			Type get_var_type(string var);
 
 			// basic block management
 			string new_BB_name();
-			BasicBlock* current_bb;
+
+			//Pointer on the current BB
+			BasicBlock* current_bb; //?? public ??
+
+		/*protected :
+			//Return true if the BB end is reached
+			bool isBBEnd(Instruction* i);*/
 
 		protected:
 			Function* function; /**< The AST this CFG comes from */

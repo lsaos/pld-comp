@@ -23,11 +23,32 @@ CFG::CFG(Function* function) : function(function), nextFreeSymbolIndex(0), nextB
 		add_to_symbol_table(var->getName(), var->getType());
 	}
 
-	BasicBlock* bb = new BasicBlock(this, function->getName()+"_bb_"+to_string(nextBBnumber));
-	bbs.push_back(bb);
+}
+
+CFG::~CFG()
+{
+	for (auto bb : bbs) {
+		delete bb;
+	}
+}
+
+void CFG::generateCFG()
+{
+	current_bb = new BasicBlock(this, new_BB_name());
+	bbs.push_back(current_bb);
 	nextBBnumber++;
 
-	//Maintenant, on parcours les instructions (pour créer les IRInstr) dans le CFG ou dans le BasicBloc ? Plus facile (vision globale de la fonction) dans le CFG, mais correct ?
+	vector<Instruction*> instructions = function->getInstructions();
+
+	for (auto i : instructions)
+	{
+		i->buildIR(this);
+	}
+}
+
+string CFG::new_BB_name()
+{
+	return function->getName() + "_bb_" + to_string(nextBBnumber);
 }
 
 void CFG::add_bb(BasicBlock* bb)
@@ -54,4 +75,40 @@ void CFG::add_to_symbol_table(string var, Type t)
 
 	this->SymbolType[var] = t;
 	this->SymbolIndex[var] = nextFreeSymbolIndex;
+}
+
+string CFG::create_new_tempvar(Type t)
+{
+	int nb;
+
+	switch (t)
+	{
+	case Type::Character:
+		nb = -nextFreeSymbolIndex + 1;
+		break;
+	case Type::Integer:
+		nb = -nextFreeSymbolIndex + 4;
+		break;
+	}
+
+	string name = "!tmp" + to_string(nb);
+	add_to_symbol_table(name, t);
+	return name;
+}
+
+int CFG::get_var_index(string var)
+{
+	return SymbolIndex[var];
+}
+
+Type CFG::get_var_type(string var)
+{
+	return SymbolType[var];
+}
+
+//A Revoir
+string CFG::IR_reg_to_asm(string reg)
+{
+	int index = SymbolIndex[reg];
+	return (to_string(index) + "(%rbp)");
 }
