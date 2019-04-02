@@ -45,7 +45,7 @@ namespace ast
 		virtual bool isControlStructure() const { return true; }
 
 	public:
-		virtual string buildIR(ir::CFG*) {}
+		virtual string buildIR(ir::CFG*) { return string(); }
 
 	private:
 		unique_ptr<Expression> condition; // Condition to execute the instruction.

@@ -122,6 +122,6 @@ namespace ast
 
 	string Assignment::buildIR(CFG* cfg)
 	{
-
+		return string();
 	}
 }
