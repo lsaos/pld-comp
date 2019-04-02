@@ -213,12 +213,12 @@ namespace ast
 		}
 	}
 
-	void BinaryExpression::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg) 
+	void BinaryExpression::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg)
 	{
 		string assemblyOp;
 		switch (op)
 		{
-			case BinaryOperator::Add :
+			case BinaryOperator::Add:
 				/* A revoir pour une certaine optimisation
 				if (left->isConstant() && right->isConstant()) {
 					int a = left->getValue() + right->getValue();
@@ -228,11 +228,14 @@ namespace ast
 				assemblyOp = "addl";
 				break;
 
-			case BinaryOperator::Substract :
+			case BinaryOperator::Substract:
 				assemblyOp = "subl";
 				break;
-			case BinaryOperator::Multiply :
+			case BinaryOperator::Multiply:
 				assemblyOp = "imull";
+				break;
+			case BinaryOperator::Divide:
+				assemblyOp = "idivl";
 				break;
 			case BinaryOperator::BitwiseAnd:
 				assemblyOp = "andl";
@@ -249,7 +252,7 @@ namespace ast
 		{
 			if (!left->isFinal() && !left->isIdentifier())
 			{
-				right->generateAssembly(f, addressTable, "%edx"); 
+				right->generateAssembly(f, addressTable, "%edx");
 				f << "%edx" << endl;
 				left->generateAssembly(f, addressTable); //%eax
 				f << "%eax" << endl;
@@ -279,7 +282,7 @@ namespace ast
 			f << ", ";
 		}
 	}
-  
+
 	void BinaryExpression::prepare()
 	{
 		if (left) {

@@ -133,12 +133,13 @@ int main(int argc, char* argv[])
 		{
 		}
 
-		system("pause");
 	}
 	else
 	{
 		cout << "Erreur de compilation" << endl;
 	}
+
+	system("pause");
 
 	return 0;
 }
