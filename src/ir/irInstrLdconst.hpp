@@ -13,13 +13,13 @@ namespace ir {
 
 		/**  constructor */
 		//IRInstr(BasicBlock*, Type t);
-		IRInstrLdconst(BasicBlock*, string dest, string op);
+		IRInstrLdconst(BasicBlock*, Type t, string dest, string cst);
 
 		/** Actual code generation */
 		void gen_asm(ostream &o); /**< x86 assembly code generation for this IR instruction */
 
 	protected:
 		string destination;
-		string operand;
+		string constant;
 	};
 }

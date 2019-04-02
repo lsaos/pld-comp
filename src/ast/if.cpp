@@ -54,7 +54,7 @@ namespace ast
 			alternative->prepare();
 		}
 	}
-
+	
 	void If::toTextualRepresentation(ostream& out, size_t i) const
 	{
 		for (size_t j = 0; j < i; j++) { out << ' '; }

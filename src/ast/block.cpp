@@ -118,7 +118,7 @@ namespace ast
 		out << '}' << endl;
 	}
 
-	void Block::add(Instruction* instr)
+	void Block::add(Instruction* instr, bool atBeginning)
 	{
 		assert(instr);
 
@@ -128,7 +128,11 @@ namespace ast
 		}
 
 		instr->setParent(this);
-		instructions.push_back(unique_ptr<Instruction>(instr));
+        if(!atBeginning){
+    		instructions.push_back(unique_ptr<Instruction>(instr));
+        } else {
+            instructions.insert(instructions.begin(),unique_ptr<Instruction>(instr));
+        }
 	}
 
 	Instruction* Block::optimize()
