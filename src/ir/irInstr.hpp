@@ -14,33 +14,51 @@ namespace ir {
 
 	class IRInstr {
 
-	public:
-		/** The instructions themselves -- feel free to subclass instead */
-		typedef enum {
-			ldconst,
-			add,
-			sub,
-			mul,
-			rmem,
-			wmem,
-			call,
-			cmp_eq,
-			cmp_lt,
-			cmp_le
-		} Operation;
+		public:
+			/** The instructions themselves -- feel free to subclass instead */
+			/*typedef enum {
+				ldconst,
+				add,
+				sub,
+				mul,
+				rmem,
+				wmem,
+				call,
+				cmp_eq,
+				cmp_lt,
+				cmp_le
+			} Operation;*/
 
 
-		/**  constructor */
-		IRInstr(BasicBlock* bb_, Operation op, Type t, vector<string> params);
+			/**  constructor */
+			//IRInstr(BasicBlock* bb_, Operation op, Type t, vector<string> params);
+			IRInstr(BasicBlock*);
 
-		/** Actual code generation */
-		void gen_asm(ostream &o); /**< x86 assembly code generation for this IR instruction */
+			/** Actual code generation */
+			virtual void gen_asm(ostream &o) = 0; /**< x86 assembly code generation for this IR instruction */
 
-	private:
-		BasicBlock* bb; /**< The BB this instruction belongs to, which provides a pointer to the CFG this instruction belong to */
-		Operation op;
-		Type t;
-		vector<string> params; /**< For 3-op instrs: d, x, y; for ldconst: d, c;  For call: label, d, params;  for wmem and rmem: choose yourself */
-		// if you subclass IRInstr, each IRInstr subclass has its parameters and the previous (very important) comment becomes useless: it would be a better design. 
+		private:
+			BasicBlock* bb; /**< The BB this instruction belongs to, which provides a pointer to the CFG this instruction belong to */
+			//Operation op;
+			Type t;
+			vector<string> params; /**< For 3-op instrs: d, x, y; for ldconst: d, c;  For call: label, d, params;  for wmem and rmem: choose yourself */
+			// if you subclass IRInstr, each IRInstr subclass has its parameters and the previous (very important) comment becomes useless: it would be a better design. 
+
+			/*
+				A FAIRE : créer un héritage de IRInstr en créant une classe par instruction
+					=> Plus long mais meilleur design et plus efficace pour l'héritage des méthodes de génération assembleur
+			*/
+	};
+
+	class IRInstrConst : public IRInstr
+	{
+		public :
+
+
+			virtual void gen_asm(ostream& o);
+
+		protected :
+			string dest;
+			string src;
 	};
 }
