@@ -38,6 +38,9 @@ namespace ast
 			return false;
 		}
 
+		//Build the associate IR
+		virtual string buildIR(ir::CFG*) = 0;
+
 	public:
 		virtual bool isExpression() const { return true; }
 	};

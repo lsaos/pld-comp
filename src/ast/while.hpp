@@ -20,5 +20,6 @@ namespace ast
 	public:
 		virtual string getStringRepresentation() const { return "while"; }
 		virtual bool isWhile() const { return true; }
+		virtual string buildIR(ir::CFG*) {}
 	};
 }

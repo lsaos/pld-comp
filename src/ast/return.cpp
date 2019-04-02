@@ -8,6 +8,8 @@
 #include "function.hpp"
 #include "identifier.hpp"
 
+using namespace ir;
+
 namespace ast
 {
 	//
@@ -95,6 +97,15 @@ namespace ast
 		if (expr!=nullptr){
 			expr->generateAssembly(f, addressTable, curReg);
 			f << "%eax" << endl;
+		}
+	}
+
+	string Return::buildIR(CFG* cfg)
+	{
+		if (expr != nullptr)
+		{
+			string ret = expr.get()->buildIR(cfg);
+			//Mettre ret dans %eax => copy ??
 		}
 	}
 }
