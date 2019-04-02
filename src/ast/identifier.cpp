@@ -9,6 +9,11 @@
 #include "function.hpp"
 #include "program.hpp"
 #include "assignment.hpp"
+#include "../ir/cfg.hpp"
+#include "../ir/irInstrLdconst.hpp"
+#include "../ir/irInstrBinaryOperation.hpp"
+
+using namespace ir;
 
 namespace ast
 {
@@ -167,5 +172,19 @@ namespace ast
 	void Identifier::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg)
 	{
 		f << "\tmovl " << addressTable[this->getReferencedVariable()] << "(%rbp), ";
+	}
+
+	string Identifier::buildIR(CFG* cfg)
+	{
+		if (isLeftValue())
+		{
+			string var = cfg->create_new_tempvar(getReferencedVariable()->getType());
+			int offset = cfg->get_var_index(getReferencedVariable()->getName());
+			cfg->current_bb->add_IRInstr(new IRInstrLdconst(cfg->current_bb, getReferencedVariable()->getType(), var, to_string(offset)), getReferencedVariable()->getType());
+			cfg->current_bb->add_IRInstr(new IRInstrBinaryOperation(cfg->current_bb, IRInstrBinaryOperation::Operation::add, var, "!bp", var), getReferencedVariable()->getType());
+			return var;
+		}
+		else
+			return getReferencedVariable()->getName();
 	}
 }

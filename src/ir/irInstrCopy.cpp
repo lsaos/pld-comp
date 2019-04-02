@@ -1,6 +1,6 @@
 #pragma once
 
-#include "irInstrCall.hpp"
+#include "irInstrCopy.hpp"
 #include "basicBlock.hpp"
 #include "cfg.hpp"
 
@@ -26,10 +26,10 @@ void IRInstrCopy::gen_asm(ostream &o) {
 	o << "\tmov" << TYPE << " -" << op1.substr(4) << "(%rbp), " << (bb->get_cfg())->get_var_index(dest) << "(%rbp)" << endl;
 } // TODO
 
-copy a !tmp64
+/*copy a !tmp64
 
 movq -64(%rbp), %rax
-movq %rax, -16(%rbp)
+movq %rax, -16(%rbp)*/
 
 void IRInstrCopy::printIR(ostream &o) {
 	o << "\tcopy " << dest << " " << op1 << endl;

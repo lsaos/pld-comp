@@ -7,6 +7,10 @@
 #include "binaryExpression.hpp"
 #include "constant.hpp"
 #include "identifier.hpp"
+#include "../ir/cfg.hpp"
+#include "../ir/irInstrBinaryOperation.hpp"
+
+using namespace ir;
 
 namespace ast
 {
@@ -292,5 +296,29 @@ namespace ast
 		if (right) {
 			right->prepare();
 		}
+	}
+
+	string BinaryExpression::buildIR(CFG* cfg)
+	{
+		IRInstrBinaryOperation::Operation operation;
+		switch (op)
+		{
+			case BinaryOperator::Add:
+				operation = IRInstrBinaryOperation::Operation::add;
+				break;
+			case BinaryOperator::Substract:
+				operation = IRInstrBinaryOperation::Operation::sub;
+				break;
+			case BinaryOperator::Multiply:
+				operation = IRInstrBinaryOperation::Operation::mul;
+				break;
+		}
+
+		string var_1 = (left.get())->buildIR(cfg);
+		string var_2 = (right.get())->buildIR(cfg);
+		//string var_3 = cfg->create_new_tempvar(getType()); //A FAIRE DANS LE FUTUR POUR PLUS DE COHERENCE !!
+		string var_3 = cfg->create_new_tempvar(getLeftExpression()->getType());
+		cfg->current_bb->add_IRInstr(new IRInstrBinaryOperation(cfg->current_bb, operation,var_3, var_1, var_2), getLeftExpression()->getType()); //getType de l'expression à la place de getLeftExpression()->getType() !!
+		return var_3;
 	}
 }
