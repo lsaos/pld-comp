@@ -24,6 +24,9 @@ namespace ast
 		// Set the identifier string.
 		void setIdent(const string& str);
 
+		// Set array indexing expression.
+		void setArrayIndex(Expression* expr);
+
 	public:
 		// Get the referenced variable.
 		// Return null if it doesn't reference a variable.
@@ -48,6 +51,14 @@ namespace ast
 			return getReferencedFunction() != nullptr;
 		}
 
+		// Return true if the identifier is an array variable.
+		bool isReferencingArray() const;
+
+		// Get array indexing expression.
+		Expression* getArrayIndex() const {
+			return arrayIndex.get();
+		}
+
 	public:
 		virtual Type getType() const;
 		virtual void checkSemantic(bool advanced) const;
@@ -55,12 +66,14 @@ namespace ast
 		virtual string getStringRepresentation() const { return ident; }
 
 		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg = "%eax");
-    
+
 		virtual void prepare();
+		virtual Instruction* optimize();
 
 		virtual bool isIdentifier() const { return true; }
 
 	private:
 		string ident; // Identifier string.
+		unique_ptr<Expression> arrayIndex; // Array indexing expression.
 	};
 }

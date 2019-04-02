@@ -19,7 +19,7 @@ namespace ast
 	{
 	}
 
-	Function* Program::getFunction(const string& name) const
+	Function* Program::getFunction(const string& name, bool withExternals) const
 	{
 		for (const auto& instr : instructions) {
 			if (instr->isFunction() && ((const Function*)instr.get())->getName() == name) {
@@ -27,10 +27,18 @@ namespace ast
 			}
 		}
 
+		if (withExternals) {
+			for (const auto& func : externalFunctions) {
+				if (func->getName() == name) {
+					return func.get();
+				}
+			}
+		}
+
 		return nullptr;
 	}
 
-	vector<Function*> Program::getFunctions() const
+	vector<Function*> Program::getFunctions(bool withExternals) const
 	{
 		vector<Function*> funcs;
 
@@ -40,10 +48,16 @@ namespace ast
 			}
 		}
 
+		if (withExternals) {
+			for (const auto& func : externalFunctions) {
+				funcs.push_back(func.get());
+			}
+		}
+
 		return funcs;
 	}
 
-	size_t Program::getFunctionsCount() const
+	size_t Program::getFunctionsCount(bool withExternals) const
 	{
 		size_t cnt = 0;
 
@@ -51,6 +65,10 @@ namespace ast
 			if (instr->isFunction()) {
 				cnt++;
 			}
+		}
+
+		if (withExternals) {
+			cnt += externalFunctions.size();
 		}
 
 		return cnt;
@@ -67,6 +85,15 @@ namespace ast
 
 		// Check we don't have duplicated function names
 		vector<string> funcs;
+
+		for (const auto& func : externalFunctions) {
+			const string& name(func->getName());
+			if (find(funcs.begin(), funcs.end(), name) != funcs.end()) {
+				error(Error::DuplicatedSymbolName, func.get());
+			}
+			funcs.push_back(name);
+		}
+
 		for (const auto& instr : instructions) {
 			if (instr->isFunction()) {
 				const string& name(((Function*)instr.get())->getName());
@@ -95,5 +122,22 @@ namespace ast
 		}
 
 		out << '}' << endl;
+	}
+
+	void Program::addExternalFunction(Function* func)
+	{
+		assert(func);
+		func->setParent(this);
+		func->setIsExtern();
+		externalFunctions.push_back(unique_ptr<Function>(func));
+	}
+
+	vector<Function*> Program::getExternalFunctions() const
+	{
+		vector<Function*> funcs;
+		for (const auto& func : externalFunctions) {
+			funcs.push_back(func.get());
+		}
+		return funcs;
 	}
 }

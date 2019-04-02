@@ -22,4 +22,23 @@ namespace ast
 		error(Error::NotConstant, this);
 		return 0;
 	}
+
+	bool Expression::isCastSafe(Type newType) const
+	{
+		switch (getType())
+		{
+		case Type::Integer:
+			switch (newType)
+			{
+			case Type::Character:
+				return false;
+			default:
+				return true;
+			}
+		case Type::Character:
+			return true;
+		default:
+			return false;
+		}
+	}
 }

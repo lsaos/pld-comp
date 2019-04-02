@@ -1,5 +1,6 @@
 #include <antlr4-runtime.h>
 #include <string>
+#include <cstring>
 #include <iostream>
 #include "../lib/unistd.h"
 #include "../parser/exprLexer.h"
@@ -132,12 +133,13 @@ int main(int argc, char* argv[])
 		{
 		}
 
-		system("pause");
 	}
 	else
 	{
 		cout << "Erreur de compilation" << endl;
 	}
+
+	system("pause");
 
 	return 0;
 }

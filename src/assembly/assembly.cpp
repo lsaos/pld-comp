@@ -5,7 +5,6 @@ using namespace assembly;
 AssemblyGenerator::AssemblyGenerator(string fileName)
 {
 	file = ofstream(fileName.substr(0, fileName.size() - 1) + "s", ios::out);
-	//addressTable = new unordered_map<ast::Variable*, int>();
 }
 
 void AssemblyGenerator::generateAssembly(ast::Program* program)
