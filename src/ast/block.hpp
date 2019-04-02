@@ -27,7 +27,7 @@ namespace ast
 	public:
 		// Add the specified instruction to the block.
 		// The block takes the ownership of the instruction.
-		void add(Instruction* instr);
+		void add(Instruction* instr, bool atBeginning=false);
 
 	public:
 		// Get the variable with the specified name.
