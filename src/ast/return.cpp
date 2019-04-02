@@ -102,10 +102,13 @@ namespace ast
 
 	string Return::buildIR(CFG* cfg)
 	{
+		string ret = "";
 		if (expr != nullptr)
 		{
-			string ret = expr.get()->buildIR(cfg);
+			ret = expr.get()->buildIR(cfg);
 			//Mettre ret dans %eax => copy ??
 		}
+
+		return ret;
 	}
 }
