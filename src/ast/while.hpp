@@ -18,7 +18,10 @@ namespace ast
 		While(const ItemPosition& position);
 
 	public:
+		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg = "%eax") {}
+		virtual void toTextualRepresentation(ostream& out, size_t i) const;
 		virtual string getStringRepresentation() const { return "while"; }
 		virtual bool isWhile() const { return true; }
+		virtual string buildIR(ir::CFG*) { return string(); }
 	};
 }

@@ -54,6 +54,8 @@ namespace ast
 
 		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg = "%eax");
 
+		virtual string buildIR(ir::CFG*) { return string(); }
+
 	private:
 		bool isExternal; // True if the variable if extern.
 	};

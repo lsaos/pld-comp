@@ -15,7 +15,8 @@ namespace ast
 	Variable::Variable(const ItemPosition& position)
 		: Instruction(position),
 		scope(Scope::Block),
-		used(false)
+		used(false),
+		isTypeArray(false)
 	{
 	}
 

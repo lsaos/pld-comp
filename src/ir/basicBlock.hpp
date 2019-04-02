@@ -1,7 +1,6 @@
 #pragma once
 
 using namespace std;
-using namespace ast;
 
 #include "irInstr.hpp"
 
@@ -26,18 +25,23 @@ namespace ir {
 	class BasicBlock {
 	public:
 		BasicBlock(CFG* cfg, string entry_label);
+
+		//Delete all the IRInstr of the BB
+		~BasicBlock();
+
 		void gen_asm(ostream &o); /**< x86 assembly code generation for this basic block (very simple) */
 
 		void add_IRInstr(IRInstr* instr, Type t);
 
-		// No encapsulation whatsoever here. Feel free to do better.
+		CFG* get_cfg() { return cfg; }
+
 		BasicBlock* exit_true;  /**< pointer to the next basic block, true branch. If nullptr, return from procedure */
 		BasicBlock* exit_false; /**< pointer to the next basic block, false branch. If null_ptr, the basic block ends with an unconditional jump */
+		
+	protected:
 		string label; /**< label of the BB, also will be the label in the generated code */
 		CFG* cfg; /** < the CFG where this block belongs */
 		vector<IRInstr*> instrs; /** < the instructions themselves. */
-	protected:
-
 
 	};
 }
