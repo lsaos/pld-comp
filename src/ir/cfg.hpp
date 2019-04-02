@@ -3,7 +3,6 @@
 #include <map>
 
 using namespace std;
-using namespace ast;
 
 #include "../ast/function.hpp"
 #include "basicBlock.hpp"
@@ -20,11 +19,11 @@ using namespace ast;
 namespace ir {
 	class CFG {
 		public:
-			CFG(Function* function) : function(function), nextFreeSymbolIndex(0), nextBBnumber(0) {}
+			CFG(ast::Function* function);
 
 			//void generateCFG();
 
-			Function* getFunction();
+			ast::Function* getFunction();
 
 			void add_bb(BasicBlock* bb);
 
@@ -35,7 +34,7 @@ namespace ir {
 			void gen_asm_epilogue(ostream& o);
 
 			// symbol table methods
-			void add_to_symbol_table(string var, Type t);
+			void add_to_symbol_table(string var, ast::Type t);
 			string create_new_tempvar(Type t); //?? A quoi sert cette méthode ??
 			int get_var_index(string var);
 			Type get_var_type(string var);
@@ -46,7 +45,7 @@ namespace ir {
 
 		protected:
 			Function* function; /**< The AST this CFG comes from */
-			map <string, Type> SymbolType; /**< part of the symbol table  */
+			map <string, ast::Type> SymbolType; /**< part of the symbol table  */
 			map <string, int> SymbolIndex; /**< part of the symbol table  */
 			int nextFreeSymbolIndex; /**< to allocate new symbols in the symbol table */
 			int nextBBnumber; /**< just for naming */
