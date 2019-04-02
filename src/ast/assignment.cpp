@@ -6,6 +6,8 @@
 
 #include "assignment.hpp"
 
+using namespace ir;
+
 namespace ast
 {
 	//
@@ -116,5 +118,10 @@ namespace ast
 			f << curReg << endl;
 			f << "\tmovl " << curReg << ", " << addressTable[identifier->getReferencedVariable()] << "(%rbp)" << endl;
 		}
+	}
+
+	string Assignment::buildIR(CFG* cfg)
+	{
+
 	}
 }

@@ -22,5 +22,6 @@ namespace ast
 		virtual void toTextualRepresentation(ostream& out, size_t i) const;
 		virtual string getStringRepresentation() const { return "while"; }
 		virtual bool isWhile() const { return true; }
+		virtual string buildIR(ir::CFG*) {}
 	};
 }
