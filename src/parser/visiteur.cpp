@@ -11,10 +11,8 @@
 #include "../ast/functionCall.hpp"
 #include "../ast/function.hpp"
 #include "../ast/instruction.hpp"
-#include "../ast/operator.hpp"
 #include "../ast/program.hpp"
 #include "../ast/type.hpp"
-#include "../ast/unaryExpression.hpp"
 #include "../ast/variable.hpp"
 #include "../ast/error.hpp"
 #include "../ast/return.hpp"
@@ -31,6 +29,41 @@ ItemPosition Visiteur::buildPos(size_t line, size_t column) {
 	return pos;
 }
 
+Expression* Visiteur::buildBinaryExpression(exprParser::ExpressionContext *ctx, BinaryOperator op){
+    #ifdef TREEVISIT
+	    jump(); cout << "BINARY "<<int(op)<<" ("<<endl;
+	    indent++;
+    #endif
+    Expression* left = (Expression*)visit(ctx->children[0]);
+    Expression* right = (Expression*)visit(ctx->children[2]);//Children 1 is the operator and children 2 is the right member.
+	BinaryExpression* binExp = new BinaryExpression(left->getPosition());
+	binExp->setLeftExpression(left);
+	binExp->setRightExpression(right);
+    binExp->setOperator(op);
+	#ifdef TREEVISIT
+		jump(); cout << ")"<<endl;
+		indent--;
+	#endif
+    return (Expression*)binExp;
+}
+
+Expression* Visiteur::buildUnaryExpression(exprParser::ExpressionContext* ctx, UnaryOperator op){
+    #ifdef TREEVISIT
+	    jump(); cout << "UNARY "<<int(op)<<" ("<<endl;
+	    indent++;
+    #endif
+	Expression* expr = (Expression*)visit(ctx->children[0]);
+
+	UnaryExpression* unary = new  UnaryExpression(expr->getPosition());
+	unary->setExpression(expr);
+	unary->setOperator(op);
+	#ifdef TREEVISIT
+		jump(); cout << ")"<<endl;
+		indent--;
+	#endif
+	return (Expression*)unary;
+}
+
 antlrcpp::Any Visiteur::visitProg(exprParser::ProgContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "PROG(" << endl;
@@ -44,14 +77,6 @@ antlrcpp::Any Visiteur::visitProg(exprParser::ProgContext *ctx) {
 	indent--;
 #endif
 	return prog;
-}
-
-antlrcpp::Any Visiteur::visitPreproc(exprParser::PreprocContext *ctx) {
-	return antlrcpp::Any();
-}
-
-antlrcpp::Any Visiteur::visitInclude(exprParser::IncludeContext *ctx) {
-	return antlrcpp::Any();
 }
 
 antlrcpp::Any Visiteur::visitMain(exprParser::MainContext *ctx) {
@@ -146,7 +171,6 @@ antlrcpp::Any Visiteur::visitValuedNewVariable(exprParser::ValuedNewVariableCont
 #endif
 	return declaration;
 }
-
 
 antlrcpp::Any Visiteur::visitRetExpr(exprParser::RetExprContext *ctx) {
 #ifdef TREEVISIT
@@ -258,7 +282,7 @@ antlrcpp::Any Visiteur::visitOptional(exprParser::OptionalContext *ctx){
     return (Instruction*)condition;
 }
 
-antlrcpp::Any Visiteur::visitLoop(exprParser::LoopContext *ctx){
+antlrcpp::Any Visiteur::visitWhileLoop(exprParser::WhileLoopContext *ctx){
     #ifdef TREEVISIT
 	jump(); cout << "WHILE(" << endl;
 	indent++;
@@ -276,6 +300,30 @@ antlrcpp::Any Visiteur::visitLoop(exprParser::LoopContext *ctx){
     return (Instruction*)loop;
 }
 
+antlrcpp::Any Visiteur::visitForLoop(exprParser::ForLoopContext *ctx){
+    #ifdef TREEVISIT
+	jump(); cout << "FOR(" << endl;
+	indent++;
+    #endif
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
+    vector<Instruction*>* declarations = (vector<Instruction*>*)visit(ctx->declaration());
+    Expression* expr = (Expression*)visit(ctx->expression());
+    Instruction* assignment = (Instruction*)visit(ctx->assignment());
+    Block* block = dynamic_cast<Block*>((Instruction*)visit(ctx->controlBody()));//FIXME : the ugliest way
+    While* loop = new While(pos);
+    loop->setCondition(expr);
+    for(auto instr : *declarations){
+        block->add(instr,true);
+    }
+    block->add(assignment);
+    loop->setInstruction(block);
+    #ifdef TREEVISIT
+    jump(); cout << ")" << endl;
+    indent--;
+    #endif
+    return (Instruction*)loop;
+}
+
 antlrcpp::Any Visiteur::visitCondition(exprParser::ConditionContext *ctx){
    return (Expression*)visit(ctx->expression());
 }
@@ -284,98 +332,6 @@ antlrcpp::Any Visiteur::visitControlBody(exprParser::ControlBodyContext *ctx){
     return (Instruction*)visit(ctx->children[0]);
 }
 
-
-
-antlrcpp::Any Visiteur::visitAdd(exprParser::AddContext *ctx) {
-#ifdef TREEVISIT
-	jump(); cout << "SOMME(" << endl;
-	indent++;
-#endif
-	Expression* left = (Expression*)visit(ctx->expression(0));
-	Expression* right = (Expression*)visit(ctx->expression(1));
-	BinaryExpression* binExp = new BinaryExpression(left->getPosition());
-	binExp->setLeftExpression(left);
-	binExp->setRightExpression(right);
-	binExp->setOperator(BinaryOperator::Add);
-#ifdef TREEVISIT
-	jump(); cout << ")" << endl;
-	indent--;
-#endif
-	return (Expression*)binExp;
-}
-
-antlrcpp::Any Visiteur::visitSub(exprParser::SubContext *ctx) {
-#ifdef TREEVISIT
-	jump(); cout << "SOUSTRAC(" << endl;
-	indent++;
-#endif
-	Expression* left = (Expression*)visit(ctx->expression(0));
-	Expression* right = (Expression*)visit(ctx->expression(1));
-	BinaryExpression* binExp = new BinaryExpression(left->getPosition());
-	binExp->setLeftExpression(left);
-	binExp->setRightExpression(right);
-	binExp->setOperator(BinaryOperator::Substract);
-#ifdef TREEVISIT
-	jump(); cout << ")" << endl;
-	indent--;
-#endif
-	return (Expression*)binExp;
-}
-
-antlrcpp::Any Visiteur::visitMult(exprParser::MultContext *ctx) {
-#ifdef TREEVISIT
-	jump(); cout << "MUL(" << endl;
-	indent++;
-#endif
-	char opmul = ctx->OPMUL()->getText().at(0);
-	Expression* left = (Expression*)visit(ctx->expression(0));
-	Expression* right = (Expression*)visit(ctx->expression(1));
-	BinaryExpression* binExp = new BinaryExpression(left->getPosition());
-	binExp->setLeftExpression(left);
-	binExp->setRightExpression(right);
-	switch (opmul) {
-	case '*':
-		binExp->setOperator(BinaryOperator::Multiply);
-		break;
-	case '/':
-		binExp->setOperator(BinaryOperator::Divide);
-		break;
-	}
-#ifdef TREEVISIT
-	jump(); cout << ")" << endl;
-	indent--;
-#endif
-	return (Expression*)binExp;
-}
-
-antlrcpp::Any Visiteur::visitBin(exprParser::BinContext *ctx){
-	#ifdef TREEVISIT
-		jump(); cout << "BINAIRE("<<endl;
-		indent++;
-	#endif
-	char opbin = ctx->OPBIN()->getText().at(0);
-	Expression* left = (Expression*)visit(ctx->expression(0));
-	Expression* right = (Expression*)visit(ctx->expression(1));
-	BinaryExpression* binExp = new BinaryExpression(left->getPosition());
-	binExp->setLeftExpression(left);
-	binExp->setRightExpression(right);
-	switch (opbin) {
-	case '&':
-		binExp->setOperator(BinaryOperator::BitwiseAnd);
-		break;
-	case '^':
-		binExp->setOperator(BinaryOperator::BitwiseXor);
-		break;
-	case '|':
-		binExp->setOperator(BinaryOperator::BitwiseOr);
-		break;
-	}
-#ifdef TREEVISIT
-	jump(); cout << ")" << endl;
-	indent--;
-#endif
-	return (Expression*)binExp;
-}
 
 antlrcpp::Any Visiteur::visitVariable(exprParser::VariableContext *ctx){
 	#ifdef TREEVISIT
@@ -397,59 +353,6 @@ antlrcpp::Any Visiteur::visitChar(exprParser::CharContext *ctx) {
 	constant->setType(Type::Character);
 	constant->setValue(value);
 	return (Expression*)constant;
-}
-
-antlrcpp::Any Visiteur::visitNegativeUnary(exprParser::NegativeUnaryContext *ctx){
-	#ifdef TREEVISIT
-		jump(); cout << "UNARY("<<endl;
-		indent++;
-	#endif
-	Expression* expr = (Expression*)visit(ctx->expression());
-	Expression* toReturn;
-	if (expr->isConstant()){
-		Constant* constant = new Constant(expr->getPosition());
-		constant->setValue(-(expr->getValue()));
-		#ifdef TREEVISIT
-			jump(); cout <<" This unary turned to a negative constant" << endl;
-		#endif
-		constant->setType(expr->getType());
-		delete expr;
-		toReturn = (Expression*) constant;
-	} else {
-		UnaryExpression* unary = new  UnaryExpression(expr->getPosition());
-		unary->setExpression(expr);
-		//Unary is by defualt '-'
-		toReturn = (Expression*)unary;
-	}
-	#ifdef TREEVISIT
-		jump(); cout << ")"<<endl;
-		indent--;
-	#endif
-	return toReturn;
-}
-
-antlrcpp::Any Visiteur::visitUnary(exprParser::UnaryContext *ctx){
-	#ifdef TREEVISIT
-		jump(); cout << "UNARY("<<endl;
-		indent++;
-	#endif
-	Expression* expr = (Expression*)visit(ctx->expression());
-
-	UnaryExpression* unary = new  UnaryExpression(expr->getPosition());
-	unary->setExpression(expr);
-	switch(ctx->UNARYOP()->getText().at(0)){
-		case '!':
-			unary->setOperator(UnaryOperator::LogicalNot);
-			break;
-		case '~':
-			unary->setOperator(UnaryOperator::BitwiseNot);
-			break;
-	}
-	#ifdef TREEVISIT
-		jump(); cout << ")"<<endl;
-		indent--;
-	#endif
-	return (Expression*)unary;
 }
 
 antlrcpp::Any Visiteur::visitParenthesis(exprParser::ParenthesisContext *ctx){
@@ -478,63 +381,6 @@ antlrcpp::Any Visiteur::visitInt(exprParser::IntContext *ctx) {
 	cout << "()" << endl;
 #endif
 	return (Expression*)constante;
-}
-
-antlrcpp::Any Visiteur::visitLogical(exprParser::LogicalContext* ctx){
-    #ifdef TREEVISIT
-		jump(); cout << "LOGIQUE("<<endl;
-		indent++;
-	#endif
-	char logop = ctx->LOGICOP()->getText().at(0);
-	Expression* left = (Expression*)visit(ctx->expression(0));
-	Expression* right = (Expression*)visit(ctx->expression(1));
-	BinaryExpression* binExp = new BinaryExpression(left->getPosition());
-	binExp->setLeftExpression(left);
-	binExp->setRightExpression(right);
-	switch (logop) {
-	case '&':
-		binExp->setOperator(BinaryOperator::LogicalAnd);
-		break;
-	case '|':
-		binExp->setOperator(BinaryOperator::LogicalOr);
-		break;
-	}
-#ifdef TREEVISIT
-	jump(); cout << ")" << endl;
-	indent--;
-#endif
-	return (Expression*)binExp;
-}
-
-antlrcpp::Any Visiteur::visitComparison(exprParser::ComparisonContext* ctx){
-    #ifdef TREEVISIT
-		jump(); cout << "COMPARISON("<<endl;
-		indent++;
-	#endif
-	string compop = ctx->OPCOMP()->getText();
-	Expression* left = (Expression*)visit(ctx->expression(0));
-	Expression* right = (Expression*)visit(ctx->expression(1));
-	BinaryExpression* binExp = new BinaryExpression(left->getPosition());
-	binExp->setLeftExpression(left);
-	binExp->setRightExpression(right);
-	if(compop=="=="){
-        binExp->setOperator(BinaryOperator::Equals);
-    } else if(compop=="!="){
-        binExp->setOperator(BinaryOperator::DifferentThan);
-    } else if(compop=="<"){
-        binExp->setOperator(BinaryOperator::LowerThan);
-    } else if(compop=="<="){
-        binExp->setOperator(BinaryOperator::LowerThanOrEquals);
-    } else if(compop==">"){
-        binExp->setOperator(BinaryOperator::GreaterThan);
-    } else if(compop==">="){
-        binExp->setOperator(BinaryOperator::GreaterThanOrEquals);
-    }
-#ifdef TREEVISIT
-	jump(); cout << ")" << endl;
-	indent--;
-#endif
-	return (Expression*)binExp;
 }
 
 antlrcpp::Any Visiteur::visitFuncType(exprParser::FuncTypeContext *ctx){
@@ -567,4 +413,80 @@ antlrcpp::Any Visiteur::visitVarType(exprParser::VarTypeContext *ctx) {
 	else {
 		return Type::Void;
 	}
+}
+
+antlrcpp::Any Visiteur::visitAdd(exprParser::AddContext *ctx){
+    return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::Add);
+}
+
+antlrcpp::Any Visiteur::visitMinus(exprParser::MinusContext *ctx) {
+    return (Expression*)buildUnaryExpression((exprParser::ExpressionContext*)ctx, UnaryOperator::Minus);
+}
+
+antlrcpp::Any Visiteur::visitLogicalNot(exprParser::LogicalNotContext *ctx) {
+    return (Expression*)buildUnaryExpression((exprParser::ExpressionContext*)ctx, UnaryOperator::LogicalNot);
+}
+
+antlrcpp::Any Visiteur::visitLowerThan(exprParser::LowerThanContext *ctx) {
+    return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::LowerThan);
+}
+
+antlrcpp::Any Visiteur::visitLowerThanEquals(exprParser::LowerThanEqualsContext *ctx) {
+    return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::LowerThanOrEquals);
+}
+
+antlrcpp::Any Visiteur::visitBitwiseXor(exprParser::BitwiseXorContext *ctx) {
+    return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::BitwiseXor);
+}
+
+antlrcpp::Any Visiteur::visitBitwiseAnd(exprParser::BitwiseAndContext *ctx) {
+    return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::BitwiseAnd);
+}
+
+antlrcpp::Any Visiteur::visitDifferent(exprParser::DifferentContext *ctx) {
+    return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::DifferentThan);
+}
+
+antlrcpp::Any Visiteur::visitLogicalOr(exprParser::LogicalOrContext *ctx) {
+    return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::LogicalOr);
+}
+
+antlrcpp::Any Visiteur::visitBitwiseNot(exprParser::BitwiseNotContext *ctx) {
+    return (Expression*)buildUnaryExpression((exprParser::ExpressionContext*)ctx, UnaryOperator::BitwiseNot);
+}
+
+antlrcpp::Any Visiteur::visitGreaterThanEquals(exprParser::GreaterThanEqualsContext *ctx) {
+    return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::GreaterThanOrEquals);
+}
+
+antlrcpp::Any Visiteur::visitGreaterThan(exprParser::GreaterThanContext *ctx) {
+    return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::GreaterThan);
+}
+
+antlrcpp::Any Visiteur::visitEquals(exprParser::EqualsContext *ctx) {
+    return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::Equals);
+}
+
+antlrcpp::Any Visiteur::visitLogicalAnd(exprParser::LogicalAndContext *ctx) {
+    return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::Add);
+}
+
+antlrcpp::Any Visiteur::visitBitwiseOr(exprParser::BitwiseOrContext *ctx) {
+    return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::BitwiseOr);
+}
+
+antlrcpp::Any Visiteur::visitMultiply(exprParser::MultiplyContext *ctx) {
+    return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::Multiply);
+}
+
+antlrcpp::Any Visiteur::visitRightShift(exprParser::RightShiftContext *ctx) {
+    return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::BitwiseRightShift);
+}
+
+antlrcpp::Any Visiteur::visitSubstract(exprParser::SubstractContext *ctx) {
+    return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::Substract);
+}
+
+antlrcpp::Any Visiteur::visitLeftShift(exprParser::LeftShiftContext *ctx) {
+    return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::BitwiseLeftShift);
 }

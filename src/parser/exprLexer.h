@@ -1,5 +1,5 @@
 
-// Generated from /home/louis/Documents/Projets/COMP/src/parser/expr.g4 by ANTLR 4.7.2
+// Generated from /home/lohl/Documents/COMP/src/parser/expr.g4 by ANTLR 4.7.1
 
 #pragma once
 
@@ -15,8 +15,10 @@ public:
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
     T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
-    SPACE = 21, OPMUL = 22, UNARYOP = 23, OPCOMP = 24, OPBIN = 25, LOGICOP = 26, 
-    INT = 27, CHAR = 28, VAR = 29
+    T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, T__24 = 25, T__25 = 26, 
+    T__26 = 27, T__27 = 28, T__28 = 29, T__29 = 30, T__30 = 31, T__31 = 32, 
+    T__32 = 33, T__33 = 34, WS = 35, Comment = 36, BlockComment = 37, Preproc = 38, 
+    INT = 39, CHAR = 40, VAR = 41
   };
 
   exprLexer(antlr4::CharStream *input);

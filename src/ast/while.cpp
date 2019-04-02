@@ -12,7 +12,7 @@ namespace ast
 		: ControlStructure(position)
 	{
 	}
-
+	
 	void While::toTextualRepresentation(ostream& out, size_t i) const
 	{
 		for (size_t j = 0; j < i; j++) { out << ' '; }
