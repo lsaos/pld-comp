@@ -15,17 +15,18 @@ namespace ir {
 	class IR {
 		public:
 			IR(Program * prog) : prog(prog) {}
-			~IR();
+			//~IR();
 
 			void generateIR();
 
 			void addCFG(CFG *cfg);
 
-			//string generateAssembly();
+			void generateAssembly(string out);
 			//void optimise();
 
 		protected:
 			Program* prog;
 			map<Function*, CFG *> cfgs; //?? Lien entre CFG et fonctions ? <Identifiable*, CFG*> ou <Function*, CFG *> ??
+			ofstream file;
 	};
 }

@@ -23,8 +23,11 @@ void IRInstrCopy::gen_asm(ostream &o) {
 	}
 
 	//write the assembly code : copy op1 to dest
-	o << "\tmov" << TYPE << " -" << op1.substr(4) << "(%rbp), " << (bb->get_cfg())->get_var_index(dest) << "(%rbp)" << endl;
-} // TODO
+	
+	//o << "\tmov" << TYPE << " -" << op1.substr(4) << "(%rbp), " << (bb->get_cfg())->get_var_index(dest) << "(%rbp)" << endl;
+	o << "\tmov" << TYPE << " " << bb->get_cfg()->get_var_index(op1) << "(%rbp), %eax" << endl;
+	o << "\tmov" << TYPE << " %eax, " << (bb->get_cfg())->get_var_index(dest) << "(%rbp)" << endl;
+} 
 
 /*copy a !tmp64
 
@@ -34,4 +37,3 @@ movq %rax, -16(%rbp)*/
 void IRInstrCopy::printIR(ostream &o) {
 	o << "\tcopy " << dest << " " << op1 << endl;
 }
-

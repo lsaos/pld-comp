@@ -2,6 +2,8 @@
 
 #include "irInstrLdconst.hpp"
 #include <string>
+#include "basicBlock.hpp"
+#include "cfg.hpp"
 
 using namespace std;
 using namespace ir;
@@ -16,11 +18,13 @@ void IRInstrLdconst::gen_asm(ostream &o)
 	switch (this->t) {
 		case (Type::Integer) :
 			type = "l";
+			o << "\tmov" << type << " $"<< constant <<", " << bb->get_cfg()->get_var_index(destination) << "(%rbp)" << endl;
 			break;
 		case(Type::Character):
 			type = "b";
+			//A faire
 			break;
 	}
-	o << "\tmov" << type << " $, -" << destination.substr(4) << "(%rbp)" << endl;
+	//o << "\tmov" << type << " $, -" << destination.substr(4) << "(%rbp)" << endl;
 }
 

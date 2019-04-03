@@ -18,5 +18,18 @@ void IR::generateIR()
 	{
 		CFG* cfg = new CFG(f);
 		addCFG(cfg);
+		cfg->generateCFG();
+	}
+}
+
+void IR::generateAssembly(string out)
+{
+	file = ofstream(out.substr(0, out.size() - 1) + "s", ios::out);
+
+	file << ".text" << endl << ".global main" << endl;
+
+	for (auto cfg : cfgs)
+	{
+		cfg.second->gen_asm(file);
 	}
 }

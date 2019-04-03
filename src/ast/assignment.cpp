@@ -7,6 +7,7 @@
 #include "assignment.hpp"
 #include "../ir/cfg.hpp"
 #include "../ir/irInstrWmen.hpp"
+#include "../ir/irInstrCopy.hpp"
 #include "variable.hpp"
 
 using namespace ir;
@@ -126,8 +127,12 @@ namespace ast
 	string Assignment::buildIR(CFG* cfg)
 	{
 		string right = expr->buildIR(cfg);
-		string left = identifier->buildIR(cfg);
-		cfg->current_bb->add_IRInstr(new IRInstrWmen(cfg->current_bb,left,right), (identifier.get())->getReferencedVariable()->getType());
+		//string left = identifier->buildIR(cfg); // identifier->getReferencedVariable()->getName();
+		//cfg->current_bb->add_IRInstr(new IRInstrWmen(cfg->current_bb,left,right), (identifier.get())->getReferencedVariable()->getType());
+
+		//Simple assigment code
+		string left = identifier->getReferencedVariable()->getName();
+		cfg->current_bb->add_IRInstr(new IRInstrCopy(cfg->current_bb, left, right), (identifier.get())->getReferencedVariable()->getType());
 		return left;
 	}
 }
