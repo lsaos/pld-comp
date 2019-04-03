@@ -24,6 +24,8 @@ namespace ir {
 		/** Actual code generation */
 		void gen_asm(ostream &o); /**< x86 assembly code generation for this IR instruction */
 
+		void printIR(ostream &o);
+
 	protected:
 		string destination;
 		string operand1;

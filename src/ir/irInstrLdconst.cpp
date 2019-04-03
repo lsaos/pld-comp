@@ -18,13 +18,16 @@ void IRInstrLdconst::gen_asm(ostream &o)
 	switch (this->t) {
 		case (Type::Integer) :
 			type = "l";
-			o << "\tmov" << type << " $"<< constant <<", " << bb->get_cfg()->get_var_index(destination) << "(%rbp)" << endl;
 			break;
 		case(Type::Character):
 			type = "b";
-			//A faire
 			break;
 	}
-	//o << "\tmov" << type << " $, -" << destination.substr(4) << "(%rbp)" << endl;
+	o << "\tmov" << type << " $" << constant << ", " << bb->get_cfg()->get_var_index(destination) << "(%rbp)" << endl;
+}
+
+void IRInstrLdconst::printIR(ostream &o)
+{
+	o << "\tldconst " << destination << " " << constant << endl;
 }
 

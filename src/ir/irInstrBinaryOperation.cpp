@@ -15,7 +15,8 @@ IRInstrBinaryOperation::IRInstrBinaryOperation(BasicBlock* bb, Operation op, str
 void IRInstrBinaryOperation::gen_asm(ostream &o)
 {
 	// check the variable type
-	string type ;
+	string type = "l";
+	string action = "add";
 
 	switch (t) {
 		case Type::Integer:
@@ -26,22 +27,40 @@ void IRInstrBinaryOperation::gen_asm(ostream &o)
 			break;
 	}
 
-	string operation;
-	switch (this->operation)
+	switch (operation)
 	{
-		case Operation::add:
-			operation = "add";
-			break;
-		case Operation::mul:
-			operation = "imul";
-			break;
-		case Operation::sub:
-			operation = "sub";
-			break;
+	case Operation::add:
+		action = "add";
+		break;
+	case Operation::sub:
+		action = "sub";
+		break;
+	case Operation::mul:
+		action = "imul";
+		break;
 	}
 
 	//Assembler's code generation 
 	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(operand1) << "(%rbp), %eax" << endl;
-	o << "\t" << operation << type << " " << bb->get_cfg()->get_var_index(operand2) << "(%rbp), %eax" << endl;
+	o << "\t" << action << type << " " << bb->get_cfg()->get_var_index(operand2) << "(%rbp), %eax" << endl;
 	o << "\tmov" << type << " %eax, " << bb->get_cfg()->get_var_index(destination) << "(%rbp)" << endl;
+}
+
+void IRInstrBinaryOperation::printIR(ostream &o)
+{
+	string mnemonic = "add";
+	switch (operation)
+	{
+	case Operation::add:
+		mnemonic = "add";
+		break;
+	case Operation::sub:
+		mnemonic = "sub";
+		break;
+	case Operation::mul:
+		mnemonic = "mul";
+		break;
+	}
+
+	o << "\t" << mnemonic << " " << destination << " " << operand1 << " " << operand2 << endl;
 }
