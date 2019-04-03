@@ -9,7 +9,7 @@ using namespace ir;
 using namespace ast;
 
 IRInstrBinaryOperation::IRInstrBinaryOperation(BasicBlock* bb, Operation op, string dest, string op1, string op2) :
-	IRInstr(bb, bb->get_cfg()->get_var_type(destination)), operation(op), destination(dest), operand1(op1), operand2(op2)
+	IRInstr(bb, bb->get_cfg()->get_var_type(dest)), operation(op), operand1(op1), operand2(op2), destination(dest)
 {}
 
 void IRInstrBinaryOperation::gen_asm(ostream &o)
@@ -19,12 +19,12 @@ void IRInstrBinaryOperation::gen_asm(ostream &o)
 	string action = "add";
 
 	switch (t) {
-	case Type::Integer:
-		type = "l";
-		break;
-	case Type::Character:
-		type = "b";
-		break;
+		case Type::Integer:
+			type = "l";
+			break;
+		case Type::Character:
+			type = "b";
+			break;
 	}
 
 	switch (operation)
@@ -43,7 +43,7 @@ void IRInstrBinaryOperation::gen_asm(ostream &o)
 	//Assembler's code generation 
 	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(operand1) << "(%rbp), %eax" << endl;
 	o << "\t" << action << type << " " << bb->get_cfg()->get_var_index(operand2) << "(%rbp), %eax" << endl;
-	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(operand2) << "(%rbp), "<< bb->get_cfg()->get_var_index(destination) << "(%rbp)" << endl;
+	o << "\tmov" << type << " %eax, " << bb->get_cfg()->get_var_index(destination) << "(%rbp)" << endl;
 }
 
 void IRInstrBinaryOperation::printIR(ostream &o)
