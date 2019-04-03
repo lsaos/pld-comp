@@ -7,6 +7,8 @@
 #include "return.hpp"
 #include "function.hpp"
 #include "identifier.hpp"
+#include "../ir/irInstrReturn.hpp"
+#include "../ir/cfg.hpp"
 
 using namespace ir;
 
@@ -106,9 +108,10 @@ namespace ast
 		if (expr != nullptr)
 		{
 			ret = expr.get()->buildIR(cfg);
-			//Mettre ret dans %eax => copy ??
+			IRInstrReturn * instr = new IRInstrReturn(cfg->current_bb, ret);
+			cfg->current_bb->add_IRInstr(instr, cfg->get_var_type(ret));
 		}
 
-		return ret;
+		return "";
 	}
 }

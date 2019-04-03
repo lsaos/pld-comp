@@ -23,8 +23,8 @@ void IRInstrWmen::gen_asm(ostream &o) {
 	}
 
 	//write the assembly code : the value of variable var is written at address addr
-	o << "\tmov" << TYPE << " -" << addr.substr(4) << "(%rbp), %eax" << endl;
-	o << "\tmov" << TYPE << " -" << var.substr(4) << "(%rbd), %r10" << endl;
+	o << "\tmov" << TYPE << " " << bb->get_cfg()->get_var_index(addr) << "(%rbp), %eax" << endl; //" -" << addr.substr(4)
+	o << "\tmov" << TYPE << " " << bb->get_cfg()->get_var_index(var) << "(%rbp), %r10" << endl; // " -" << var.substr(4)
 	o << "\tmov" << TYPE << " %r10, (%eax)" << endl;
 
 } 

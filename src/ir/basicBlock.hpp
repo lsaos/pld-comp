@@ -34,6 +34,7 @@ namespace ir {
 		void add_IRInstr(IRInstr* instr, Type t);
 
 		CFG* get_cfg() { return cfg; }
+		string get_label();
 
 		BasicBlock* exit_true;  /**< pointer to the next basic block, true branch. If nullptr, return from procedure */
 		BasicBlock* exit_false; /**< pointer to the next basic block, false branch. If null_ptr, the basic block ends with an unconditional jump */

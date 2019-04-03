@@ -28,10 +28,13 @@
 
 #include "../assembly/assembly.hpp"
 
+#include "../ir/ir.hpp"
+
 using namespace antlr4;
 using namespace std;
 using namespace ast;
 using namespace assembly;
+using namespace ir;
 
 int main(int argc, char* argv[])
 {
@@ -107,8 +110,11 @@ int main(int argc, char* argv[])
 	}
 
 	if (optionC) {
-		AssemblyGenerator ag(argv[1]);
-		ag.generateAssembly(prog);
+		/*AssemblyGenerator ag(argv[1]);
+		ag.generateAssembly(prog);*/
+		IR ir(prog);
+		ir.generateIR();
+		ir.generateAssembly(argv[1]);
 	}
 
 	system("pause");

@@ -34,7 +34,7 @@ CFG::~CFG()
 
 void CFG::generateCFG()
 {
-	current_bb = new BasicBlock(this, new_BB_name());
+	current_bb = new BasicBlock(this, function->getName());
 	bbs.push_back(current_bb);
 	nextBBnumber++;
 
@@ -111,4 +111,34 @@ string CFG::IR_reg_to_asm(string reg)
 {
 	int index = SymbolIndex[reg];
 	return (to_string(index) + "(%rbp)");
+}
+
+void CFG::gen_asm(ostream& o)
+{
+	bool prologue = true;
+
+	for (auto bb : bbs)
+	{
+		o << endl << bb->get_label() << ":" << endl;
+
+		if (prologue)
+		{
+			gen_asm_prologue(o);
+			prologue = false;
+		}
+
+		bb->gen_asm(o);
+	}
+
+	gen_asm_epilogue(o);
+}
+
+void CFG::gen_asm_prologue(ostream& o)
+{
+	o << "\tpushq %rbp" << endl << "\tmovq %rsp, %rbp" << endl;
+}
+
+void CFG::gen_asm_epilogue(ostream& o)
+{
+	o << "\tpopq %rbp" << endl << "\tret" << endl;
 }
