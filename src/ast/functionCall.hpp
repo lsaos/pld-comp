@@ -45,7 +45,7 @@ namespace ast
 		virtual void checkSemantic(bool advanced) const;
 		virtual void prepare();
 		virtual string getStringRepresentation() const;
-		virtual void toTextualRepresentation(ostream& out, size_t i) const {}
+		virtual void toTextualRepresentation(ostream& out, size_t i) const;
 
 	public:
 		virtual bool isFunctionCall() const { return true; }

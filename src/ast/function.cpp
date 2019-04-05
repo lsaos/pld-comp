@@ -69,6 +69,19 @@ namespace ast
 		for (size_t j = 0; j < i + 1; j++) { out << ' '; }
 		out << "Ident(" << getName() << ')' << endl;
 
+		const vector<Variable*> params(getParameters());
+		if (!params.empty()) {
+			for (size_t j = 0; j < i + 1; j++) { out << ' '; }
+			cout << "Parameters {" << endl;
+
+			for (const Variable* param : params) {
+				param->toTextualRepresentation(out, i + 2);
+			}
+
+			for (size_t j = 0; j < i + 1; j++) { out << ' '; }
+			cout << '}' << endl;
+		}
+
 		Block::toTextualRepresentation(out, i + 1);
 
 		for (size_t j = 0; j < i; j++) { out << ' '; }
