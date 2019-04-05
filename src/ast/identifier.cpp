@@ -168,6 +168,16 @@ namespace ast
 	{
 		for (size_t j = 0; j < i; j++) { out << ' '; }
 		out << "Ident(" << ident << ')' << endl;
+
+		if (arrayIndex) {
+			for (size_t j = 0; j < i; j++) { out << ' '; }
+			out << "Index {" << endl;
+
+			arrayIndex->toTextualRepresentation(out, i + 1);
+
+			for (size_t j = 0; j < i; j++) { out << ' '; }
+			out << '}' << endl;
+		}
 	}
 
 	void Identifier::generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg)
