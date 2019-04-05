@@ -136,6 +136,7 @@ void CFG::gen_asm(ostream& o)
 void CFG::gen_asm_prologue(ostream& o)
 {
 	o << "\tpushq %rbp" << endl << "\tmovq %rsp, %rbp" << endl;
+	//Si paramètres dans la fonction : ajouter les instructions assembleurs pour les récupérer dans le prologue
 }
 
 void CFG::gen_asm_epilogue(ostream& o)

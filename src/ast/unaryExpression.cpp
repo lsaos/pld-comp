@@ -6,6 +6,10 @@
 
 #include "unaryExpression.hpp"
 #include "constant.hpp"
+#include "../ir/cfg.hpp"
+#include "../ir/irInstrUnaryOperation.hpp"
+
+using namespace ir;
 
 namespace ast
 {
@@ -140,5 +144,24 @@ namespace ast
 		if (expr) {
 			expr->prepare();
 		}
+	}
+
+	string UnaryExpression::buildIR(ir::CFG* cfg)
+	{
+		string var;
+		string temp;
+		switch (op)
+		{
+			case UnaryOperator::Minus:
+				var = (expr.get())->buildIR(cfg);
+				temp = cfg->create_new_tempvar((expr.get())->getType());
+				cfg->current_bb->add_IRInstr(new IRInstrUnaryOperation(cfg->current_bb, IRInstrUnaryOperation::UnaryOperation::minus, temp, var), (expr.get())->getType());
+				break;
+			case UnaryOperator::LogicalNot:
+				//Quel op�rateur : ! ou ~ ?
+				break;
+		}
+
+		return temp;
 	}
 }
