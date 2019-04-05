@@ -7,14 +7,17 @@ using namespace ast;
 
 namespace ir {
 
-	class IRInstrBinaryOperation : public virtual IRInstr {
+	class IRInstrBinaryOperation : public IRInstr {
 
 	public:
 
 		typedef enum {
 			add,
 			sub,
-			mul
+			mul,
+			bitwiseAnd,
+			bitwiseOr,
+			bitwiseXor
 		} Operation;
 
 		/**  constructor */

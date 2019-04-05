@@ -4,6 +4,7 @@
 // INSA Lyon
 //
 
+#pragma once
 #include "binaryExpression.hpp"
 #include "constant.hpp"
 #include "identifier.hpp"
@@ -303,6 +304,7 @@ namespace ast
 	string BinaryExpression::buildIR(CFG* cfg)
 	{
 		IRInstrBinaryOperation::Operation operation;
+		unique_ptr<Expression> temp;
 		switch (op)
 		{
 		case BinaryOperator::Add:

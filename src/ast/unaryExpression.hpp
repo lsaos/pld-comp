@@ -61,6 +61,6 @@ namespace ast
 
 	public:
 		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*, int>& addressTable, string curReg = "%eax");
-		virtual string buildIR(ir::CFG*) { return string(); }
+		virtual string buildIR(ir::CFG*);
 	};
 }

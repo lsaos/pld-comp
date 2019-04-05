@@ -29,15 +29,24 @@ void IRInstrBinaryOperation::gen_asm(ostream &o)
 
 	switch (operation)
 	{
-	case Operation::add:
-		action = "add";
-		break;
-	case Operation::sub:
-		action = "sub";
-		break;
-	case Operation::mul:
-		action = "imul";
-		break;
+		case Operation::add:
+			action = "add";
+			break;
+		case Operation::sub:
+			action = "sub";
+			break;
+		case Operation::mul:
+			action = "imul";
+			break;
+		case Operation::bitwiseAnd:
+			action = "and";
+			break;
+		case Operation::bitwiseOr:
+			action = "or";
+			break;
+		case Operation::bitwiseXor:
+			action = "xor";
+			break;
 	}
 
 	//Assembler's code generation 
