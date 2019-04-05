@@ -47,7 +47,7 @@ namespace ast
 	public:
 		virtual string buildIR(ir::CFG*) { return string(); }
 
-	private:
+	protected:
 		unique_ptr<Expression> condition; // Condition to execute the instruction.
 		unique_ptr<Instruction> instr; // Instruction to execute when the condition is true.
 	};

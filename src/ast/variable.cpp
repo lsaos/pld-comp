@@ -91,6 +91,7 @@ namespace ast
 			Instruction* optimized = arraySize->optimize();
 			if (optimized) {
 				assert(optimized != arraySize.get() && optimized->isExpression());
+				optimized->setParent(this);
 				arraySize = unique_ptr<Expression>((Expression*)optimized);
 			}
 		}

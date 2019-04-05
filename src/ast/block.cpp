@@ -111,7 +111,9 @@ namespace ast
 		cout << "ListInstr {" << endl;
 
 		for (auto& instr : instructions) {
-			instr->toTextualRepresentation(out, i + 1);
+			if (!instr->isVariable() || ((const Variable*)instr.get())->getScope() != Scope::Parameter) {
+				instr->toTextualRepresentation(out, i + 1);
+			}
 		}
 
 		for (size_t j = 0; j < i; j++) { out << ' '; }
@@ -128,11 +130,12 @@ namespace ast
 		}
 
 		instr->setParent(this);
-        if(!atBeginning){
-    		instructions.push_back(unique_ptr<Instruction>(instr));
-        } else {
-            instructions.insert(instructions.begin(),unique_ptr<Instruction>(instr));
-        }
+		if (!atBeginning) {
+			instructions.push_back(unique_ptr<Instruction>(instr));
+		}
+		else {
+			instructions.insert(instructions.begin(), unique_ptr<Instruction>(instr));
+		}
 	}
 
 	Instruction* Block::optimize()
@@ -142,6 +145,7 @@ namespace ast
 			Instruction* optimized = instr->optimize();
 			if (optimized) {
 				assert(optimized != instr.get());
+				optimized->setParent(this);
 				instr = unique_ptr<Instruction>(optimized);
 			}
 		}

@@ -110,4 +110,27 @@ namespace ast
 			return string();
 		}
 	}
+
+	void FunctionCall::toTextualRepresentation(ostream& out, size_t i) const
+	{
+		for (size_t j = 0; j < i; j++) { out << ' '; }
+		out << "Call {" << endl;
+
+		identifier->toTextualRepresentation(out, i + 1);
+
+		if (!args.empty()) {
+			for (size_t j = 0; j < i + 1; j++) { out << ' '; }
+			out << "Arguments {" << endl;
+
+			for (const auto& arg : args) {
+				arg->toTextualRepresentation(out, i + 2);
+			}
+
+			for (size_t j = 0; j < i + 1; j++) { out << ' '; }
+			out << '}' << endl;
+		}
+
+		for (size_t j = 0; j < i; j++) { out << ' '; }
+		out << '}' << endl;
+	}
 }
