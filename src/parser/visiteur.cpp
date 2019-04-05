@@ -534,6 +534,7 @@ antlrcpp::Any Visiteur::visitFuncCall(exprParser::FuncCallContext *ctx){
 	FunctionCall* funcCall = new FunctionCall(pos);
 	Identifier* identifier = new Identifier(pos);
 	identifier->setIdent(ctx->VAR()->getText());
+	funcCall->setIdentifier(identifier);
 	if(ctx->getRuleContexts<exprParser::FuncCallArgumentsContext>().size()!=0){
 		vector<Expression*>* arguments = (vector<Expression*>*)visit(ctx->funcCallArguments());
 		for(int i=0; i<arguments->size(); i++){
