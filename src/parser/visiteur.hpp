@@ -35,6 +35,10 @@ public:
     virtual antlrcpp::Any visitPlainNewVariable(exprParser::PlainNewVariableContext *context);
 
     virtual antlrcpp::Any visitValuedNewVariable(exprParser::ValuedNewVariableContext *context);
+    
+    virtual antlrcpp::Any visitDeclareVariable(exprParser::DeclareVariableContext *context);
+
+    virtual antlrcpp::Any visitDeclareArray(exprParser::DeclareArrayContext *context);
 
     virtual antlrcpp::Any visitRetExpr(exprParser::RetExprContext *context);
 
@@ -45,6 +49,10 @@ public:
     virtual antlrcpp::Any visitInstruction(exprParser::InstructionContext *context);
 
     virtual antlrcpp::Any visitAssignment(exprParser::AssignmentContext *context);
+    
+    virtual antlrcpp::Any visitVariableExpression(exprParser::VariableExpressionContext *context);
+
+    virtual antlrcpp::Any visitArrayExpression(exprParser::ArrayExpressionContext *context);
 
     virtual antlrcpp::Any visitOptional(exprParser::OptionalContext *context);
 
