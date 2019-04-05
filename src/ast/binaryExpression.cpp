@@ -10,6 +10,7 @@
 #include "identifier.hpp"
 #include "../ir/cfg.hpp"
 #include "../ir/irInstrBinaryOperation.hpp"
+#include "../ir/irInstrComparison.hpp"
 
 using namespace ir;
 
@@ -304,6 +305,8 @@ namespace ast
 	string BinaryExpression::buildIR(CFG* cfg)
 	{
 		IRInstrBinaryOperation::Operation operation;
+		IRInstrComparison::Operation operationComp;
+		bool comparison = false;
 		unique_ptr<Expression> temp;
 		switch (op)
 		{
@@ -325,38 +328,41 @@ namespace ast
 			case BinaryOperator::BitwiseXor:
 				operation = IRInstrBinaryOperation::Operation::bitwiseXor;
 				break;
-			/*case BinaryOperator::Equals:
-				operation = IRInstrBinaryOperation::Operation::cmp_eq;
+			case BinaryOperator::Equals:
+				comparison = true;
+				operationComp = IRInstrComparison::Operation::cmp_eq;
 				break;
 			case BinaryOperator::LowerThan:
-				operation = IRInstrBinaryOperation::Operation::cmp_lt;
+				comparison = true;
+				operationComp = IRInstrComparison::Operation::cmp_lt;
 				break;
 			case BinaryOperator::LowerThanOrEquals:
-				operation = IRInstrBinaryOperation::Operation::cmp_le;
+				comparison = true;
+				operationComp = IRInstrComparison::Operation::cmp_le;
 				break;
 			case BinaryOperator::DifferentThan:
-				//operation = IRInstrBinaryOperation::Operation::xor;
-				//TODO
+				comparison = true;
+				operationComp = IRInstrComparison::Operation::cmp_neq;
 				break;
 			case BinaryOperator::GreaterThan:
-				temp = unique_ptr<Expression>(left.get());
-				left.reset(right.get());
-				right.reset(temp.get());
-				operation = IRInstrBinaryOperation::Operation::cmp_le;
+				comparison = true;
+				operationComp = IRInstrComparison::Operation::cmp_gt;
 				break;
 			case BinaryOperator::GreaterThanOrEquals:
-				temp = unique_ptr<Expression>(left.get());
-				left.reset(right.get());
-				right.reset(temp.get());
-				operation = IRInstrBinaryOperation::Operation::cmp_lt;
-				break;*/
+				comparison = true;
+				operationComp = IRInstrComparison::Operation::cmp_ge;
+				break;
 		}
 
 		string var_1 = (left.get())->buildIR(cfg);
 		string var_2 = (right.get())->buildIR(cfg);
 		//string var_3 = cfg->create_new_tempvar(getType()); //A FAIRE DANS LE FUTUR POUR PLUS DE COHERENCE !!
 		string var_3 = cfg->create_new_tempvar(getLeftExpression()->getType());
-		cfg->current_bb->add_IRInstr(new IRInstrBinaryOperation(cfg->current_bb, operation, var_3, var_1, var_2), getLeftExpression()->getType()); //getType de l'expression à la place de getLeftExpression()->getType() !!
+
+		if(!comparison)
+			cfg->current_bb->add_IRInstr(new IRInstrBinaryOperation(cfg->current_bb, operation, var_3, var_1, var_2), getLeftExpression()->getType()); //getType de l'expression à la place de getLeftExpression()->getType() !!
+		else
+			cfg->current_bb->add_IRInstr(new IRInstrComparison(cfg->current_bb, operationComp, var_3, var_1, var_2), getLeftExpression()->getType());
 		return var_3;
 	}
 }

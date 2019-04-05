@@ -119,6 +119,7 @@ namespace ast
 		
 		//Construction du BasicBlock then
 		BasicBlock* thenBB = new BasicBlock(cfg, cfg->new_BB_name());
+		cfg->add_bb(thenBB);
 		cfg->current_bb = thenBB;
 		var = instr->buildIR(cfg);
 		cfg->current_bb->set_last_var(var);
@@ -128,19 +129,29 @@ namespace ast
 		if (alternative != nullptr)
 		{
 			elseBB = new BasicBlock(cfg, cfg->new_BB_name());
+			cfg->add_bb(elseBB);
 			cfg->current_bb = elseBB;
-			var = instr->buildIR(cfg);
+			var = alternative->buildIR(cfg);
 			cfg->current_bb->set_last_var(var);
 		}
 		else
+		{
 			elseBB = nullptr;
+		}
 
 		BasicBlock* afterIfBB = new BasicBlock(cfg, cfg->new_BB_name());
+		cfg->add_bb(afterIfBB);
+
 		//Pourquoi ? testBB n'a pas encore de successeurs à ce moment de la génération de l'IR...
 		afterIfBB->exit_true = testBB->exit_true;
 		afterIfBB->exit_false = testBB->exit_false;
 		testBB->exit_true = thenBB;
-		testBB->exit_false = elseBB;
+
+		if (elseBB == nullptr)
+			testBB->exit_false = afterIfBB;
+		else
+			testBB->exit_false = elseBB;
+
 		thenBB->exit_true = afterIfBB;
 		thenBB->exit_false = nullptr;
 		

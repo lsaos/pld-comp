@@ -23,10 +23,6 @@ CFG::CFG(Function* function) : function(function), nextFreeSymbolIndex(0), nextB
 		add_to_symbol_table(var->getName(), var->getType());
 	}
 
-	//DEBUG
-	for (auto i : SymbolIndex)
-		cout << i.first << " : " << i.second << endl;
-
 }
 
 CFG::~CFG()
@@ -52,7 +48,7 @@ void CFG::generateCFG()
 
 string CFG::new_BB_name()
 {
-	return function->getName() + "_bb_" + to_string(nextBBnumber);
+	return function->getName() + "_bb_" + to_string(nextBBnumber++);
 }
 
 void CFG::add_bb(BasicBlock* bb)

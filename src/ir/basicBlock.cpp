@@ -58,8 +58,8 @@ void BasicBlock::gen_asm(ostream& o)
 		else
 		{
 			o << "\tcmpl $0, " << cfg->get_var_index(lastVar) << "(%rbp)" << endl;
-			o << "\tje " << exit_true->get_label() << endl;
-			o << "\tjne " << exit_false->get_label() << endl;
+			o << "\tje " << exit_false->get_label() << endl;
+			o << "\tjne " << exit_true->get_label() << endl;
 		}
 	}
 }
