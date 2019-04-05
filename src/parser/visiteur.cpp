@@ -70,6 +70,12 @@ antlrcpp::Any Visiteur::visitProg(exprParser::ProgContext *ctx) {
 	indent++;
 #endif
 	Program* prog = new Program();
+	for (int i=0; i<ctx->declaration().size(); i++){
+        vector<Instruction*>* declarations = (vector<Instruction*>*)visit(ctx->declaration(i));
+        for(int j=0; j<declarations->size();j++){
+            prog->add(declarations->at(j));
+        }
+    }
 	for(int i=0; i<ctx->function().size(); i++){
 		Instruction* instr = (Instruction*)visit(ctx->function(i));
 		prog->add(instr);
@@ -114,7 +120,7 @@ antlrcpp::Any Visiteur::visitParameters(exprParser::ParametersContext *ctx){
 	#endif
 	vector<Variable*>* variables = new vector<Variable*>();
 	for(int i=0; i<ctx->VAR().size(); i++){
-		ItemPosition pos = buildPos(ctx->varType(i)->getStart()->getLine(), ctx->varType(i)->getStart()->getCharPositionInLine());//FIXME
+		ItemPosition pos = buildPos(ctx->varType(i)->getStart()->getLine(), ctx->varType(i)->getStart()->getCharPositionInLine());
 		Type type = (Type)visit(ctx->varType(i));
 		Variable* parameter = new Variable(pos);
 		parameter->setName(ctx->VAR(i)->getText());
@@ -157,9 +163,7 @@ antlrcpp::Any Visiteur::visitPlainNewVariable(exprParser::PlainNewVariableContex
     #ifdef TREEVISIT
 	jump(); cout << "PLAIN" << endl;
     #endif
-	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
-    Variable* variable = new Variable(pos);
-    variable->setName(ctx->VAR()->getText());
+    Variable* variable = (Variable*)visit(ctx->newVarName());
     vector<Instruction*>* declaration = new vector<Instruction*>;
     declaration->push_back((Instruction*)variable);
 	return declaration;
@@ -189,6 +193,24 @@ antlrcpp::Any Visiteur::visitValuedNewVariable(exprParser::ValuedNewVariableCont
 #endif
 	return declaration;
 }
+
+antlrcpp::Any Visiteur::visitDeclareVariable(exprParser::DeclareVariableContext *ctx){
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
+    Variable* variable = new Variable(pos);
+    variable->setName(ctx->VAR()->getText());
+    return variable;
+}
+
+antlrcpp::Any Visiteur::visitDeclareArray(exprParser::DeclareArrayContext *ctx){
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
+    Variable* variable = new Variable(pos);
+    variable->setName(ctx->VAR()->getText());
+    variable->setIsArray();
+    Expression* expr = (Expression*)visit(ctx->expression());
+    variable->setArraySize(expr);
+	return variable;
+}
+
 
 antlrcpp::Any Visiteur::visitRetExpr(exprParser::RetExprContext *ctx) {
 #ifdef TREEVISIT
@@ -261,7 +283,7 @@ antlrcpp::Any Visiteur::visitInstruction(exprParser::InstructionContext *ctx) {
 }
 
 antlrcpp::Any Visiteur::visitAssignment(exprParser::AssignmentContext *ctx) {
-
+//FIXME
 #ifdef TREEVISIT
 	jump(); cout << "ASSIGNMENT(" << endl;
 	indent++;
@@ -269,8 +291,7 @@ antlrcpp::Any Visiteur::visitAssignment(exprParser::AssignmentContext *ctx) {
 	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
 	Assignment* assignment = new Assignment(pos);
 	Expression* expression = (Expression*)visit(ctx->expression());
-	Identifier* identifier = new Identifier(pos);
-	identifier->setIdent(ctx->VAR()->getText());
+	Identifier* identifier = (Identifier*)visit(ctx->varExpr());
 	assignment->setValue(expression);
 	assignment->setIdentifier(identifier);
 #ifdef TREEVISIT
@@ -279,6 +300,25 @@ antlrcpp::Any Visiteur::visitAssignment(exprParser::AssignmentContext *ctx) {
 #endif
 	return (Instruction*)assignment;
 
+}
+
+antlrcpp::Any Visiteur::visitVariableExpression(exprParser::VariableExpressionContext *ctx){
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
+	Identifier* identifier = new Identifier(pos);
+	identifier->setIdent(ctx->VAR()->getText());
+	return identifier;
+}
+
+antlrcpp::Any Visiteur::visitArrayExpression(exprParser::ArrayExpressionContext *ctx){
+	#ifdef TREEVISIT
+		jump(); cout << "=>ARRAY_ACCESS"<<endl;
+	#endif
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
+	Identifier* identifier = new Identifier(pos);
+	identifier->setIdent(ctx->VAR()->getText());
+	Expression* expr = (Expression*)visit(ctx->expression());
+	identifier->setArrayIndex(expr);
+	return identifier;
 }
 
 antlrcpp::Any Visiteur::visitOptional(exprParser::OptionalContext *ctx){
@@ -329,22 +369,27 @@ antlrcpp::Any Visiteur::visitForLoop(exprParser::ForLoopContext *ctx){
 	indent++;
     #endif
 	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
+	Block* forBlock= new Block(pos);
     vector<Instruction*>* declarations = (vector<Instruction*>*)visit(ctx->forInit());
     Expression* expr = (Expression*)visit(ctx->expression());
     Instruction* assignment = (Instruction*)visit(ctx->assignment());
     Block* block = dynamic_cast<Block*>((Instruction*)visit(ctx->controlBody()));//FIXME : the ugliest way
+    
+    //Declarations before the loop
+    for(auto instr : *declarations){
+        forBlock->add(instr);
+    }
+    //The loop itself
     While* loop = new While(pos);
     loop->setCondition(expr);
-    for(auto instr : *declarations){
-        block->add(instr,true);
-    }
     block->add(assignment);
     loop->setInstruction(block);
+    forBlock->add(loop);
     #ifdef TREEVISIT
     jump(); cout << ")" << endl;
     indent--;
     #endif
-    return (Instruction*)loop;
+    return (Instruction*)forBlock;
 }
 
 antlrcpp::Any Visiteur::visitForDeclaration(exprParser::ForDeclarationContext *ctx){
@@ -372,9 +417,7 @@ antlrcpp::Any Visiteur::visitVariable(exprParser::VariableContext *ctx){
 	#ifdef TREEVISIT
 		jump(); cout << "VAR"<<endl;
 	#endif
-	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
-	Identifier* identifier = new Identifier(pos);
-	identifier->setIdent(ctx->VAR()->getText());
+	Identifier* identifier = (Identifier*)visit(ctx->varExpr());
 	return (Expression*)identifier;
 }
 
