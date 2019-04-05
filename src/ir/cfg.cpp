@@ -144,3 +144,11 @@ void CFG::gen_asm_epilogue(ostream& o)
 	//Créer un nouveau bloc ou pas ?
 	o << "\tpopq %rbp" << endl << "\tret" << endl;
 }
+
+void CFG::printIR()
+{
+	for (auto bb : bbs)
+	{
+		bb->printIR();
+	}
+}

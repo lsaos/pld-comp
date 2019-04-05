@@ -64,3 +64,11 @@ void BasicBlock::gen_asm(ostream& o)
 	}
 }
 
+void BasicBlock::printIR()
+{
+	for (auto i : instrs)
+	{
+		i->printIR(cout);
+	}
+}
+

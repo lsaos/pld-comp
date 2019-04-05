@@ -174,6 +174,7 @@ int main(int argc, char* argv[])
 		ag.generateAssembly(prog);*/
 		IR ir(prog);
 		ir.generateIR();
+		//ir.printIR();
 		ir.generateAssembly(argv[1]);
 	}
 

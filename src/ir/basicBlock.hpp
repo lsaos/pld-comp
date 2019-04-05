@@ -31,6 +31,8 @@ namespace ir {
 
 		void gen_asm(ostream &o); /**< x86 assembly code generation for this basic block (very simple) */
 
+		void printIR();
+
 		void add_IRInstr(IRInstr* instr, Type t);
 
 		void set_last_var(string);
