@@ -14,7 +14,13 @@ namespace ir {
 		typedef enum {
 			add,
 			sub,
-			mul
+			mul,
+			cmp_eq,
+			cmp_lt,
+			cmp_le,
+			and,
+			or,
+			xor
 		} Operation;
 
 		/**  constructor */

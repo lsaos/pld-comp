@@ -4,6 +4,7 @@
 // INSA Lyon
 //
 
+#pragma once
 #include "binaryExpression.hpp"
 #include "constant.hpp"
 #include "identifier.hpp"
@@ -301,6 +302,7 @@ namespace ast
 	string BinaryExpression::buildIR(CFG* cfg)
 	{
 		IRInstrBinaryOperation::Operation operation;
+		unique_ptr<Expression> temp;
 		switch (op)
 		{
 			case BinaryOperator::Add:
@@ -311,6 +313,40 @@ namespace ast
 				break;
 			case BinaryOperator::Multiply:
 				operation = IRInstrBinaryOperation::Operation::mul;
+				break;
+			case BinaryOperator::BitwiseAnd:
+				operation = IRInstrBinaryOperation::Operation::and;
+				break;
+			case BinaryOperator::BitwiseOr:
+				operation = IRInstrBinaryOperation::Operation::or;
+				break;
+			case BinaryOperator::BitwiseXor:
+				operation = IRInstrBinaryOperation::Operation::xor;
+				break;
+			case BinaryOperator::Equals:
+				operation = IRInstrBinaryOperation::Operation::cmp_eq;
+				break;
+			case BinaryOperator::LowerThan:
+				operation = IRInstrBinaryOperation::Operation::cmp_lt;
+				break;
+			case BinaryOperator::LowerThanOrEquals:
+				operation = IRInstrBinaryOperation::Operation::cmp_le;
+				break;
+			case BinaryOperator::DifferentThan:
+				//operation = IRInstrBinaryOperation::Operation::xor;
+				//TODO
+				break;
+			case BinaryOperator::GreaterThan:
+				temp = unique_ptr<Expression>(left.get());
+				left.reset(right.get());
+				right.reset(temp.get());
+				operation = IRInstrBinaryOperation::Operation::cmp_le;
+				break;
+			case BinaryOperator::GreaterThanOrEquals:
+				temp = unique_ptr<Expression>(left.get());
+				left.reset(right.get());
+				right.reset(temp.get());
+				operation = IRInstrBinaryOperation::Operation::cmp_lt;
 				break;
 		}
 
