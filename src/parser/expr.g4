@@ -1,6 +1,6 @@
 grammar expr;
 
-prog:  function+;
+prog:  (declaration)* function+;
 
 function: funcType  VAR  '(' parameters? ')'  block ;
 parameters: varType VAR (',' varType VAR)*;

@@ -70,6 +70,12 @@ antlrcpp::Any Visiteur::visitProg(exprParser::ProgContext *ctx) {
 	indent++;
 #endif
 	Program* prog = new Program();
+	for (int i=0; i<ctx->declaration().size(); i++){
+        vector<Instruction*>* declarations = (vector<Instruction*>*)visit(ctx->declaration(i));
+        for(int j=0; j<declarations->size();j++){
+            prog->add(declarations->at(j));
+        }
+    }
 	for(int i=0; i<ctx->function().size(); i++){
 		Instruction* instr = (Instruction*)visit(ctx->function(i));
 		prog->add(instr);
