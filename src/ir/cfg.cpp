@@ -130,7 +130,7 @@ void CFG::gen_asm(ostream& o)
 		bb->gen_asm(o);
 	}
 
-	gen_asm_epilogue(o);
+	//gen_asm_epilogue(o);
 }
 
 void CFG::gen_asm_prologue(ostream& o)

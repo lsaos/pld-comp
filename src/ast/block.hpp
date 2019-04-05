@@ -51,7 +51,7 @@ namespace ast
 		virtual bool isBlock() const { return true; }
 
 		virtual void generateAssembly(ofstream& f, unordered_map<ast::Variable*,int>& addressTable, string curReg = "%eax") {}
-		virtual string buildIR(ir::CFG*) { return string(); }
+		virtual string buildIR(ir::CFG*);
 
 	protected:
 		vector<unique_ptr<Instruction>> instructions; // List of instructions in the block.

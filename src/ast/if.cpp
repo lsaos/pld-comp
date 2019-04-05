@@ -5,6 +5,10 @@
 //
 
 #include "if.hpp"
+#include "../ir/cfg.hpp"
+#include "../ir/basicBlock.hpp"
+
+using namespace ir;
 
 namespace ast
 {
@@ -88,6 +92,47 @@ namespace ast
 
 		for (size_t j = 0; j < i; j++) { out << ' '; }
 		out << '}' << endl;
+	}
+
+	string If::buildIR(ir::CFG* cfg)
+	{
+		condition->buildIR(cfg);
+		BasicBlock* testBB = cfg->current_bb;
+		
+		//Construction du BasicBlock then
+		BasicBlock* thenBB = new BasicBlock(cfg, cfg->new_BB_name());
+		cfg->current_bb = thenBB;
+		instr->buildIR(cfg);
+
+		BasicBlock* elseBB;
+
+		if (alternative != nullptr)
+		{
+			elseBB = new BasicBlock(cfg, cfg->new_BB_name());
+			cfg->current_bb = elseBB;
+			instr->buildIR(cfg);
+		}
+		else
+			elseBB = nullptr;
+
+		BasicBlock* afterIfBB = new BasicBlock(cfg, cfg->new_BB_name());
+		//Pourquoi ? testBB n'a pas encore de successeurs à ce moment de la génération de l'IR...
+		afterIfBB->exit_true = testBB->exit_true;
+		afterIfBB->exit_false = testBB->exit_false;
+		testBB->exit_true = thenBB;
+		testBB->exit_false = elseBB;
+		thenBB->exit_true = afterIfBB;
+		thenBB->exit_false = nullptr;
+		
+		if (elseBB != nullptr)
+		{
+			elseBB->exit_true = afterIfBB;
+			elseBB->exit_false = nullptr;
+		}
+
+		cfg->current_bb = afterIfBB;
+
+		return "";
 	}
 
 }
