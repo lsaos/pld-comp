@@ -113,13 +113,15 @@ namespace ast
 
 	string If::buildIR(ir::CFG* cfg)
 	{
-		condition->buildIR(cfg);
+		string var = condition->buildIR(cfg);
+		cfg->current_bb->set_last_var(var);
 		BasicBlock* testBB = cfg->current_bb;
 		
 		//Construction du BasicBlock then
 		BasicBlock* thenBB = new BasicBlock(cfg, cfg->new_BB_name());
 		cfg->current_bb = thenBB;
-		instr->buildIR(cfg);
+		var = instr->buildIR(cfg);
+		cfg->current_bb->set_last_var(var);
 
 		BasicBlock* elseBB;
 
@@ -127,7 +129,8 @@ namespace ast
 		{
 			elseBB = new BasicBlock(cfg, cfg->new_BB_name());
 			cfg->current_bb = elseBB;
-			instr->buildIR(cfg);
+			var = instr->buildIR(cfg);
+			cfg->current_bb->set_last_var(var);
 		}
 		else
 			elseBB = nullptr;

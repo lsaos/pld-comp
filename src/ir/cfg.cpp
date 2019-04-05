@@ -23,6 +23,10 @@ CFG::CFG(Function* function) : function(function), nextFreeSymbolIndex(0), nextB
 		add_to_symbol_table(var->getName(), var->getType());
 	}
 
+	//DEBUG
+	for (auto i : SymbolIndex)
+		cout << i.first << " : " << i.second << endl;
+
 }
 
 CFG::~CFG()

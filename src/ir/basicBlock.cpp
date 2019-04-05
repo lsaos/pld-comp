@@ -30,6 +30,11 @@ string BasicBlock::get_label()
 	return label;
 }
 
+void BasicBlock::set_last_var(string var)
+{
+	lastVar = var;
+}
+
 void BasicBlock::gen_asm(ostream& o)
 {
 	//o << endl << label << " :" << endl;
@@ -39,9 +44,23 @@ void BasicBlock::gen_asm(ostream& o)
 		i->gen_asm(o);
 	}
 
+	IRInstr* last = instrs.back();
+
+	//Ajouter les jumps ici
+
 	if (exit_true == nullptr)
 	{
 		cfg->gen_asm_epilogue(o);
+	}
+	else {
+		if (exit_false == nullptr)
+			o << "\tjmp " << exit_true->get_label() << endl;
+		else
+		{
+			o << "\tcmpl $0, " << cfg->get_var_index(lastVar) << "(%rbp)" << endl;
+			o << "\tje " << exit_true->get_label() << endl;
+			o << "\tjne " << exit_false->get_label() << endl;
+		}
 	}
 }
 
