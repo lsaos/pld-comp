@@ -27,5 +27,5 @@ void IRInstrReturn::gen_asm(ostream &o)
 
 void IRInstrReturn::printIR(ostream &o)
 {
-	o << "\treturn " << op << " %eax" << endl;
+	o << "\treturn " << op << endl;
 }
