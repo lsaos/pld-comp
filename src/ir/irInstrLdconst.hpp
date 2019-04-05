@@ -7,7 +7,7 @@ using namespace ast;
 
 namespace ir {
 
-	class IRInstrLdconst : public virtual IRInstr {
+	class IRInstrLdconst : public IRInstr {
 
 	public:
 

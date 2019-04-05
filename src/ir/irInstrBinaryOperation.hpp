@@ -7,7 +7,7 @@ using namespace ast;
 
 namespace ir {
 
-	class IRInstrBinaryOperation : public virtual IRInstr {
+	class IRInstrBinaryOperation : public IRInstr {
 
 	public:
 
