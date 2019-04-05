@@ -315,15 +315,15 @@ namespace ast
 				operation = IRInstrBinaryOperation::Operation::mul;
 				break;
 			case BinaryOperator::BitwiseAnd:
-				operation = IRInstrBinaryOperation::Operation::and;
+				operation = IRInstrBinaryOperation::Operation::bitwiseAnd;
 				break;
 			case BinaryOperator::BitwiseOr:
-				operation = IRInstrBinaryOperation::Operation::or;
+				operation = IRInstrBinaryOperation::Operation::bitwiseOr;
 				break;
 			case BinaryOperator::BitwiseXor:
-				operation = IRInstrBinaryOperation::Operation::xor;
+				operation = IRInstrBinaryOperation::Operation::bitwiseXor;
 				break;
-			case BinaryOperator::Equals:
+			/*case BinaryOperator::Equals:
 				operation = IRInstrBinaryOperation::Operation::cmp_eq;
 				break;
 			case BinaryOperator::LowerThan:
@@ -347,7 +347,7 @@ namespace ast
 				left.reset(right.get());
 				right.reset(temp.get());
 				operation = IRInstrBinaryOperation::Operation::cmp_lt;
-				break;
+				break;*/
 		}
 
 		string var_1 = (left.get())->buildIR(cfg);

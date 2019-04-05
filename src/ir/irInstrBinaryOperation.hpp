@@ -15,12 +15,9 @@ namespace ir {
 			add,
 			sub,
 			mul,
-			cmp_eq,
-			cmp_lt,
-			cmp_le,
-			and,
-			or,
-			xor
+			bitwiseAnd,
+			bitwiseOr,
+			bitwiseXor
 		} Operation;
 
 		/**  constructor */
@@ -37,6 +34,5 @@ namespace ir {
 		string operand1;
 		string operand2;
 		Operation operation;
-
 	};
 }

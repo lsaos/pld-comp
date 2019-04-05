@@ -38,23 +38,14 @@ void IRInstrBinaryOperation::gen_asm(ostream &o)
 		case Operation::mul:
 			action = "imul";
 			break;
-		case Operation::and:
+		case Operation::bitwiseAnd:
 			action = "and";
 			break;
-		case Operation::or:
+		case Operation::bitwiseOr:
 			action = "or";
 			break;
-		case Operation::xor:
+		case Operation::bitwiseXor:
 			action = "xor";
-			break;
-		case Operation::cmp_eq:
-			action = "";
-			break;
-		case Operation::cmp_lt:
-			action = "";
-			break;
-		case Operation::cmp_le:
-			action = "";
 			break;
 	}
 

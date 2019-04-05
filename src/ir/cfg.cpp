@@ -141,5 +141,6 @@ void CFG::gen_asm_prologue(ostream& o)
 
 void CFG::gen_asm_epilogue(ostream& o)
 {
+	//Créer un nouveau bloc ou pas ?
 	o << "\tpopq %rbp" << endl << "\tret" << endl;
 }
