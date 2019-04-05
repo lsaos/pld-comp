@@ -1,8 +1,9 @@
 grammar expr;
 
-prog:  main;
+prog:  function+;
 
-main: funcType  'main'  '('  ')'  '{'  (declaration )* (instruction )* ret?  '}' ;
+function: funcType  VAR  '(' parameters? ')'  block ;
+parameters: varType VAR (',' varType VAR)*;
 declaration: varType  newVar  (','  newVar )* ';';
 newVar: VAR #plainNewVariable
 	| VAR  '='  expression #valuedNewVariable
@@ -14,16 +15,21 @@ block: '{'  (declaration )* (instruction )* '}';
 instruction: assignment ';'
 			| optional
 			| loop
+			| ret
 			;
 assignment: VAR  '='  expression;
 optional: 'if' condition controlBody ( 'else'  controlBody)?;
 loop: 'while' condition controlBody #whileLoop
-	| 'for' '(' declaration expression ';' assignment ')' controlBody #forLoop
+	| 'for' '(' forInit expression ';' assignment ')' controlBody #forLoop
 	;
+forInit: declaration #forDeclaration
+		| assignment ';' #forAssignment
+		;
 condition:  '('  expression  ')' ;
 controlBody: block
 			| instruction;
-expression: VAR #variable
+expression: funcCall #exprFunc
+		  | VAR #variable
 		  | INT #int
 		  | CHAR #char
 		  | '(' expression  ')' #parenthesis
@@ -47,6 +53,8 @@ expression: VAR #variable
 		  |	expression  '&&'  expression #LogicalAnd
 		  |	expression  '||'  expression #LogicalOr
 		  ;
+funcCall: VAR '(' funcCallArguments? ')';
+funcCallArguments: expression (',' expression)*;
 
 funcType: 'int'|'void';
 varType: 'int'|'char';

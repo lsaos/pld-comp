@@ -26,7 +26,9 @@ public:
 
 	virtual antlrcpp::Any visitProg(exprParser::ProgContext *context);
 
-    virtual antlrcpp::Any visitMain(exprParser::MainContext *context);
+    virtual antlrcpp::Any visitFunction(exprParser::FunctionContext *context);
+    
+    virtual antlrcpp::Any visitParameters(exprParser::ParametersContext *context);
 
     virtual antlrcpp::Any visitDeclaration(exprParser::DeclarationContext *context);
 
@@ -49,10 +51,16 @@ public:
     virtual antlrcpp::Any visitWhileLoop(exprParser::WhileLoopContext *context);
 
     virtual antlrcpp::Any visitForLoop(exprParser::ForLoopContext *context);
+    
+    virtual antlrcpp::Any visitForDeclaration(exprParser::ForDeclarationContext *context);
+
+    virtual antlrcpp::Any visitForAssignment(exprParser::ForAssignmentContext *context);
 
     virtual antlrcpp::Any visitCondition(exprParser::ConditionContext *context);
 
     virtual antlrcpp::Any visitControlBody(exprParser::ControlBodyContext *context);
+    
+    virtual antlrcpp::Any visitExprFunc(exprParser::ExprFuncContext *context);
 
     virtual antlrcpp::Any visitAdd(exprParser::AddContext *context);
 
@@ -102,6 +110,11 @@ public:
     virtual antlrcpp::Any visitFuncType(exprParser::FuncTypeContext *context);
 
     virtual antlrcpp::Any visitVarType(exprParser::VarTypeContext *context);
+    
+    virtual antlrcpp::Any visitFuncCall(exprParser::FuncCallContext *context);
+
+    virtual antlrcpp::Any visitFuncCallArguments(exprParser::FuncCallArgumentsContext *context);
+    
 	virtual ~Visiteur() {}
 
 #ifdef TREEVISIT

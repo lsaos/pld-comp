@@ -129,6 +129,7 @@ namespace ast
 			Instruction* optimized = arrayIndex->optimize();
 			if (optimized) {
 				assert(optimized != arrayIndex.get() && optimized->isExpression());
+				optimized->setParent(this);
 				arrayIndex = unique_ptr<Expression>((Expression*)optimized);
 			}
 		}
