@@ -156,6 +156,16 @@ namespace ast
 
 	void Block::prepare()
 	{
+		// Remove nested single blocks
+		if (!isProgram() && instructions.size() == 1 && instructions[0]->isBlock()) {
+			Block* subBlock = (Block*)instructions[0].get();
+			vector<unique_ptr<Instruction>> instrs(move(subBlock->instructions));
+			for (auto& instr : instrs) {
+				instr->setParent(this);
+			}
+			instructions = move(instrs);
+		}
+
 		for (auto& instr : instructions) {
 			instr->prepare();
 		}

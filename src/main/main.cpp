@@ -1,13 +1,28 @@
-#include <antlr4-runtime.h>
+//
+// (c) 2019 The Super 4404 C Compiler
+// A.Belin, A.Nahid, L.Ohl, L.Saos, A.Verrier, I.Zemmouri
+// INSA Lyon
+//
+
+// Standard library
 #include <string>
 #include <cstring>
 #include <iostream>
 
+using namespace std;
+
+// ANTLR
+#include <antlr4-runtime.h>
+
+using namespace antlr4;
+
+// Syntaxic parser
 #include "../parser/exprLexer.h"
 #include "../parser/exprParser.h"
 #include "../parser/exprBaseVisitor.h"
 #include "../parser/visiteur.hpp"
 
+// Semantic tree
 #include "../ast/program.hpp"
 #include "../ast/assignment.hpp"
 #include "../ast/binaryExpression.hpp"
@@ -26,13 +41,15 @@
 #include "../ast/error.hpp"
 #include "../ast/return.hpp"
 
-#include "../assembly/assembly.hpp"
+using namespace ast;
 
+// Assembly generation
+#include "../assembly/assembly.hpp"
 #include "../ir/ir.hpp"
 
-using namespace antlr4;
-using namespace std;
-using namespace ast;
+
+
+
 using namespace assembly;
 using namespace ir;
 
@@ -58,28 +75,34 @@ void registerExternalFunctions(Program* prog)
 
 int main(int argc, char* argv[])
 {
+	// Check we have the filename
 	if (argc < 2)
 	{
-		cout << "Usage: comp source_file [-a] [-o] [-c]" << endl;
+		cout << "Usage: comp source_file [-a] [-o] [-c] [-t]" << endl;
 		system("pause");
 		return -1;
 	}
 
-	bool optionA = false;
-	bool optionC = false;
-	bool optionO = false;
+	// Parse compiler options
+	bool staticAnalysis = false;
+	bool genAsm = false;
+	bool optimize = false;
+	bool textualRepresentation = false;
 
 	for (int i = 2; i < argc; i++) {
 		const string arg(argv[i]);
 
 		if (arg == "-c") {
-			optionC = true;
+			genAsm = true;
 		}
 		else if (arg == "-a") {
-			optionA = true;
+			staticAnalysis = true;
 		}
 		else if (arg == "-o") {
-			optionO = true;
+			optimize = true;
+		}
+		else if (arg == "-t") {
+			textualRepresentation = true;
 		}
 		else {
 			cout << "Warning: unknown option " << arg << endl;
@@ -107,7 +130,7 @@ int main(int argc, char* argv[])
 	size_t nbErrors = parser.getNumberOfSyntaxErrors();
 
 	//Pour tester l'assemblage
-	optionC = true;
+	genAsm = true;
 
 	if (nbErrors != 0)
 	{
@@ -122,8 +145,7 @@ int main(int argc, char* argv[])
 
 	try
 	{
-		prog->checkSemantic(optionA);
-		prog->toTextualRepresentation(cout);
+		prog->checkSemantic(staticAnalysis);
 	}
 	catch (...)
 	{
@@ -131,16 +153,23 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	if (optionO) {
-		cout << "-------------------------------" << endl
-			<< " After optimization" << endl
-			<< "-------------------------------" << endl;
-
-		prog->optimize();
+	if (textualRepresentation) {
 		prog->toTextualRepresentation(cout);
 	}
 
-	if (optionC) {
+	if (optimize) {
+		prog->optimize();
+
+		if (textualRepresentation) {
+			cout << "-------------------------------" << endl
+				<< " After optimization" << endl
+				<< "-------------------------------" << endl;
+
+			prog->toTextualRepresentation(cout);
+		}
+	}
+
+	if (genAsm) {
 		/*AssemblyGenerator ag(argv[1]);
 		ag.generateAssembly(prog);*/
 		IR ir(prog);
