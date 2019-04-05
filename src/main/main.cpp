@@ -36,6 +36,26 @@ using namespace ast;
 using namespace assembly;
 using namespace ir;
 
+// Register external functions which can be called by
+// the specified program without being part of it
+void registerExternalFunctions(Program* prog)
+{
+	Variable* funcPutCharArg = new Variable(ItemPosition());
+	funcPutCharArg->setName("character");
+	funcPutCharArg->setType(Type::Integer);
+
+	Function* funcPutChar = new Function(ItemPosition());
+	funcPutChar->setName("putchar");
+	funcPutChar->setType(Type::Integer);
+	funcPutChar->addParameter(funcPutCharArg);
+	prog->addExternalFunction(funcPutChar);
+
+	Function* funcGetChar = new Function(ItemPosition());
+	funcGetChar->setName("getchar");
+	funcGetChar->setType(Type::Integer);
+	prog->addExternalFunction(funcGetChar);
+}
+
 int main(int argc, char* argv[])
 {
 	if (argc < 2)
@@ -43,6 +63,27 @@ int main(int argc, char* argv[])
 		cout << "Usage: comp source_file [-a] [-o] [-c]" << endl;
 		system("pause");
 		return -1;
+	}
+
+	bool optionA = false;
+	bool optionC = false;
+	bool optionO = false;
+
+	for (int i = 2; i < argc; i++) {
+		const string arg(argv[i]);
+
+		if (arg == "-c") {
+			optionC = true;
+		}
+		else if (arg == "-a") {
+			optionA = true;
+		}
+		else if (arg == "-o") {
+			optionO = true;
+		}
+		else {
+			cout << "Warning: unknown option " << arg << endl;
+		}
 	}
 
 	ifstream file;
@@ -53,20 +94,6 @@ int main(int argc, char* argv[])
 		cout << "Failed to open file '" << argv[1] << '\'' << endl;
 		system("pause");
 		return -1;
-	}
-
-	bool optionA = false, optionC = false, optionO = false;
-
-	for (int i = 2; i < argc; i++) {
-		if (strcmp(argv[i], "-c") == 0) {
-			optionC = true;
-		}
-		else if (strcmp(argv[i], "-a") == 0) {
-			optionA = true;
-		}
-		else if (strcmp(argv[i], "-o") == 0) {
-			optionO = true;
-		}
 	}
 
 	ANTLRInputStream input(file);
@@ -82,13 +109,15 @@ int main(int argc, char* argv[])
 	//Pour tester l'assemblage
 	optionC = true;
 
-	if (nbErrors != 0) {
-		cout << "Erreur de compilation" << endl;
+	if (nbErrors != 0)
+	{
+		cout << "Compilation failed with synthax errors" << endl;
 		return -1;
 	}
 
 	Visiteur visitor;
 	Program* prog = (Program*)visitor.visit(tree);
+	registerExternalFunctions(prog);
 	prog->prepare();
 
 	try
@@ -98,6 +127,8 @@ int main(int argc, char* argv[])
 	}
 	catch (...)
 	{
+		cout << "Compilation failed with semantic errors" << endl;
+		return -1;
 	}
 
 	if (optionO) {

@@ -5,6 +5,7 @@
 //
 
 #include "if.hpp"
+#include "block.hpp"
 #include "../ir/cfg.hpp"
 #include "../ir/basicBlock.hpp"
 
@@ -42,11 +43,27 @@ namespace ast
 			Instruction* optimized = alternative->optimize();
 			if (optimized) {
 				assert(optimized != alternative.get());
+				optimized->setParent(this);
 				alternative = unique_ptr<Instruction>(optimized);
 			}
 		}
 
-		// We can't optimize the if itself
+		// If the condition is constant the if is useless
+		if (condition->isConstant()) {
+			if (condition->getValue() != 0) {
+				return instr.release();
+			}
+			else {
+				if (alternative) {
+					return alternative.release();
+				}
+				else {
+					// Replace by an empty block
+					return new Block(getPosition());
+				}
+			}
+		}
+
 		return nullptr;
 	}
 
@@ -58,7 +75,7 @@ namespace ast
 			alternative->prepare();
 		}
 	}
-	
+
 	void If::toTextualRepresentation(ostream& out, size_t i) const
 	{
 		for (size_t j = 0; j < i; j++) { out << ' '; }
@@ -67,7 +84,7 @@ namespace ast
 		for (size_t j = 0; j < i + 1; j++) { out << ' '; }
 		out << "Cond {" << endl;
 
-		getCondition()->toTextualRepresentation(out, i + 2);
+		condition->toTextualRepresentation(out, i + 2);
 
 		for (size_t j = 0; j < i + 1; j++) { out << ' '; }
 		out << '}' << endl;
@@ -75,7 +92,7 @@ namespace ast
 		for (size_t j = 0; j < i + 1; j++) { out << ' '; }
 		out << "Body {" << endl;
 
-		getInstruction()->toTextualRepresentation(out, i + 2);
+		instr->toTextualRepresentation(out, i + 2);
 
 		for (size_t j = 0; j < i + 1; j++) { out << ' '; }
 		out << '}' << endl;

@@ -108,6 +108,7 @@ namespace ast
 			Instruction* optimized = expr->optimize();
 			if (optimized) {
 				assert(optimized != expr.get() && optimized->isExpression());
+				optimized->setParent(this);
 				expr = unique_ptr<Expression>((Expression*)optimized);
 			}
 		}

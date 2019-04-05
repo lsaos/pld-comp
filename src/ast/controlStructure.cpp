@@ -49,6 +49,7 @@ namespace ast
 			Instruction* optimized = condition->optimize();
 			if (optimized) {
 				assert(optimized != condition.get() && optimized->isExpression());
+				optimized->setParent(this);
 				condition = unique_ptr<Expression>((Expression*)optimized);
 			}
 		}
@@ -58,6 +59,7 @@ namespace ast
 			Instruction* optimized = instr->optimize();
 			if (optimized) {
 				assert(optimized != instr.get());
+				optimized->setParent(this);
 				instr = unique_ptr<Instruction>(optimized);
 			}
 		}
