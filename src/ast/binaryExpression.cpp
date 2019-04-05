@@ -192,6 +192,7 @@ namespace ast
 			Instruction* optimized = left->optimize();
 			if (optimized) {
 				assert(optimized != left.get() && optimized->isExpression());
+				optimized->setParent(this);
 				left = unique_ptr<Expression>((Expression*)optimized);
 			}
 		}
@@ -201,6 +202,7 @@ namespace ast
 			Instruction* optimized = right->optimize();
 			if (optimized) {
 				assert(optimized != right.get() && optimized->isExpression());
+				optimized->setParent(this);
 				right = unique_ptr<Expression>((Expression*)optimized);
 			}
 		}
@@ -222,34 +224,34 @@ namespace ast
 		string assemblyOp;
 		switch (op)
 		{
-			case BinaryOperator::Add:
-				/* A revoir pour une certaine optimisation
-				if (left->isConstant() && right->isConstant()) {
-					int a = left->getValue() + right->getValue();
-					cout << a << endl;
-					f << "\tmovl $" << a << ", %eax" << endl;
-				}*/
-				assemblyOp = "addl";
-				break;
+		case BinaryOperator::Add:
+			/* A revoir pour une certaine optimisation
+			if (left->isConstant() && right->isConstant()) {
+				int a = left->getValue() + right->getValue();
+				cout << a << endl;
+				f << "\tmovl $" << a << ", %eax" << endl;
+			}*/
+			assemblyOp = "addl";
+			break;
 
-			case BinaryOperator::Substract:
-				assemblyOp = "subl";
-				break;
-			case BinaryOperator::Multiply:
-				assemblyOp = "imull";
-				break;
-			case BinaryOperator::Divide:
-				assemblyOp = "idivl";
-				break;
-			case BinaryOperator::BitwiseAnd:
-				assemblyOp = "andl";
-				break;
-			case BinaryOperator::BitwiseOr:
-				assemblyOp = "orl";
-				break;
-			case BinaryOperator::BitwiseXor:
-				assemblyOp = "xorl";
-				break;
+		case BinaryOperator::Substract:
+			assemblyOp = "subl";
+			break;
+		case BinaryOperator::Multiply:
+			assemblyOp = "imull";
+			break;
+		case BinaryOperator::Divide:
+			assemblyOp = "idivl";
+			break;
+		case BinaryOperator::BitwiseAnd:
+			assemblyOp = "andl";
+			break;
+		case BinaryOperator::BitwiseOr:
+			assemblyOp = "orl";
+			break;
+		case BinaryOperator::BitwiseXor:
+			assemblyOp = "xorl";
+			break;
 		}
 
 		if (!right->isFinal() && !right->isIdentifier())
@@ -303,22 +305,22 @@ namespace ast
 		IRInstrBinaryOperation::Operation operation;
 		switch (op)
 		{
-			case BinaryOperator::Add:
-				operation = IRInstrBinaryOperation::Operation::add;
-				break;
-			case BinaryOperator::Substract:
-				operation = IRInstrBinaryOperation::Operation::sub;
-				break;
-			case BinaryOperator::Multiply:
-				operation = IRInstrBinaryOperation::Operation::mul;
-				break;
+		case BinaryOperator::Add:
+			operation = IRInstrBinaryOperation::Operation::add;
+			break;
+		case BinaryOperator::Substract:
+			operation = IRInstrBinaryOperation::Operation::sub;
+			break;
+		case BinaryOperator::Multiply:
+			operation = IRInstrBinaryOperation::Operation::mul;
+			break;
 		}
 
 		string var_1 = (left.get())->buildIR(cfg);
 		string var_2 = (right.get())->buildIR(cfg);
 		//string var_3 = cfg->create_new_tempvar(getType()); //A FAIRE DANS LE FUTUR POUR PLUS DE COHERENCE !!
 		string var_3 = cfg->create_new_tempvar(getLeftExpression()->getType());
-		cfg->current_bb->add_IRInstr(new IRInstrBinaryOperation(cfg->current_bb, operation,var_3, var_1, var_2), getLeftExpression()->getType()); //getType de l'expression à la place de getLeftExpression()->getType() !!
+		cfg->current_bb->add_IRInstr(new IRInstrBinaryOperation(cfg->current_bb, operation, var_3, var_1, var_2), getLeftExpression()->getType()); //getType de l'expression à la place de getLeftExpression()->getType() !!
 		return var_3;
 	}
 }
