@@ -7,13 +7,18 @@ using namespace ast;
 
 namespace ir {
 
-	class IRInstrLdconst : public IRInstr {
+	class IRInstrUnaryOperation : public IRInstr {
 
 	public:
 
+		typedef enum {
+			minus,
+			logicalNot
+		} UnaryOperation;
+
 		/**  constructor */
 		//IRInstr(BasicBlock*, Type t);
-		IRInstrLdconst(BasicBlock*, Type t, string dest, string cst);
+		IRInstrUnaryOperation(BasicBlock*, UnaryOperation op, string dest, string operand);
 
 		/** Actual code generation */
 		void gen_asm(ostream &o); /**< x86 assembly code generation for this IR instruction */
@@ -22,6 +27,8 @@ namespace ir {
 
 	protected:
 		string destination;
-		string constant;
+		string operand;
+		UnaryOperation operation;
+
 	};
 }

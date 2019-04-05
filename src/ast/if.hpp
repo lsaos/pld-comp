@@ -48,6 +48,7 @@ namespace ast
 		virtual bool isIf() const { return true; }
 
 		virtual string buildIR(ir::CFG*) { return string(); }
+
 	private:
 		unique_ptr<Instruction> alternative; // Alternative instruction to execute when the condition is false.
 	};
