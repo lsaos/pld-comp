@@ -8,8 +8,8 @@ using namespace std;
 using namespace ir;
 using namespace ast;
 
-IRInstrComparison::IRInstrComparison(BasicBlock* bb, Operation op, string dest, string op1, string op2) :
-	IRInstr(bb, bb->get_cfg()->get_var_type(destination)), operation(op), destination(dest), operand1(op1), operand2(op2)
+IRInstrComparison::IRInstrComparison(BasicBlock* bb, IRInstrComparison::Operation op, string dest, string op1, string op2) :
+	IRInstr(bb, bb->get_cfg()->get_var_type(dest)), operation(op), destination(dest), operand1(op1), operand2(op2)
 {}
 
 void IRInstrComparison::gen_asm(ostream &o)

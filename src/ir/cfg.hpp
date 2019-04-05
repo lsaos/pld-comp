@@ -25,6 +25,8 @@ namespace ir {
 
 			void generateCFG();
 
+			void printIR();
+
 			ast::Function* getFunction();
 
 			void add_bb(BasicBlock* bb);

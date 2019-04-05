@@ -170,4 +170,15 @@ namespace ast
 			instr->prepare();
 		}
 	}
+
+	string Block::buildIR(ir::CFG* cfg)
+	{
+		string var;
+		for (auto& i : instructions)
+		{
+			var = i->buildIR(cfg);
+		}
+
+		return var;
+	}
 }

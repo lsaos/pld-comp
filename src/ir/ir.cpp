@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ir.hpp"
+#include "cfg.hpp"
+#include "basicBlock.hpp"
 
 using namespace ir;
 using namespace ast;
@@ -31,5 +33,13 @@ void IR::generateAssembly(string out)
 	for (auto cfg : cfgs)
 	{
 		cfg.second->gen_asm(file);
+	}
+}
+
+void IR::printIR()
+{
+	for (auto f : cfgs)
+	{
+		f.second->printIR();
 	}
 }

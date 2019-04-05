@@ -193,9 +193,10 @@ int main(int argc, char* argv[])
 	// Generate the assembly
 	if (true) { // TODO: replace by genAsm option
 		/*AssemblyGenerator ag(argv[1]);
-		ag.generateAssembly(prog);*/ // TODO: remove it
+		ag.generateAssembly(prog);*/
 		IR ir(prog);
 		ir.generateIR();
+		//ir.printIR();
 		ir.generateAssembly(argv[1]);
 	}
 

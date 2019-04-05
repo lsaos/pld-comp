@@ -48,7 +48,7 @@ void CFG::generateCFG()
 
 string CFG::new_BB_name()
 {
-	return function->getName() + "_bb_" + to_string(nextBBnumber);
+	return function->getName() + "_bb_" + to_string(nextBBnumber++);
 }
 
 void CFG::add_bb(BasicBlock* bb)
@@ -130,7 +130,7 @@ void CFG::gen_asm(ostream& o)
 		bb->gen_asm(o);
 	}
 
-	gen_asm_epilogue(o);
+	//gen_asm_epilogue(o);
 }
 
 void CFG::gen_asm_prologue(ostream& o)
@@ -141,5 +141,14 @@ void CFG::gen_asm_prologue(ostream& o)
 
 void CFG::gen_asm_epilogue(ostream& o)
 {
+	//Créer un nouveau bloc ou pas ?
 	o << "\tpopq %rbp" << endl << "\tret" << endl;
+}
+
+void CFG::printIR()
+{
+	for (auto bb : bbs)
+	{
+		bb->printIR();
+	}
 }
