@@ -13,8 +13,11 @@ namespace ir {
 
 		typedef enum {
 			cmp_eq,
+			cmp_neq,
 			cmp_lt,
-			cmp_le
+			cmp_le,
+			cmp_gt,
+			cmp_ge
 		} Operation;
 
 		/**  constructor */

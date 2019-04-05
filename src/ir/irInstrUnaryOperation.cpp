@@ -49,7 +49,7 @@ void IRInstrUnaryOperation::printIR(ostream& o)
 		mnemonic = "neg";
 		break;
 	case UnaryOperation::logicalNot:
-		//TODO
+		mnemonic = "not";
 		break;
 	}
 

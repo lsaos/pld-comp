@@ -14,7 +14,46 @@ IRInstrComparison::IRInstrComparison(BasicBlock* bb, Operation op, string dest, 
 
 void IRInstrComparison::gen_asm(ostream &o)
 {
-	//TODO
+	//choix opération set
+	string set = "setl";
+	switch (operation)
+	{
+	case Operation::cmp_eq:
+		set = "sete";
+		break;
+	case Operation::cmp_neq:
+		set = "setne";
+		break;
+	case Operation::cmp_gt:
+		set = "setg";
+		break;
+	case Operation::cmp_ge:
+		set = "setge";
+		break;
+	case Operation::cmp_lt:
+		set = "setl";
+		break;
+	case Operation::cmp_le:
+		set = "setle";
+		break;
+	}
+
+	switch (t)
+	{
+	case Type::Integer:
+		o << "\tmovl " << bb->get_cfg()->get_var_index(operand1) << "(%rbp), %eax" << endl;
+		o << "\tcmpl " << bb->get_cfg()->get_var_index(operand2) << "(%rbp), %eax" << endl;
+		o << "\t" << set << " %al" << endl;
+		o << "\tmovzbl %al, %eax" << endl;
+		o << "\tmovl %eax, " << bb->get_cfg()->get_var_index(destination) << "(%rbp)" << endl;
+		break;
+	case Type::Character:
+		o << "\tmovzbl " << bb->get_cfg()->get_var_index(operand1) << "(%rbp), %eax" << endl;
+		o << "\tcmpl " << bb->get_cfg()->get_var_index(operand2) << "(%rbp), %al" << endl;
+		o << "\t" << set << " %al" << endl;
+		o << "\tmovb %al, " << bb->get_cfg()->get_var_index(destination) << "(%rbp)" << endl;
+		break;
+	}
 }
 
 void IRInstrComparison::printIR(ostream &o)

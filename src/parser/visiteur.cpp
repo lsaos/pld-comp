@@ -248,7 +248,12 @@ antlrcpp::Any Visiteur::visitInstruction(exprParser::InstructionContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "INSTRUCTION [" << endl;
 #endif
-	Instruction* instr = (Instruction*)visit(ctx->children[0]);
+	Instruction* instr;
+	if(ctx->getRuleContexts<exprParser::FuncCallContext>().size()!=0){
+		instr = (Instruction*)((Expression*)visit(ctx->children[0]));
+	} else {
+		instr = (Instruction*)visit(ctx->children[0]);
+	}
 #ifdef TREEVISIT
 	jump(); cout << "]" << endl;
 #endif
