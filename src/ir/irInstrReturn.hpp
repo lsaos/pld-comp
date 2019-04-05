@@ -4,7 +4,7 @@
 
 namespace ir
 {
-	class IRInstrReturn : public virtual IRInstr
+	class IRInstrReturn : public IRInstr
 	{
 		public :
 			IRInstrReturn(BasicBlock* bb, string op);

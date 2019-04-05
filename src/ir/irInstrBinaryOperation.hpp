@@ -7,7 +7,7 @@ using namespace ast;
 
 namespace ir {
 
-	class IRInstrBinaryOperation : public virtual IRInstr {
+	class IRInstrBinaryOperation : public IRInstr {
 
 	public:
 
@@ -15,12 +15,9 @@ namespace ir {
 			add,
 			sub,
 			mul,
-			cmp_eq,
-			cmp_lt,
-			cmp_le,
-			and,
-			or,
-			xor
+			bitwiseAnd,
+			bitwiseOr,
+			bitwiseXor
 		} Operation;
 
 		/**  constructor */
