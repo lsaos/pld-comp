@@ -16,6 +16,7 @@ instruction: assignment ';'
 			| optional
 			| loop
 			| ret
+			| funcCall ';'
 			;
 assignment: VAR  '='  expression;
 optional: 'if' condition controlBody ( 'else'  controlBody)?;
