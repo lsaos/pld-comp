@@ -111,7 +111,9 @@ namespace ast
 		cout << "ListInstr {" << endl;
 
 		for (auto& instr : instructions) {
-			instr->toTextualRepresentation(out, i + 1);
+			if (!instr->isVariable() || ((const Variable*)instr.get())->getScope() != Scope::Parameter) {
+				instr->toTextualRepresentation(out, i + 1);
+			}
 		}
 
 		for (size_t j = 0; j < i; j++) { out << ' '; }
