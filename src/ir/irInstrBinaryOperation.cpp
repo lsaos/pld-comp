@@ -19,15 +19,6 @@ void IRInstrBinaryOperation::gen_asm(ostream &o)
 	string workingReg = AssemblyType::registerType[t];
 	string action = "add";
 
-	/*switch (t) {
-		case Type::Integer:
-			type = "l";
-			break;
-		case Type::Character:
-			type = "b";
-			break;
-	}*/
-
 	switch (operation)
 	{
 		case Operation::add:

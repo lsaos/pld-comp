@@ -20,61 +20,52 @@ IRInstrCall::IRInstrCall(BasicBlock* bb, string dest, string label, vector <stri
 
 void IRInstrCall::gen_asm(ostream &o)
 {
-	/*string type;
-
-	switch (t) {
-	case Type::Integer:
-		type = "l";
-		break;
-	case Type::Character:
-		type = "b";
-		break;
-	}*/
-
-	map<Type, string> typeTable;
-	typeTable[Type::Integer] = "l";
-	typeTable[Type::Character] = "l";
-
 	string type;
 
 	if (op.size() == 6) 
 	{
-		type = typeTable[bb->get_cfg()->get_var_type(op[5])];
+		type = AssemblyType::operatorType[bb->get_cfg()->get_var_type(op[5])];
+		type = (type == "b" ? "l" : type);
 		o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(op[5]) << "(%rbp), %eax" << endl;
 		o << "\tmov" << type << " %eax, %r9" << endl;
 	}
 
 	if (op.size() >= 5)
 	{
-		type = typeTable[bb->get_cfg()->get_var_type(op[4])];
+		type = AssemblyType::operatorType[bb->get_cfg()->get_var_type(op[4])];
+		type = (type == "b" ? "l" : type);
 		o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(op[4]) << "(%rbp), %eax" << endl;
 		o << "\tmov" << type << " %eax, %r8" << endl;
 	}
 
 	if (op.size() >= 4)
 	{
-		type = typeTable[bb->get_cfg()->get_var_type(op[3])];
+		type = AssemblyType::operatorType[bb->get_cfg()->get_var_type(op[3])];
+		type = (type == "b" ? "l" : type);
 		o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(op[3]) << "(%rbp), %eax" << endl;
 		o << "\tmov" << type << " %eax, %ecx" << endl;
 	}
 
 	if (op.size() >= 3)
 	{
-		type = typeTable[bb->get_cfg()->get_var_type(op[2])];
+		type = AssemblyType::operatorType[bb->get_cfg()->get_var_type(op[2])];
+		type = (type == "b" ? "l" : type);
 		o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(op[2]) << "(%rbp), %eax" << endl;
 		o << "\tmov" << type << " %eax, %edx" << endl;
 	}
 
 	if (op.size() >= 2)
 	{
-		type = typeTable[bb->get_cfg()->get_var_type(op[1])];
+		type = AssemblyType::operatorType[bb->get_cfg()->get_var_type(op[1])];
+		type = (type == "b" ? "l" : type);
 		o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(op[1]) << "(%rbp), %eax" << endl;
 		o << "\tmov" << type << " %eax, %esi" << endl;
 	}
 
 	if (op.size() >= 1)
 	{
-		type = typeTable[bb->get_cfg()->get_var_type(op[0])];
+		type = AssemblyType::operatorType[bb->get_cfg()->get_var_type(op[0])];
+		type = (type == "b" ? "l" : type);
 		o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(op[0]) << "(%rbp), %eax" << endl;
 		o << "\tmov" << type << " %eax, %edi" << endl;
 	}
@@ -89,8 +80,9 @@ void IRInstrCall::gen_asm(ostream &o)
 
 	if ((bb->get_cfg())->get_return_type() != Type::Void)
 	{
-		type = typeTable[(bb->get_cfg())->get_return_type()];
-		o << "\tmov" << type << " %eax, " << bb->get_cfg()->get_var_index(dest) << "(%rbp)" << endl;
+		type = AssemblyType::operatorType[(bb->get_cfg())->get_return_type()];
+		string workingRegister = AssemblyType::registerType[(bb->get_cfg())->get_return_type()];
+		o << "\tmov" << type << " " << workingRegister << ", " << bb->get_cfg()->get_var_index(dest) << "(%rbp)" << endl;
 	}
 } 
 

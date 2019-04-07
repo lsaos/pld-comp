@@ -15,15 +15,6 @@ void IRInstrCopy::gen_asm(ostream &o) {
 	string type = AssemblyType::operatorType[t];
 	string workingReg = AssemblyType::registerType[t];
 
-	/*switch (t){
-		case Type::Integer:
-			TYPE = "l";
-			break;
-		case Type::Character:
-			TYPE = "b";
-			break;
-	}*/
-
 	//write the assembly code : copy op1 to dest
 	
 	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(op1) << "(%rbp), " << workingReg << endl;

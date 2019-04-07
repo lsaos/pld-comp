@@ -28,15 +28,6 @@ void IRInstrUnaryOperation::gen_asm(ostream& o)
 	string type = AssemblyType::operatorType[t];
 	string workingReg = AssemblyType::registerType[t];
 
-	/*switch (t) {
-		case Type::Integer:
-			type = "l";
-			break;
-		case Type::Character:
-			type = "b";
-			break;
-	}*/
-
 	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(operand) << "%(rbp), " << workingReg << endl;
 	o << op << type << " " << workingReg << endl;
 	o << "\tmov" << type << " " << workingReg << ", " << bb->get_cfg()->get_var_index(destination) << "%(rbp)"<< endl;

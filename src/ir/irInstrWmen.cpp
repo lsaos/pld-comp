@@ -15,15 +15,6 @@ void IRInstrWmen::gen_asm(ostream &o) {
 	string type = AssemblyType::operatorType[t];
 	string workingReg = AssemblyType::registerType[t];
 
-	/*switch (t){
-		case Type::Integer:
-			TYPE = "l";
-			break;
-		case Type::Character:
-			TYPE = "b";
-			break;
-	}*/
-
 	//write the assembly code : the value of variable var is written at address addr
 	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(addr) << "(%rbp), " << workingReg << endl; //" -" << addr.substr(4)
 	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(var) << "(%rbp), %r10" << endl; // " -" << var.substr(4)

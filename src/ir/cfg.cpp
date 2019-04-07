@@ -139,20 +139,14 @@ void CFG::gen_asm(ostream& o)
 void CFG::gen_asm_prologue(ostream& o)
 {
 	o << "\tpushq %rbp" << endl << "\tmovq %rsp, %rbp" << endl;
-	//Si paramètres dans la fonction : ajouter les instructions assembleurs pour les récupérer dans le prologue
 	
 	vector<Variable*> params = function->getParameters();
-
-	/*map<Type, string> typeTable;
-	typeTable[Type::Integer] = "l";
-	typeTable[Type::Character] = "l";*/
 
 	string type;
 	string reg;
 
 	for (int i=0;i<params.size();i++)
 	{
-		//type = typeTable[get_var_type(params[i]->getName())];
 		type = AssemblyType::operatorType[get_var_type(params[i]->getName())];
 
 		if (type == "b")

@@ -15,15 +15,6 @@ void IRInstrReturn::gen_asm(ostream &o)
 	string type = AssemblyType::operatorType[t];
 	string workingReg = AssemblyType::registerType[t];
 
-	/*switch (t) {
-	case Type::Integer:
-		type = "l";
-		break;
-	case Type::Character:
-		type = "b";
-		break;
-	}*/
-
 	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(op) << "(%rbp), " << workingReg << endl;
 }
 

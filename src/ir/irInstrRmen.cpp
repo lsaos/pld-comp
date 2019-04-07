@@ -15,15 +15,6 @@ void IRInstrRmen::gen_asm(ostream &o) {
 	string type = AssemblyType::operatorType[t];
 	string workingReg = AssemblyType::registerType[t];
 
-	/*switch (t){
-		case Type::Integer:
-			TYPE = "l";
-			break;
-		case Type::Character:
-			TYPE = "b";
-			break;
-	}*/
-
 	//write the assembly code : the content of address addr is copied in variable dest
 	o << "\tmov" << type << " -" << dest.substr(4) << "(%rbp), " << workingReg << endl;
 	o << "\tmov" << type << " -" << addr.substr(4) << "(%rbd), %r10" << endl;
