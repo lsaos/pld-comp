@@ -41,9 +41,7 @@ namespace ast
 		size_t getParametersCount() const;
 
 		// Return true if the variable is extern.
-		bool isExtern() const {
-			return isExternal;
-		}
+		bool isExtern() const { return isExternal; }
 
 	public:
 		virtual void toTextualRepresentation(ostream& out, size_t i) const;

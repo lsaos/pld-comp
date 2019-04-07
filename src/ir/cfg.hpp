@@ -17,6 +17,13 @@ using namespace std;
 
  */
 namespace ir {
+
+	class AssemblyType {
+		public:
+			static map<Type, string> operatorType;
+			static map<Type, string> registerType;
+	};
+
 	class CFG {
 		public:
 			CFG(ast::Function* function);
@@ -42,6 +49,7 @@ namespace ir {
 			string create_new_tempvar(Type t);
 			int get_var_index(string var);
 			Type get_var_type(string var);
+			Type get_return_type();
 
 			// basic block management
 			string new_BB_name();

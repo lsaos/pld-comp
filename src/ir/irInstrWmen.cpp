@@ -12,20 +12,22 @@ IRInstrWmen::IRInstrWmen(BasicBlock* bb, string addr, string var) : IRInstr(bb, 
 
 void IRInstrWmen::gen_asm(ostream &o) {
 	// check the variable type
-	string TYPE;
-	switch (t){
+	string type = AssemblyType::operatorType[t];
+	string workingReg = AssemblyType::registerType[t];
+
+	/*switch (t){
 		case Type::Integer:
 			TYPE = "l";
 			break;
 		case Type::Character:
 			TYPE = "b";
 			break;
-	}
+	}*/
 
 	//write the assembly code : the value of variable var is written at address addr
-	o << "\tmov" << TYPE << " " << bb->get_cfg()->get_var_index(addr) << "(%rbp), %eax" << endl; //" -" << addr.substr(4)
-	o << "\tmov" << TYPE << " " << bb->get_cfg()->get_var_index(var) << "(%rbp), %r10" << endl; // " -" << var.substr(4)
-	o << "\tmov" << TYPE << " %r10, (%eax)" << endl;
+	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(addr) << "(%rbp), " << workingReg << endl; //" -" << addr.substr(4)
+	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(var) << "(%rbp), %r10" << endl; // " -" << var.substr(4)
+	o << "\tmov" << type << " %r10, " << workingReg << endl;
 
 } 
 

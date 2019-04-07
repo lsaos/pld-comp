@@ -15,17 +15,18 @@ IRInstrBinaryOperation::IRInstrBinaryOperation(BasicBlock* bb, Operation op, str
 void IRInstrBinaryOperation::gen_asm(ostream &o)
 {
 	// check the variable type
-	string type = "l";
+	string type = AssemblyType::operatorType[t];
+	string workingReg = AssemblyType::registerType[t];
 	string action = "add";
 
-	switch (t) {
+	/*switch (t) {
 		case Type::Integer:
 			type = "l";
 			break;
 		case Type::Character:
 			type = "b";
 			break;
-	}
+	}*/
 
 	switch (operation)
 	{
@@ -50,9 +51,9 @@ void IRInstrBinaryOperation::gen_asm(ostream &o)
 	}
 
 	//Assembler's code generation 
-	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(operand1) << "(%rbp), %eax" << endl;
-	o << "\t" << action << type << " " << bb->get_cfg()->get_var_index(operand2) << "(%rbp), %eax" << endl;
-	o << "\tmov" << type << " %eax, " << bb->get_cfg()->get_var_index(destination) << "(%rbp)" << endl;
+	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(operand1) << "(%rbp), " << workingReg << endl;
+	o << "\t" << action << type << " " << bb->get_cfg()->get_var_index(operand2) << "(%rbp), " << workingReg << endl;
+	o << "\tmov" << type << " " << workingReg << ", " << bb->get_cfg()->get_var_index(destination) << "(%rbp)" << endl;
 }
 
 void IRInstrBinaryOperation::printIR(ostream &o)
