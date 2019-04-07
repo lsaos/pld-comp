@@ -11,7 +11,7 @@ namespace ir {
 
 		public:
 			/**  constructor */
-			IRInstrCall(BasicBlock* bb, string dest, string label, vector <string> op);
+			IRInstrCall(BasicBlock* bb, string dest, string label, vector <string> op, bool isExternal = false);
 
 			/** Actual code generation */
 			void gen_asm(ostream &o);
@@ -22,5 +22,6 @@ namespace ir {
 			string dest;
 			string label;
 			vector <string> op;
+			bool isExternal;
 	};
 }

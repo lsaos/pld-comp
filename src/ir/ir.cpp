@@ -28,7 +28,7 @@ void IR::generateAssembly(string out)
 {
 	file = ofstream(out.substr(0, out.size() - 1) + "s", ios::out);
 
-	file << ".text" << endl << ".global main" << endl;
+	file << ".text" << endl << ".global main" << endl; //<< ".type main, @function" << endl;
 
 	for (auto cfg : cfgs)
 	{

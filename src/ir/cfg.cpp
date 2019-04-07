@@ -7,6 +7,9 @@ using namespace std;
 using namespace ir;
 using namespace ast;
 
+map<Type, string> AssemblyType::operatorType = { {Type::Character, "b"}, {Type::Integer, "l"} };
+map<Type, string> AssemblyType::registerType = { {Type::Character, "%al"}, {Type::Integer, "%eax"} };
+
 CFG::CFG(Function* function) : function(function), nextFreeSymbolIndex(0), nextBBnumber(0) 
 {
 	vector<Variable*> params = function->getParameters();
@@ -136,7 +139,45 @@ void CFG::gen_asm(ostream& o)
 void CFG::gen_asm_prologue(ostream& o)
 {
 	o << "\tpushq %rbp" << endl << "\tmovq %rsp, %rbp" << endl;
-	//Si paramètres dans la fonction : ajouter les instructions assembleurs pour les récupérer dans le prologue
+	
+	vector<Variable*> params = function->getParameters();
+
+	string type;
+	string reg;
+
+	for (int i=0;i<params.size();i++)
+	{
+		type = AssemblyType::operatorType[get_var_type(params[i]->getName())];
+
+		if (type == "b")
+			type = "l";
+
+		o << "\tmov" << type << " ";
+		switch (i)
+		{
+			case 0:
+				reg = "%edi";
+				break;
+			case 1:
+				reg = "esi";
+				break;
+			case 2:
+				reg = "edx";
+				break;
+			case 3:
+				reg = "ecx";
+				break;
+			case 4:
+				reg = "%r8";
+				break;
+			case 5:
+				reg = "%r9";
+				break;
+		}
+
+		o << reg << ", " << get_var_index(params[i]->getName()) << "(%rbp)" << endl;
+	}
+
 }
 
 void CFG::gen_asm_epilogue(ostream& o)
@@ -151,4 +192,9 @@ void CFG::printIR()
 	{
 		bb->printIR();
 	}
+}
+
+Type CFG::get_return_type()
+{
+	return function->getType();
 }

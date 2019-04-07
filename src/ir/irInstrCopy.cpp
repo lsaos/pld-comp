@@ -12,27 +12,14 @@ IRInstrCopy::IRInstrCopy(BasicBlock* bb, string dest, string op1) : IRInstr(bb, 
 
 void IRInstrCopy::gen_asm(ostream &o) {
 	// check the variable type
-	string TYPE;
-	switch (t){
-		case Type::Integer:
-			TYPE = "l";
-			break;
-		case Type::Character:
-			TYPE = "b";
-			break;
-	}
+	string type = AssemblyType::operatorType[t];
+	string workingReg = AssemblyType::registerType[t];
 
 	//write the assembly code : copy op1 to dest
 	
-	//o << "\tmov" << TYPE << " -" << op1.substr(4) << "(%rbp), " << (bb->get_cfg())->get_var_index(dest) << "(%rbp)" << endl;
-	o << "\tmov" << TYPE << " " << bb->get_cfg()->get_var_index(op1) << "(%rbp), %eax" << endl;
-	o << "\tmov" << TYPE << " %eax, " << (bb->get_cfg())->get_var_index(dest) << "(%rbp)" << endl;
+	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(op1) << "(%rbp), " << workingReg << endl;
+	o << "\tmov" << type << " " << workingReg << ", " << (bb->get_cfg())->get_var_index(dest) << "(%rbp)" << endl;
 } 
-
-/*copy a !tmp64
-
-movq -64(%rbp), %rax
-movq %rax, -16(%rbp)*/
 
 void IRInstrCopy::printIR(ostream &o) {
 	o << "\tcopy " << dest << " " << op1 << endl;
