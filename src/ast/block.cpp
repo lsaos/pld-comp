@@ -82,7 +82,7 @@ namespace ast
 			}
 		}
 
-		bool variableAllowed = isFunction();
+		bool variableAllowed = isProgram() || isFunction();
 
 		for (const auto& instr : instructions) {
 			if (instr->isVariable()) {

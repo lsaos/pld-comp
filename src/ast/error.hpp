@@ -33,6 +33,7 @@ namespace ast
 	{
 		None,
 		UnusedVariable,
-		UnsafeCast
+		UnsafeCast,
+		ValueOutOfType
 	};
 }

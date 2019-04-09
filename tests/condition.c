@@ -1,7 +1,9 @@
 #pragma once
 
+int b;
+
 int /*bite*/ main(){
-	int a=3;
+	char a=347;
 	if(a==2){
 		a=a+1;//jean-michel becut
 	} else {
