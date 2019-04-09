@@ -30,7 +30,6 @@ int /*bite*/ main(){
 	if(a==2){
 		a=1;
 	} else if (a==5){
-		int b, c=2+3;
 		a=3;
 	}
 	return a;

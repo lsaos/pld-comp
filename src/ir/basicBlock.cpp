@@ -44,8 +44,6 @@ void BasicBlock::gen_asm(ostream& o)
 		i->gen_asm(o);
 	}
 
-	IRInstr* last = instrs.back();
-
 	//Ajouter les jumps ici
 
 	if (exit_true == nullptr)
