@@ -41,17 +41,17 @@ void IRInstrComparison::gen_asm(ostream &o)
 	switch (t)
 	{
 	case Type::Integer:
-		o << "\tmovl " << bb->get_cfg()->get_var_index(operand1) << "(%rbp), %eax" << endl;
-		o << "\tcmpl " << bb->get_cfg()->get_var_index(operand2) << "(%rbp), %eax" << endl;
+		o << "\tmovl " << bb->get_cfg()->IR_reg_to_asm(operand1) << ", %eax" << endl;
+		o << "\tcmpl " << bb->get_cfg()->IR_reg_to_asm(operand2) << ", %eax" << endl;
 		o << "\t" << set << " %al" << endl;
 		o << "\tmovzbl %al, %eax" << endl;
-		o << "\tmovl %eax, " << bb->get_cfg()->get_var_index(destination) << "(%rbp)" << endl;
+		o << "\tmovl %eax, " << bb->get_cfg()->IR_reg_to_asm(destination) << endl;
 		break;
 	case Type::Character:
-		o << "\tmovzbl " << bb->get_cfg()->get_var_index(operand1) << "(%rbp), %eax" << endl;
-		o << "\tcmpl " << bb->get_cfg()->get_var_index(operand2) << "(%rbp), %al" << endl;
+		o << "\tmovzbl " << bb->get_cfg()->IR_reg_to_asm(operand1) << ", %eax" << endl;
+		o << "\tcmpl " << bb->get_cfg()->IR_reg_to_asm(operand2) << ", %al" << endl;
 		o << "\t" << set << " %al" << endl;
-		o << "\tmovb %al, " << bb->get_cfg()->get_var_index(destination) << "(%rbp)" << endl;
+		o << "\tmovb %al, " << bb->get_cfg()->IR_reg_to_asm(destination) << endl;
 		break;
 	}
 }
@@ -64,11 +64,20 @@ void IRInstrComparison::printIR(ostream &o)
 	case Operation::cmp_eq:
 		mnemonic = "cmp_eq";
 		break;
+	case Operation::cmp_neq:
+		mnemonic = "cmp_neq";
+		break;
 	case Operation::cmp_le:
 		mnemonic = "cmp_le";
 		break;
 	case Operation::cmp_lt:
 		mnemonic = "cmp_lt";
+		break;
+	case Operation::cmp_ge:
+		mnemonic = "cmp_ge";
+		break;
+	case Operation::cmp_gt:
+		mnemonic = "cmp_gt";
 		break;
 	}
 

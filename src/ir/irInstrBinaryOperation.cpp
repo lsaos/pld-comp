@@ -42,9 +42,9 @@ void IRInstrBinaryOperation::gen_asm(ostream &o)
 	}
 
 	//Assembler's code generation 
-	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(operand1) << "(%rbp), " << workingReg << endl;
-	o << "\t" << action << type << " " << bb->get_cfg()->get_var_index(operand2) << "(%rbp), " << workingReg << endl;
-	o << "\tmov" << type << " " << workingReg << ", " << bb->get_cfg()->get_var_index(destination) << "(%rbp)" << endl;
+	o << "\tmov" << type << " " << bb->get_cfg()->IR_reg_to_asm(operand1) << ", " << workingReg << endl;
+	o << "\t" << action << type << " " << bb->get_cfg()->IR_reg_to_asm(operand2) << ", " << workingReg << endl;
+	o << "\tmov" << type << " " << workingReg << ", " << bb->get_cfg()->IR_reg_to_asm(destination) << endl;
 }
 
 void IRInstrBinaryOperation::printIR(ostream &o)

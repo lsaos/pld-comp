@@ -26,7 +26,7 @@ void IRInstrCall::gen_asm(ostream &o)
 	{
 		type = AssemblyType::operatorType[bb->get_cfg()->get_var_type(op[5])];
 		type = (type == "b" ? "l" : type);
-		o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(op[5]) << "(%rbp), %eax" << endl;
+		o << "\tmov" << type << " " << bb->get_cfg()->IR_reg_to_asm(op[5]) << ", %eax" << endl;
 		o << "\tmov" << type << " %eax, %r9" << endl;
 	}
 
@@ -34,7 +34,7 @@ void IRInstrCall::gen_asm(ostream &o)
 	{
 		type = AssemblyType::operatorType[bb->get_cfg()->get_var_type(op[4])];
 		type = (type == "b" ? "l" : type);
-		o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(op[4]) << "(%rbp), %eax" << endl;
+		o << "\tmov" << type << " " << bb->get_cfg()->IR_reg_to_asm(op[4]) << ", %eax" << endl;
 		o << "\tmov" << type << " %eax, %r8" << endl;
 	}
 
@@ -42,7 +42,7 @@ void IRInstrCall::gen_asm(ostream &o)
 	{
 		type = AssemblyType::operatorType[bb->get_cfg()->get_var_type(op[3])];
 		type = (type == "b" ? "l" : type);
-		o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(op[3]) << "(%rbp), %eax" << endl;
+		o << "\tmov" << type << " " << bb->get_cfg()->IR_reg_to_asm(op[3]) << ", %eax" << endl;
 		o << "\tmov" << type << " %eax, %ecx" << endl;
 	}
 
@@ -50,7 +50,7 @@ void IRInstrCall::gen_asm(ostream &o)
 	{
 		type = AssemblyType::operatorType[bb->get_cfg()->get_var_type(op[2])];
 		type = (type == "b" ? "l" : type);
-		o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(op[2]) << "(%rbp), %eax" << endl;
+		o << "\tmov" << type << " " << bb->get_cfg()->IR_reg_to_asm(op[2]) << ", %eax" << endl;
 		o << "\tmov" << type << " %eax, %edx" << endl;
 	}
 
@@ -58,7 +58,7 @@ void IRInstrCall::gen_asm(ostream &o)
 	{
 		type = AssemblyType::operatorType[bb->get_cfg()->get_var_type(op[1])];
 		type = (type == "b" ? "l" : type);
-		o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(op[1]) << "(%rbp), %eax" << endl;
+		o << "\tmov" << type << " " << bb->get_cfg()->IR_reg_to_asm(op[1]) << ", %eax" << endl;
 		o << "\tmov" << type << " %eax, %esi" << endl;
 	}
 
@@ -66,7 +66,7 @@ void IRInstrCall::gen_asm(ostream &o)
 	{
 		type = AssemblyType::operatorType[bb->get_cfg()->get_var_type(op[0])];
 		type = (type == "b" ? "l" : type);
-		o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(op[0]) << "(%rbp), %eax" << endl;
+		o << "\tmov" << type << " " << bb->get_cfg()->IR_reg_to_asm(op[0]) << ", %eax" << endl;
 		o << "\tmov" << type << " %eax, %edi" << endl;
 	}
 
@@ -82,7 +82,7 @@ void IRInstrCall::gen_asm(ostream &o)
 	{
 		type = AssemblyType::operatorType[(bb->get_cfg())->get_return_type()];
 		string workingRegister = AssemblyType::registerType[(bb->get_cfg())->get_return_type()];
-		o << "\tmov" << type << " " << workingRegister << ", " << bb->get_cfg()->get_var_index(dest) << "(%rbp)" << endl;
+		o << "\tmov" << type << " " << workingRegister << ", " << bb->get_cfg()->IR_reg_to_asm(dest) << endl;
 	}
 } 
 
