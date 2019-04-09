@@ -3,7 +3,7 @@
 int b;
 
 int /*bite*/ main(){
-	char a=347;
+	char a=3471212212121212121212;
 	if(a==2){
 		a=a+1;//jean-michel becut
 	} else {
