@@ -252,13 +252,20 @@ antlrcpp::Any Visiteur::visitBlock(exprParser::BlockContext *ctx){
     #endif
 	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
     Block* block = new Block(pos);
+    vector<Instruction*>* firstInstructions = new vector<Instruction*>();
     for (int i=0; i<ctx->declaration().size(); i++){
         vector<Instruction*>* declarations = (vector<Instruction*>*)visit(ctx->declaration(i));
-        for(int j=0; j<declarations->size();j++){
-            block->add(declarations->at(j));
+        //First pass : getting all declarations of symbols
+        firstInstructions->insert(firstInstructions->begin(), declarations->at(0));
+        if (declarations->size()>1){
+        	firstInstructions->push_back(declarations->at(1));
         }
         delete declarations;
     }
+    for (int i = 0; i < firstInstructions->size(); i++) {
+		block->add(firstInstructions->at(i));
+	}
+	delete firstInstructions;
 	for (int i = 0; i < ctx->instruction().size(); i++) {
 		block->add((Instruction*)visit(ctx->instruction(i)));
 	}
