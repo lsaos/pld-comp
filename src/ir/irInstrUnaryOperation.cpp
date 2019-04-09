@@ -17,20 +17,32 @@ void IRInstrUnaryOperation::gen_asm(ostream& o)
 	string op;
 	switch (operation)
 	{
+		string type = AssemblyType::operatorType[t];
+		string workingReg = AssemblyType::registerType[t];
+
 		case UnaryOperation::minus:
 			op = "\tneg";
+			//Assembly code for negation
+			o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(operand) << "%(rbp), " << workingReg << endl;
+			o << op << type << " " << workingReg << endl;
+			o << "\tmov" << type << " " << workingReg << ", " << bb->get_cfg()->get_var_index(destination) << "%(rbp)" << endl;
 			break;
 		case UnaryOperation::logicalNot:
-			//TODO
+			//TO VERIFY
+			o << "\tcmpl $0, " << bb->get_cfg()->get_var_index(operand) << "%(rbp)" << endl;
+			o << "\tsete %al";
+			if (Type::Integer) {
+				o << "\tmovzbl  %al, %eax" << endl;
+				o << "\tmovl %eax, " << bb->get_cfg()->get_var_index(destination) << "(%rbp)" << endl;
+			}
+			else if (Type::Character) {
+				o << "\tmovb %al, " << bb->get_cfg()->get_var_index(destination) << "(%rbp)" << endl;
+			}
+				
 			break;
 	}
 
-	string type = AssemblyType::operatorType[t];
-	string workingReg = AssemblyType::registerType[t];
-
-	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(operand) << "%(rbp), " << workingReg << endl;
-	o << op << type << " " << workingReg << endl;
-	o << "\tmov" << type << " " << workingReg << ", " << bb->get_cfg()->get_var_index(destination) << "%(rbp)"<< endl;
+	
 }
 
 void IRInstrUnaryOperation::printIR(ostream& o)
