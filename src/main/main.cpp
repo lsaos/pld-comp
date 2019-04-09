@@ -1,13 +1,29 @@
-#include <antlr4-runtime.h>
+//
+// (c) 2019 The Super 4404 C Compiler
+// A.Belin, A.Nahid, L.Ohl, L.Saos, A.Verrier, I.Zemmouri
+// INSA Lyon
+//
+
+// Standard library
 #include <string>
 #include <cstring>
 #include <iostream>
+#include <chrono>
 
+using namespace std;
+
+// ANTLR
+#include <antlr4-runtime.h>
+
+using namespace antlr4;
+
+// Syntaxic parser
 #include "../parser/exprLexer.h"
 #include "../parser/exprParser.h"
 #include "../parser/exprBaseVisitor.h"
 #include "../parser/visiteur.hpp"
 
+// Abstract syntax tree
 #include "../ast/program.hpp"
 #include "../ast/assignment.hpp"
 #include "../ast/binaryExpression.hpp"
@@ -26,15 +42,24 @@
 #include "../ast/error.hpp"
 #include "../ast/return.hpp"
 
-#include "../assembly/assembly.hpp"
+using namespace ast;
 
+// Assembly generation
+#include "../assembly/assembly.hpp"
 #include "../ir/ir.hpp"
 
-using namespace antlr4;
-using namespace std;
-using namespace ast;
 using namespace assembly;
 using namespace ir;
+
+// Values returned by the program.
+enum RETURN_CODE
+{
+	RETURN_CODE_OK = 0,
+	RETURN_CODE_INVALID_ARGS = -1,
+	RETURN_CODE_OPEN_FILE_FAILED = -2,
+	RETURN_CODE_SYNTAX_ERROR = -3,
+	RETURN_CODE_SEMANTIC_ERROR = -4
+};
 
 // Register external functions which can be called by
 // the specified program without being part of it
@@ -58,42 +83,58 @@ void registerExternalFunctions(Program* prog)
 
 int main(int argc, char* argv[])
 {
+	cout << "-------------------------------" << endl
+		<< " The Super 4404 C Compiler" << endl
+		<< " Copyright 2019 (c) A.Belin, A.Nahid, L.Ohl, L.Saos, A.Verrier, I.Zemmouri" << endl
+		<< " INSA Lyon" << endl
+		<< "-------------------------------" << endl;
+
+	// Start the timer
+	const chrono::high_resolution_clock::time_point startTime(chrono::high_resolution_clock::now());
+
+	// Check we have the filename
 	if (argc < 2)
 	{
-		cout << "Usage: comp source_file [-a] [-o] [-c]" << endl;
-		system("pause");
-		return -1;
+		cout << "Usage: comp source_file [-a] [-o] [-c] [-t]" << endl;
+		system("pause"); // TODO: remove it
+		return RETURN_CODE_INVALID_ARGS;
 	}
 
-	bool optionA = false;
-	bool optionC = false;
-	bool optionO = false;
+	// Parse compiler options
+	bool staticAnalysis = false;
+	bool genAsm = false;
+	bool optimize = false;
+	bool textualRepresentation = false;
 
 	for (int i = 2; i < argc; i++) {
 		const string arg(argv[i]);
 
 		if (arg == "-c") {
-			optionC = true;
+			genAsm = true;
 		}
 		else if (arg == "-a") {
-			optionA = true;
+			staticAnalysis = true;
 		}
 		else if (arg == "-o") {
-			optionO = true;
+			optimize = true;
+		}
+		else if (arg == "-t") {
+			textualRepresentation = true;
 		}
 		else {
 			cout << "Warning: unknown option " << arg << endl;
 		}
 	}
 
+	// Open the file and parse it with ANTLR
 	ifstream file;
 	file.open(argv[1], ios::in);
 
 	if (!file)
 	{
 		cout << "Failed to open file '" << argv[1] << '\'' << endl;
-		system("pause");
-		return -1;
+		system("pause"); // TODO: remove it
+		return RETURN_CODE_OPEN_FILE_FAILED;
 	}
 
 	ANTLRInputStream input(file);
@@ -104,51 +145,69 @@ int main(int argc, char* argv[])
 
 	exprParser parser(&tokens);
 	tree::ParseTree* tree = parser.prog();
-	size_t nbErrors = parser.getNumberOfSyntaxErrors();
+	const size_t syntaxErrorCount = parser.getNumberOfSyntaxErrors();
 
-	//Pour tester l'assemblage
-	optionC = true;
-
-	if (nbErrors != 0)
+	if (syntaxErrorCount != 0)
 	{
-		cout << "Compilation failed with synthax errors" << endl;
-		return -1;
+		cout << "Compilation failed with syntax errors" << endl;
+		system("pause"); // TODO: remove it
+		return RETURN_CODE_SYNTAX_ERROR;
 	}
 
+	// Create the abstract syntax tree
 	Visiteur visitor;
 	Program* prog = (Program*)visitor.visit(tree);
 	registerExternalFunctions(prog);
 	prog->prepare();
 
+	// Check the program's semantic validity
+	// Errors throw exceptions
 	try
 	{
-		prog->checkSemantic(optionA);
-		prog->toTextualRepresentation(cout);
+		prog->checkSemantic(staticAnalysis);
 	}
 	catch (...)
 	{
 		cout << "Compilation failed with semantic errors" << endl;
-		return -1;
+		system("pause"); // TODO: remove it
+		return RETURN_CODE_SEMANTIC_ERROR;
 	}
 
-	if (optionO) {
-		cout << "-------------------------------" << endl
-			<< " After optimization" << endl
-			<< "-------------------------------" << endl;
-
-		prog->optimize();
+	if (textualRepresentation) {
 		prog->toTextualRepresentation(cout);
 	}
 
-	if (optionC) {
+	// Optimize the program at the AST level
+	if (optimize) {
+		prog->optimize();
+
+		if (textualRepresentation) {
+			cout << "-------------------------------" << endl
+				<< " After optimization" << endl
+				<< "-------------------------------" << endl;
+
+			prog->toTextualRepresentation(cout);
+		}
+	}
+
+	// Generate the assembly
+	if (true) { // TODO: replace by genAsm option
 		/*AssemblyGenerator ag(argv[1]);
 		ag.generateAssembly(prog);*/
 		IR ir(prog);
 		ir.generateIR();
+		cout << endl << endl;
+		ir.printIR();
+		cout << endl;
 		ir.generateAssembly(argv[1]);
 	}
 
-	system("pause");
+	// Show the measured time
+	cout << "Job done in " <<
+		chrono::duration_cast<chrono::milliseconds>(chrono::high_resolution_clock::now() - startTime).count()
+		<< "ms" << endl;
 
-	return 0;
+	system("pause"); // TODO: remove it
+
+	return RETURN_CODE_OK;
 }

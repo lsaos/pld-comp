@@ -14,15 +14,8 @@ IRInstrLdconst::IRInstrLdconst(BasicBlock* bb, Type t, string dest, string cst) 
 
 void IRInstrLdconst::gen_asm(ostream &o)
 {
-	string type;
-	switch (this->t) {
-		case (Type::Integer) :
-			type = "l";
-			break;
-		case(Type::Character):
-			type = "b";
-			break;
-	}
+	string type = AssemblyType::operatorType[t];
+
 	o << "\tmov" << type << " $" << constant << ", " << bb->get_cfg()->get_var_index(destination) << "(%rbp)" << endl;
 }
 

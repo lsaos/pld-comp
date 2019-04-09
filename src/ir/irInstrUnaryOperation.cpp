@@ -25,19 +25,12 @@ void IRInstrUnaryOperation::gen_asm(ostream& o)
 			break;
 	}
 
-	string type;
-	switch (t) {
-		case Type::Integer:
-			type = "l";
-			break;
-		case Type::Character:
-			type = "b";
-			break;
-	}
+	string type = AssemblyType::operatorType[t];
+	string workingReg = AssemblyType::registerType[t];
 
-	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(operand) << "%(rbp), %eax" << endl;
-	o << op << type << " %eax" << endl;
-	o << "\tmov" << type << " %eax, " << bb->get_cfg()->get_var_index(destination) << "%(rbp)"<< endl;
+	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(operand) << "%(rbp), " << workingReg << endl;
+	o << op << type << " " << workingReg << endl;
+	o << "\tmov" << type << " " << workingReg << ", " << bb->get_cfg()->get_var_index(destination) << "%(rbp)"<< endl;
 }
 
 void IRInstrUnaryOperation::printIR(ostream& o)

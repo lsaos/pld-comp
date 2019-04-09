@@ -12,20 +12,13 @@ IRInstrRmen::IRInstrRmen(BasicBlock* bb, string addr, string dest) : IRInstr(bb,
 
 void IRInstrRmen::gen_asm(ostream &o) {
 	// check the variable type
-	string TYPE;
-	switch (t){
-		case Type::Integer:
-			TYPE = "l";
-			break;
-		case Type::Character:
-			TYPE = "b";
-			break;
-	}
+	string type = AssemblyType::operatorType[t];
+	string workingReg = AssemblyType::registerType[t];
 
 	//write the assembly code : the content of address addr is copied in variable dest
-	o << "\tmov" << TYPE << " -" << dest.substr(4) << "(%rbp), %eax" << endl;
-	o << "\tmov" << TYPE << " -" << addr.substr(4) << "(%rbd), %r10" << endl;
-	o << "\tmov" << TYPE << " %r10, (%eax)" << endl;
+	o << "\tmov" << type << " -" << dest.substr(4) << "(%rbp), " << workingReg << endl;
+	o << "\tmov" << type << " -" << addr.substr(4) << "(%rbd), %r10" << endl;
+	o << "\tmov" << type << " %r10, " << workingReg << endl;
 }
 
 void IRInstrRmen::printIR(ostream &o) {

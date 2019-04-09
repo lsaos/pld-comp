@@ -5,6 +5,10 @@
 //
 
 #include "variable.hpp"
+#include "../ir/cfg.hpp"
+#include "../ir/basicBlock.hpp"
+
+using namespace ir;
 
 namespace ast
 {
@@ -156,4 +160,14 @@ namespace ast
 	{
 		f << "\tmovl " << addressTable[this] << "(%rbp), %eax" << endl;
 	}*/
+
+	string Variable::buildIR(ir::CFG* cfg)
+	{
+		if (cfg->get_var_index(getName()) == 0)
+		{
+			cfg->add_to_symbol_table(getName(), getType());
+		}
+
+		return getName();
+	}
 }

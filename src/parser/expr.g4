@@ -1,13 +1,16 @@
 grammar expr;
 
-prog:  function+;
+prog:  (declaration)* function+;
 
 function: funcType  VAR  '(' parameters? ')'  block ;
 parameters: varType VAR (',' varType VAR)*;
 declaration: varType  newVar  (','  newVar )* ';';
-newVar: VAR #plainNewVariable
+newVar: newVarName #plainNewVariable
 	| VAR  '='  expression #valuedNewVariable
 	;
+newVarName: VAR #declareVariable
+			| VAR '[' expression ']' #declareArray
+			;
 ret: 'return'  expression  ';' #retExpr
 	| 'return'  ';' #retNoExpr
 	;
@@ -16,8 +19,12 @@ instruction: assignment ';'
 			| optional
 			| loop
 			| ret
+			| funcCall ';'
 			;
-assignment: VAR  '='  expression;
+assignment: varExpr  '='  expression;
+varExpr: VAR #variableExpression
+	| VAR '[' expression ']' #arrayExpression
+	;
 optional: 'if' condition controlBody ( 'else'  controlBody)?;
 loop: 'while' condition controlBody #whileLoop
 	| 'for' '(' forInit expression ';' assignment ')' controlBody #forLoop
@@ -29,7 +36,7 @@ condition:  '('  expression  ')' ;
 controlBody: block
 			| instruction;
 expression: funcCall #exprFunc
-		  | VAR #variable
+		  | varExpr #variable
 		  | INT #int
 		  | CHAR #char
 		  | '(' expression  ')' #parenthesis

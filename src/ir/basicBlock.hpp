@@ -31,7 +31,11 @@ namespace ir {
 
 		void gen_asm(ostream &o); /**< x86 assembly code generation for this basic block (very simple) */
 
+		void printIR();
+
 		void add_IRInstr(IRInstr* instr, Type t);
+
+		void set_last_var(string);
 
 		CFG* get_cfg() { return cfg; }
 		string get_label();
@@ -43,6 +47,7 @@ namespace ir {
 		string label; /**< label of the BB, also will be the label in the generated code */
 		CFG* cfg; /** < the CFG where this block belongs */
 		vector<IRInstr*> instrs; /** < the instructions themselves. */
+		string lastVar;
 
 	};
 }

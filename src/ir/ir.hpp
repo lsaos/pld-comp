@@ -19,6 +19,8 @@ namespace ir {
 
 			void generateIR();
 
+			void printIR();
+
 			void addCFG(CFG *cfg);
 
 			void generateAssembly(string out);

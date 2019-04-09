@@ -7,6 +7,11 @@
 #include "functionCall.hpp"
 #include "function.hpp"
 #include "variable.hpp"
+#include "../ir/cfg.hpp"
+#include "../ir/basicBlock.hpp"
+#include "../ir/irInstrCall.hpp"
+
+using namespace ir;
 
 namespace ast
 {
@@ -132,5 +137,25 @@ namespace ast
 
 		for (size_t j = 0; j < i; j++) { out << ' '; }
 		out << '}' << endl;
+	}
+
+	string FunctionCall::buildIR(ir::CFG* cfg)
+	{
+		string dest = cfg->create_new_tempvar(identifier->getType());
+		vector<string> op;
+		string temp;
+
+		for (auto& exp : args)
+		{
+			temp = exp.get()->buildIR(cfg);
+			op.push_back(temp);
+		}
+
+		bool isExternal = identifier->getReferencedFunction()->isExtern();
+
+		IRInstrCall* instr = new IRInstrCall(cfg->current_bb, dest, identifier->getReferencedFunction()->getName(), op, isExternal);
+		cfg->current_bb->add_IRInstr(instr,identifier->getType());
+
+		return dest;
 	}
 }

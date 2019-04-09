@@ -6,6 +6,10 @@
 
 #include "if.hpp"
 #include "block.hpp"
+#include "../ir/cfg.hpp"
+#include "../ir/basicBlock.hpp"
+
+using namespace ir;
 
 namespace ast
 {
@@ -105,6 +109,69 @@ namespace ast
 
 		for (size_t j = 0; j < i; j++) { out << ' '; }
 		out << '}' << endl;
+	}
+
+
+	string If::buildIR(ir::CFG* cfg)
+	{
+		string var = condition->buildIR(cfg);
+		cfg->current_bb->set_last_var(var);
+		BasicBlock* testBB = cfg->current_bb;
+
+		//Construction of the then BasicBlock 
+		BasicBlock* thenBB = new BasicBlock(cfg, cfg->new_BB_name());
+		cfg->add_bb(thenBB);
+
+		BasicBlock* elseBB;
+
+		//Construction of the next BasicBlock after if instruction
+		BasicBlock* afterIfBB = new BasicBlock(cfg, cfg->new_BB_name());
+		cfg->add_bb(afterIfBB);
+	
+		//AfterIF BB's pointers stitching
+		afterIfBB->exit_true = testBB->exit_true;
+		afterIfBB->exit_false = testBB->exit_false;
+
+		//Construction of the else BasicBlock, if it exists
+		if (alternative != nullptr)
+		{
+			elseBB = new BasicBlock(cfg, cfg->new_BB_name());
+			cfg->add_bb(elseBB);
+			elseBB->exit_true = afterIfBB;
+			elseBB->exit_false = nullptr;
+		}
+		else
+		{
+			elseBB = nullptr;
+		}
+
+		//Original BB's pointers stitching
+		testBB->exit_true = thenBB;
+		if (elseBB == nullptr)
+			testBB->exit_false = afterIfBB;
+		else
+			testBB->exit_false = elseBB;
+
+		//Then BB's pointers stitching
+		thenBB->exit_true = afterIfBB;
+		thenBB->exit_false = nullptr;
+
+		//IR code generation for Then BB
+		cfg->current_bb = thenBB;
+		var = instr->buildIR(cfg);
+		cfg->current_bb->set_last_var(var);
+
+		//IR code generation for Else BB, if it exists
+		if (elseBB != nullptr)
+		{
+			cfg->current_bb = elseBB;
+			var = alternative->buildIR(cfg);
+			cfg->current_bb->set_last_var(var);
+		}
+
+		cfg->current_bb = afterIfBB;
+
+		return "";
 	}
 
 }

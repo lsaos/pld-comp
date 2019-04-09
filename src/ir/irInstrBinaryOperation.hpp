@@ -34,6 +34,5 @@ namespace ir {
 		string operand1;
 		string operand2;
 		Operation operation;
-
 	};
 }
