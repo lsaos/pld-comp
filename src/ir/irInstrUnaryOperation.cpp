@@ -22,20 +22,20 @@ void IRInstrUnaryOperation::gen_asm(ostream& o)
 		case UnaryOperation::minus:
 			op = "\tneg";
 			//Assembly code for negation
-			o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(operand) << "%(rbp), " << workingReg << endl;
+			o << "\tmov" << type << " " << bb->get_cfg()->IR_reg_to_asm(operand) << ", " << workingReg << endl;
 			o << op << type << " " << workingReg << endl;
-			o << "\tmov" << type << " " << workingReg << ", " << bb->get_cfg()->get_var_index(destination) << "%(rbp)" << endl;
+			o << "\tmov" << type << " " << workingReg << ", " << bb->get_cfg()->IR_reg_to_asm(destination) << endl;
 			break;
 		case UnaryOperation::logicalNot:
 			//TO VERIFY
-			o << "\tcmpl $0, " << bb->get_cfg()->get_var_index(operand) << "%(rbp)" << endl;
+			o << "\tcmpl $0, " << bb->get_cfg()->IR_reg_to_asm(operand) << endl;
 			o << "\tsete %al";
 			if (t==Type::Integer) {
 				o << "\tmovzbl  %al, %eax" << endl;
-				o << "\tmovl %eax, " << bb->get_cfg()->get_var_index(destination) << "(%rbp)" << endl;
+				o << "\tmovl %eax, " << bb->get_cfg()->IR_reg_to_asm(destination) << endl;
 			}
 			else if (t==Type::Character) {
-				o << "\tmovb %al, " << bb->get_cfg()->get_var_index(destination) << "(%rbp)" << endl;
+				o << "\tmovb %al, " << bb->get_cfg()->IR_reg_to_asm(destination) << endl;
 			}
 				
 			break;
