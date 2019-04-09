@@ -64,11 +64,20 @@ void IRInstrComparison::printIR(ostream &o)
 	case Operation::cmp_eq:
 		mnemonic = "cmp_eq";
 		break;
+	case Operation::cmp_neq:
+		mnemonic = "cmp_neq";
+		break;
 	case Operation::cmp_le:
 		mnemonic = "cmp_le";
 		break;
 	case Operation::cmp_lt:
 		mnemonic = "cmp_lt";
+		break;
+	case Operation::cmp_ge:
+		mnemonic = "cmp_ge";
+		break;
+	case Operation::cmp_gt:
+		mnemonic = "cmp_gt";
 		break;
 	}
 
