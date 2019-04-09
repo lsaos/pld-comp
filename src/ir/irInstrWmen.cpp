@@ -16,8 +16,8 @@ void IRInstrWmen::gen_asm(ostream &o) {
 	string workingReg = AssemblyType::registerType[t];
 
 	//write the assembly code : the value of variable var is written at address addr
-	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(addr) << "(%rbp), " << workingReg << endl; //" -" << addr.substr(4)
-	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(var) << "(%rbp), %r10" << endl; // " -" << var.substr(4)
+	o << "\tmov" << type << " " << bb->get_cfg()->IR_reg_to_asm(addr) << ", " << workingReg << endl;
+	o << "\tmov" << type << " " << bb->get_cfg()->IR_reg_to_asm(var) << ", %r10" << endl;
 	o << "\tmov" << type << " %r10, " << workingReg << endl;
 
 } 

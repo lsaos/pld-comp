@@ -28,9 +28,9 @@ void IRInstrUnaryOperation::gen_asm(ostream& o)
 	string type = AssemblyType::operatorType[t];
 	string workingReg = AssemblyType::registerType[t];
 
-	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(operand) << "%(rbp), " << workingReg << endl;
+	o << "\tmov" << type << " " << bb->get_cfg()->IR_reg_to_asm(operand) << ", " << workingReg << endl;
 	o << op << type << " " << workingReg << endl;
-	o << "\tmov" << type << " " << workingReg << ", " << bb->get_cfg()->get_var_index(destination) << "%(rbp)"<< endl;
+	o << "\tmov" << type << " " << workingReg << ", " << bb->get_cfg()->IR_reg_to_asm(destination) << endl;
 }
 
 void IRInstrUnaryOperation::printIR(ostream& o)

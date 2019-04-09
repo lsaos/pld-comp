@@ -16,7 +16,7 @@ void IRInstrLdconst::gen_asm(ostream &o)
 {
 	string type = AssemblyType::operatorType[t];
 
-	o << "\tmov" << type << " $" << constant << ", " << bb->get_cfg()->get_var_index(destination) << "(%rbp)" << endl;
+	o << "\tmov" << type << " $" << constant << ", " << bb->get_cfg()->IR_reg_to_asm(destination) << endl;
 }
 
 void IRInstrLdconst::printIR(ostream &o)
