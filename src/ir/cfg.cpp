@@ -204,6 +204,23 @@ void CFG::gen_asm_epilogue(ostream& o)
 	o << "\tpopq %rbp" << endl << "\tret" << endl;
 }
 
+void CFG::gen_MSP430_prologue(ostream& o)
+{
+	vector<Variable*> variables = function->getVariables(false);
+	o << "PUSHM.W #1, R4" << endl;
+	o << "MOV.W R1, R4" << endl;
+	o << "SUB.W #" << variables.size() << ", R1" << endl;
+}
+
+void CFG::gen_MSP430_epilogue(ostream& o)
+{
+	vector<Variable*> variables = function->getVariables(false);
+	o << "ADD.W #" << variables.size() << ", R1" << endl;
+	o << "POPW.W #1, r4" << endl;
+	o << "RET" << endl;
+	
+}
+
 void CFG::printIR()
 {
 	for (auto bb : bbs)

@@ -43,6 +43,8 @@ namespace ir {
 			string IR_reg_to_asm(string reg); /**< helper method: inputs a IR reg or input variable, returns e.g. "-24(%rbp)" for the proper value of 24 */
 			void gen_asm_prologue(ostream& o);
 			void gen_asm_epilogue(ostream& o);
+			void gen_MSP430_prologue(ostream& o);
+			void gen_MSP430_epilogue(ostream& o);
 
 			// symbol table methods
 			void add_to_symbol_table(string var, Type t);
