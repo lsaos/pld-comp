@@ -16,6 +16,9 @@ void IRInstrReturn::gen_asm(ostream &o)
 	string workingReg = AssemblyType::registerType[t];
 
 	o << "\tmov" << type << " " << bb->get_cfg()->IR_reg_to_asm(op) << ", " << workingReg << endl;
+
+	//Test
+	bb->exit_true = bb->get_cfg()->last_bb;
 }
 
 void IRInstrReturn::printIR(ostream &o)
