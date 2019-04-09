@@ -34,7 +34,7 @@ main_bb_2:
 	movzbl %al, %eax
 	movl %eax, -40(%rbp)
 	cmpl $0, -40(%rbp)
-	je main_bb_5
+	je main_bb_6
 	jne main_bb_4
 
 main_bb_3:
@@ -56,3 +56,29 @@ main_bb_5:
 	movl -4(%rbp), %eax
 	popq %rbp
 	ret
+
+main_bb_6:
+	movl $5, -48(%rbp)
+	movl -4(%rbp), %eax
+	cmpl -48(%rbp), %eax
+	sete %al
+	movzbl %al, %eax
+	movl %eax, -52(%rbp)
+	cmpl $0, -52(%rbp)
+	je main_bb_8
+	jne main_bb_7
+
+main_bb_7:
+	movl $2, -64(%rbp)
+	movl $3, -68(%rbp)
+	movl -64(%rbp), %eax
+	addl -68(%rbp), %eax
+	movl %eax, -72(%rbp)
+	movl -72(%rbp), %eax
+	movl %eax, -60(%rbp)
+	movl $3, -76(%rbp)
+	movl -76(%rbp), %eax
+	movl %eax, -4(%rbp)
+	jmp main_bb_8
+
+main_bb_8:
