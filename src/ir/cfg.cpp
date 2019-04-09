@@ -31,6 +31,7 @@ CFG::CFG(Function* function) : function(function), nextFreeSymbolIndex(0), nextB
 			add_to_symbol_table(var->getName(), var->getType());
 	}
 
+	last_bb = new BasicBlock(this, function->getName()+"_last");
 }
 
 CFG::~CFG()
@@ -51,6 +52,12 @@ void CFG::generateCFG()
 	for (auto i : instructions)
 	{
 		i->buildIR(this);
+	}
+
+	if (get_return_type() != Type::Void)
+	{
+		current_bb->exit_true = last_bb;
+		add_bb(last_bb);
 	}
 }
 
