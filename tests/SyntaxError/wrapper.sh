@@ -17,9 +17,9 @@ for file in $files
 do
 	dir="Test$i"
 	mkdir $dir
-	cp $file $dir/"test$i.c"
-	echo "0" > $dir/returncode
-	echo "../$1 test$i.c">$dir/run
+	cp $file $dir/$file
+	echo "253" > $dir/returncode
+	echo "../$1 $file">$dir/run
 	touch $dir/description
 	rm $file
 	let "i=$i+1"

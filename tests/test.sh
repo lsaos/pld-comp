@@ -39,27 +39,18 @@ else
   exit 2
 fi
 
+sRun="$sRun >temp.txt >temperr.txt"
+
 # stdin has been specified
 if [ -r "std.in" ]
 then 
   sRun="$sRun <std.in"
 fi
 
-# stdout has been specified
-if [ -r "std.out" ]
-then 
-  sRun="$sRun >temp.txt"
-fi
-
-# stderr has been specified
-if [ -r "stderr.out" ]
-then 
-  sRun="$sRun 2>temperr.txt"
-fi
-
 echo $sRun
 # execute the command line
 eval $sRun
+
 returnCode=$?
 
 resultGlobal=1
@@ -77,6 +68,18 @@ then
     resultRC=0
     resultGlobal=0
   fi
+fi
+
+# stdout has been specified
+if [ ! -r "std.out" ]
+then 
+  rm temp.txt
+fi
+
+# stderr has been specified
+if [ ! -r "stderr.out" ]
+then 
+  rm temperr.txt
 fi
 
 # compare stdout if concerned
@@ -121,24 +124,29 @@ returnCodeAssembly=2
 for i in *.s
 do
 	fileName=`basename $i .s`
-	as -o "$fileName.o" "$fileName.s"
-	gcc "$fileName.o"
-	./a.out
-	returnCodeAssembly=$?
-	rm -f "$fileName.o" "a.out"
-	gcc "$fileName.c"
-	./a.out
-	returnCodeGCC=$?
-	rm -f "a.out"
-	if [ "$returnCodeGCC" = "$returnCodeAssembly" ]
-	then
-   		echo "                             Return Code (Assembly): PASSED"
-   		resultRCComp=1
-   	else
-    	echo "                             Return Code (Assembly): FAILED"
-    	resultRCComp=0
-    	resultGlobal=0
-    fi
+	if [ -r "$fileName.s" ]; then
+		as -o "$fileName.o" "$fileName.s"
+		gcc "$fileName.o"
+		./a.out
+		returnCodeAssembly=$?
+		rm -f "$fileName.o" "a.out"
+		gcc "$fileName.c"
+		./a.out
+		returnCodeGCC=$?
+		rm -f "a.out"
+		if [ "$returnCodeGCC" = "$returnCodeAssembly" ]
+		then
+	   		echo "                             Return Code (Assembly): PASSED"
+	   		resultRCComp=1
+	   	else
+			echo "                             Return Code (Assembly): FAILED"
+			resultRCComp=0
+			resultGlobal=0
+		fi
+		if [ ! -r "$fileName.s.outfile" ] ; then
+			rm "$fileName.s"
+		fi
+	fi
 done
 
 # compare files created if concerned
