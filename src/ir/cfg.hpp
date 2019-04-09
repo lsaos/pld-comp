@@ -56,6 +56,7 @@ namespace ir {
 
 			//Pointer on the current BB
 			BasicBlock* current_bb; //?? public ??
+			BasicBlock* last_bb;
 
 		/*protected :
 			//Return true if the BB end is reached

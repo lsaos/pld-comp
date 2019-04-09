@@ -156,7 +156,20 @@ int main(int argc, char* argv[])
 
 	// Create the abstract syntax tree
 	Visiteur visitor;
-	Program* prog = (Program*)visitor.visit(tree);
+	Program* prog = nullptr;
+
+	try
+	{
+		prog = (Program*)visitor.visit(tree);
+	}
+	catch (const exception& e)
+	{
+		cerr << e.what() << endl;
+		cout << "Compilation failed with syntax errors" << endl;
+		system("pause"); // TODO: remove it
+		return RETURN_CODE_SYNTAX_ERROR;
+	}
+
 	registerExternalFunctions(prog);
 	prog->prepare();
 
