@@ -17,8 +17,8 @@ void IRInstrCopy::gen_asm(ostream &o) {
 
 	//write the assembly code : copy op1 to dest
 	
-	o << "\tmov" << type << " " << bb->get_cfg()->get_var_index(op1) << "(%rbp), " << workingReg << endl;
-	o << "\tmov" << type << " " << workingReg << ", " << (bb->get_cfg())->get_var_index(dest) << "(%rbp)" << endl;
+	o << "\tmov" << type << " " << bb->get_cfg()->IR_reg_to_asm(op1) << ", " << workingReg << endl;
+	o << "\tmov" << type << " " << workingReg << ", " << bb->get_cfg()->IR_reg_to_asm(dest) << endl;
 } 
 
 void IRInstrCopy::printIR(ostream &o) {

@@ -19,11 +19,16 @@ CFG::CFG(Function* function) : function(function), nextFreeSymbolIndex(0), nextB
 		add_to_symbol_table(i->getName(), i->getType());
 	}
 
-	vector<Variable*> vars = function->getVariables(false);
+	vector<Variable*> vars = function->getVariables(true);
 
 	for (auto var : vars)
 	{
-		add_to_symbol_table(var->getName(), var->getType());
+		if (var->getScope() == Scope::Global){
+			globalVariables[var->getName()] = var->getName();
+			SymbolType[var->getName()] = var->getType();
+		}
+		else
+			add_to_symbol_table(var->getName(), var->getType());
 	}
 
 }
@@ -109,11 +114,17 @@ Type CFG::get_var_type(string var)
 	return SymbolType[var];
 }
 
-//A Revoir
 string CFG::IR_reg_to_asm(string reg)
 {
-	int index = SymbolIndex[reg];
-	return (to_string(index) + "(%rbp)");
+	int index;
+	
+	if (globalVariables[reg] != "")
+		return (reg + "(%rip)");
+	else
+	{
+		index = SymbolIndex[reg];
+		return (to_string(index) + "(%rbp)");
+	}
 }
 
 void CFG::gen_asm(ostream& o)
