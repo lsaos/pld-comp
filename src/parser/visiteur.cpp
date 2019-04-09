@@ -75,6 +75,7 @@ antlrcpp::Any Visiteur::visitProg(exprParser::ProgContext *ctx) {
         for(int j=0; j<declarations->size();j++){
             prog->add(declarations->at(j));
         }
+        delete declarations;
     }
 	for(int i=0; i<ctx->function().size(); i++){
 		Instruction* instr = (Instruction*)visit(ctx->function(i));
@@ -100,6 +101,7 @@ antlrcpp::Any Visiteur::visitFunction(exprParser::FunctionContext *ctx) {
     	for(int i=0; i<parameters->size(); i++){
     		func->addParameter(parameters->at(i));
     	}
+    	delete parameters;
     }
     Instruction* block = (Instruction*)visit(ctx->block());
     func->add(block);   
@@ -255,6 +257,7 @@ antlrcpp::Any Visiteur::visitBlock(exprParser::BlockContext *ctx){
         for(int j=0; j<declarations->size();j++){
             block->add(declarations->at(j));
         }
+        delete declarations;
     }
 	for (int i = 0; i < ctx->instruction().size(); i++) {
 		block->add((Instruction*)visit(ctx->instruction(i)));
@@ -379,6 +382,7 @@ antlrcpp::Any Visiteur::visitForLoop(exprParser::ForLoopContext *ctx){
     for(auto instr : *declarations){
         forBlock->add(instr);
     }
+    delete declarations;
     //The loop itself
     While* loop = new While(pos);
     loop->setCondition(expr);
@@ -472,7 +476,9 @@ antlrcpp::Any Visiteur::visitFuncType(exprParser::FuncTypeContext *ctx){
 	else if (type == "int") {
 		return Type::Integer;
 	}
-	else {
+	else if (type=="char"){
+		return Type::Character;
+	} else {
 		return Type::Void;
 	}
 }
@@ -489,7 +495,7 @@ antlrcpp::Any Visiteur::visitVarType(exprParser::VarTypeContext *ctx) {
 		return Type::Integer;
 	}
 	else {
-		return Type::Void;
+		return Type::Integer;
 	}
 }
 
@@ -588,6 +594,7 @@ antlrcpp::Any Visiteur::visitFuncCall(exprParser::FuncCallContext *ctx){
 		for(int i=0; i<arguments->size(); i++){
 			funcCall->addArgument(arguments->at(i));
 		}
+		delete arguments;
 	}
 	
 	#ifdef TREEVISIT

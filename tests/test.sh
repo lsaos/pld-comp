@@ -115,6 +115,32 @@ then
   rm temperr.txt
 fi
 
+#If assembly was produced, does it have the same output as a classic gcc ?
+#Get filename:
+returnCodeAssembly=2
+for i in *.s
+do
+	fileName=`basename $i .s`
+	as -o "$fileName.o" "$fileName.s"
+	gcc "$fileName.o"
+	./a.out
+	returnCodeAssembly=$?
+	rm -f "$fileName.o" "a.out"
+	gcc "$fileName.c"
+	./a.out
+	returnCodeGCC=$?
+	rm -f "a.out"
+	if [ "$returnCodeGCC" = "$returnCodeAssembly" ]
+	then
+   		echo "                             Return Code (Assembly): PASSED"
+   		resultRCComp=1
+   	else
+    	echo "                             Return Code (Assembly): FAILED"
+    	resultRCComp=0
+    	resultGlobal=0
+    fi
+done
+
 # compare files created if concerned
 resultFiles=2
 if ls *.outfile &> /dev/null
@@ -169,7 +195,7 @@ then
   fi
   if [ -w "$2" ]
   then
-    echo "$Directory;$resultRC;$resultOut;$resultErr;$resultFiles;$resultGlobal" >>$2
+    echo "$Directory;$resultRC;$resultOut;$resultErr;$resultRCComp;$resultFiles;$resultGlobal" >>$2
   fi
 fi
 

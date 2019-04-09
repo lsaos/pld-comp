@@ -111,6 +111,7 @@ namespace ast
 		case Error::InvalidArraySize: cerr << "invalid array size"; break;
 		case Error::MissingArrayIndex: cerr << "missing array index"; break;
 		case Error::IndexOutOfBounds: cerr << "index out of array bounds"; break;
+		case Error::VariableDeclarationBeginningFunction: cerr << "variable declaration is only allowed at function beginning"; break;
 		default: cerr << "unknown error"; break;
 		}
 
