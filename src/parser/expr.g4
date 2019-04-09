@@ -63,7 +63,7 @@ expression: funcCall #exprFunc
 funcCall: VAR '(' funcCallArguments? ')';
 funcCallArguments: expression (',' expression)*;
 
-funcType: 'int'|'void';
+funcType: 'int'|'void'|'char';
 varType: 'int'|'char';
 WS: [ \t\r\n] -> skip;
 Comment: '//' ~[\r\n]* -> skip;
