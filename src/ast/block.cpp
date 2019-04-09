@@ -73,28 +73,34 @@ namespace ast
 	void Block::checkSemantic(bool advanced) const
 	{
 		// Check symbols duplication
-		if (getParentBlock()) {
-			vector<string> symbols;
+		vector<string> symbols;
 
+		if (getParentBlock()) {
 			const vector<Variable*> vars(getParentBlock()->getVariables(true));
 			for (const Variable* var : vars) {
 				symbols.push_back(var->getName());
 			}
+		}
 
-			/*const vector<Function*> funcs(getProgram()->getFunctions());
-			for (const Function* func : funcs) {
-				symbols.push_back(func->getName());
-			}*/
+		bool variableAllowed = isFunction();
 
-			for (auto& instr : instructions) {
-				if (instr->isVariable()) {
-					const string& name(((const Variable*)instr.get())->getName());
+		for (const auto& instr : instructions) {
+			if (instr->isVariable()) {
+				if (!variableAllowed) {
+					error(Error::VariableDeclarationBeginningFunction, instr.get());
+				}
 
-					if (find(symbols.begin(), symbols.end(), name) != symbols.end()) {
-						error(Error::DuplicatedSymbolName, instr.get());
-					}
+				const string& name(((const Variable*)instr.get())->getName());
 
-					symbols.push_back(name);
+				if (find(symbols.begin(), symbols.end(), name) != symbols.end()) {
+					error(Error::DuplicatedSymbolName, instr.get());
+				}
+
+				symbols.push_back(name);
+			}
+			else {
+				if (!isProgram()) {
+					variableAllowed = false;
 				}
 			}
 		}
