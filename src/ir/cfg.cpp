@@ -10,7 +10,7 @@ using namespace ast;
 map<Type, string> AssemblyType::operatorType = { {Type::Character, "b"}, {Type::Integer, "l"} };
 map<Type, string> AssemblyType::registerType = { {Type::Character, "%al"}, {Type::Integer, "%eax"} };
 
-CFG::CFG(Function* function) : function(function), nextFreeSymbolIndex(0), nextBBnumber(0) 
+CFG::CFG(Function* function) : function(function), nextFreeSymbolIndex(0), nextBBnumber(0), current_context(0)
 {
 	add_to_symbol_table("!bp", Type::Void);
 
@@ -18,28 +18,34 @@ CFG::CFG(Function* function) : function(function), nextFreeSymbolIndex(0), nextB
 
 	for (auto i : params)
 	{
+		string name = i->getName() + "_" + to_string(current_context);
+		variablesName[i] = name;
+
 		if(i->isArray())
-			add_to_symbol_table(i->getName(), i->getType(), i->getArraySize());
+			add_to_symbol_table(name, i->getType(), i->getArraySize());
 		else
-			add_to_symbol_table(i->getName(), i->getType());
+			add_to_symbol_table(name, i->getType());
 	}
 
 	vector<Variable*> vars = function->getVariables(true);
 
 	for (auto var : vars)
 	{
-		//TODO : tableau global
-		if (var->getScope() == Scope::Global){
+		//var->setName(var->getName() + "_" + to_string(current_context));
+		string name = var->getName() + "_" + to_string(current_context);
+		variablesName[var] = name;
+
+		/*if (var->getScope() == Scope::Global){
 			globalVariables[var->getName()] = var->getName();
 			SymbolType[var->getName()] = var->getType();
 		}
 		else
-		{
+		{*/
 			if(var->isArray())
-				add_to_symbol_table(var->getName(), var->getType(), var->getArraySize());
+				add_to_symbol_table(name, var->getType(), var->getArraySize());
 			else
-				add_to_symbol_table(var->getName(), var->getType());
-		}
+				add_to_symbol_table(name, var->getType());
+		//}
 			
 	}
 
@@ -91,6 +97,8 @@ Function* CFG::getFunction()
 void CFG::add_to_symbol_table(string var, Type t, int nbCases)
 {
 	int size = 0;
+	//string name = var + "_" + to_string(current_context);
+
 	switch (t)
 	{
 		case Type::Character:
@@ -123,7 +131,7 @@ string CFG::create_new_tempvar(Type t)
 		break;
 	}
 
-	string name = "!tmp" + to_string(nb);
+	string name = "!tmp" + to_string(nb)+"_"+to_string(current_context);
 	add_to_symbol_table(name, t);
 	return name;
 }
@@ -199,7 +207,7 @@ void CFG::gen_asm_prologue(ostream& o)
 
 	for (int i=0;i<params.size();i++)
 	{
-		type = AssemblyType::operatorType[get_var_type(params[i]->getName())];
+		type = AssemblyType::operatorType[get_var_type(get_var_name(params[i]))];
 
 		if (type == "b")
 			type = "l";
@@ -227,7 +235,7 @@ void CFG::gen_asm_prologue(ostream& o)
 				break;
 		}
 
-		o << reg << ", " << get_var_index(params[i]->getName()) << "(%rbp)" << endl;
+		o << reg << ", " << get_var_index(get_var_name(params[i])) << "(%rbp)" << endl;
 	}
 
 }
@@ -267,4 +275,30 @@ void CFG::printIR()
 Type CFG::get_return_type()
 {
 	return function->getType();
+}
+
+int CFG::get_nextFreeSymbolIndex()
+{
+	return nextFreeSymbolIndex;
+}
+
+void CFG::set_nextFreeSymbolIndex(int n)
+{
+	nextFreeSymbolIndex = n;
+}
+
+void CFG::add_variable_name(Variable* var)
+{
+	string name = var->getName() + "_" + to_string(current_context);
+	variablesName[var] = name;
+
+	if (var->isArray())
+		add_to_symbol_table(name, var->getType(), var->getArraySize());
+	else
+		add_to_symbol_table(name, var->getType());
+}
+
+string CFG::get_var_name(Variable* var)
+{
+	return variablesName[var];
 }

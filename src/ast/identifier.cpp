@@ -200,11 +200,15 @@ namespace ast
 				string tmp = cfg->create_new_tempvar(getReferencedVariable()->getType());
 
 				//Rmem ??
-				cfg->current_bb->add_IRInstr(new IRInstrRmen(cfg->current_bb, getReferencedVariable()->getName(), tmp, index), getReferencedVariable()->getType());
+				cfg->current_bb->add_IRInstr(new IRInstrRmen(cfg->current_bb, cfg->get_var_name(getReferencedVariable()), tmp, index), getReferencedVariable()->getType());
 				return tmp;
 			}
 		}
 		else
-			return getReferencedVariable()->getName();
+		{
+			//cout << getReferencedVariable()->getName() << endl;
+			//return getReferencedVariable()->getName();
+			return cfg->get_var_name(getReferencedVariable());
+		}
 	}
 }

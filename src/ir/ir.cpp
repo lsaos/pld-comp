@@ -16,12 +16,15 @@ void IR::addCFG(CFG *cfg)
 void IR::generateIR()
 {
 	vector<Function*> functions = prog->getFunctions();
+	int context = 1;
 	
 	for (auto f : functions) 
 	{
 		CFG* cfg = new CFG(f);
 		addCFG(cfg);
+		cfg->current_context = context;
 		cfg->generateCFG();
+		context = cfg->current_context;
 	}
 }
 

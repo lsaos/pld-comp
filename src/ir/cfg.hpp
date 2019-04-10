@@ -49,17 +49,24 @@ namespace ir {
 
 			// symbol table methods
 			void add_to_symbol_table(string var, Type t, int nbCases=1);
+			void add_variable_name(Variable* var);
 			string create_new_tempvar(Type t);
 			int get_var_index(string var);
 			Type get_var_type(string var);
+			string get_var_name(Variable*);
 			Type get_return_type();
+			int get_nextFreeSymbolIndex();
+			void set_nextFreeSymbolIndex(int);
 
 			// basic block management
 			string new_BB_name();
 
 			//Pointer on the current BB
-			BasicBlock* current_bb; //?? public ??
+			BasicBlock* current_bb;
 			BasicBlock* last_bb;
+
+			//N° of the current block context
+			int current_context;
 
 		/*protected :
 			//Return true if the BB end is reached
@@ -70,6 +77,7 @@ namespace ir {
 			map <string, ast::Type> SymbolType; /**< part of the symbol table  */
 			map <string, int> SymbolIndex; /**< part of the symbol table  */
 			map<string, string> globalVariables; /**List of the global variables of the function*/
+			map<Variable*, string> variablesName;
 			int nextFreeSymbolIndex; /**< to allocate new symbols in the symbol table */
 			int nextBBnumber; /**< just for naming */
 
