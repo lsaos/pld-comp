@@ -12,6 +12,7 @@
 #include "../ir/cfg.hpp"
 #include "../ir/irInstrLdconst.hpp"
 #include "../ir/irInstrBinaryOperation.hpp"
+#include "../ir/irInstrRmen.hpp"
 
 using namespace ir;
 
@@ -187,13 +188,21 @@ namespace ast
 
 	string Identifier::buildIR(CFG* cfg)
 	{
-		if (isLeftValue())
+		if (isReferencingArray())
 		{
-			string var = cfg->create_new_tempvar(getReferencedVariable()->getType());
-			int offset = cfg->get_var_index(getReferencedVariable()->getName());
-			cfg->current_bb->add_IRInstr(new IRInstrLdconst(cfg->current_bb, getReferencedVariable()->getType(), var, to_string(offset)), getReferencedVariable()->getType());
-			cfg->current_bb->add_IRInstr(new IRInstrBinaryOperation(cfg->current_bb, IRInstrBinaryOperation::Operation::add, var, "!bp", var), getReferencedVariable()->getType());
-			return var;
+			string index = getArrayIndex()->buildIR(cfg);
+			if (isLeftValue())
+			{
+				return index;
+			}
+			else
+			{
+				string tmp = cfg->create_new_tempvar(getReferencedVariable()->getType());
+
+				//Rmem ??
+				cfg->current_bb->add_IRInstr(new IRInstrRmen(cfg->current_bb, getReferencedVariable()->getName(), tmp, index), getReferencedVariable()->getType());
+				return tmp;
+			}
 		}
 		else
 			return getReferencedVariable()->getName();

@@ -45,7 +45,7 @@ namespace ir {
 			void gen_asm_epilogue(ostream& o);
 
 			// symbol table methods
-			void add_to_symbol_table(string var, Type t);
+			void add_to_symbol_table(string var, Type t, int nbCases=1);
 			string create_new_tempvar(Type t);
 			int get_var_index(string var);
 			Type get_var_type(string var);

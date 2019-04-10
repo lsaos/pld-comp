@@ -12,23 +12,35 @@ map<Type, string> AssemblyType::registerType = { {Type::Character, "%al"}, {Type
 
 CFG::CFG(Function* function) : function(function), nextFreeSymbolIndex(0), nextBBnumber(0) 
 {
+	add_to_symbol_table("!bp", Type::Void);
+
 	vector<Variable*> params = function->getParameters();
 
 	for (auto i : params)
 	{
-		add_to_symbol_table(i->getName(), i->getType());
+		if(i->isArray())
+			add_to_symbol_table(i->getName(), i->getType(), i->getArraySize());
+		else
+			add_to_symbol_table(i->getName(), i->getType());
 	}
 
 	vector<Variable*> vars = function->getVariables(true);
 
 	for (auto var : vars)
 	{
+		//TODO : tableau global
 		if (var->getScope() == Scope::Global){
 			globalVariables[var->getName()] = var->getName();
 			SymbolType[var->getName()] = var->getType();
 		}
 		else
-			add_to_symbol_table(var->getName(), var->getType());
+		{
+			if(var->isArray())
+				add_to_symbol_table(var->getName(), var->getType(), var->getArraySize());
+			else
+				add_to_symbol_table(var->getName(), var->getType());
+		}
+			
 	}
 
 	last_bb = new BasicBlock(this, function->getName()+"_last");
@@ -76,17 +88,22 @@ Function* CFG::getFunction()
 	return function;
 }
 
-void CFG::add_to_symbol_table(string var, Type t)
+void CFG::add_to_symbol_table(string var, Type t, int nbCases)
 {
+	int size = 0;
 	switch (t)
 	{
-	case Type::Character:
-		nextFreeSymbolIndex -= 1;
-		break;
-	case Type::Integer:
-		nextFreeSymbolIndex -= 4;
-		break;
+		case Type::Character:
+			size -= 1;
+			break;
+		case Type::Integer:
+			size -= 4;
+			break;
 	}
+
+	size = size * nbCases;
+
+	nextFreeSymbolIndex += size;
 
 	this->SymbolType[var] = t;
 	this->SymbolIndex[var] = nextFreeSymbolIndex;
