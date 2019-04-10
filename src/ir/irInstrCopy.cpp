@@ -19,7 +19,18 @@ void IRInstrCopy::gen_asm(ostream &o) {
 	
 	o << "\tmov" << type << " " << bb->get_cfg()->IR_reg_to_asm(op1) << ", " << workingReg << endl;
 	o << "\tmov" << type << " " << workingReg << ", " << bb->get_cfg()->IR_reg_to_asm(dest) << endl;
-} 
+}
+
+void IRInstrCopy::gen_asm_MSP430(ostream &o) {
+	// check the variable type
+	string type = (t == Type::Integer) ? "W" : "B";
+	string workingReg = "R12";
+
+	//write the assembly code : copy op1 to dest
+
+	o << "\tMOV." << type << " " << bb->get_cfg()->get_var_index(op1) << "(R4), " << workingReg << endl;
+	o << "\tMOV." << type << " " << workingReg << ", " << bb->get_cfg()->get_var_index(dest) << "(R4)" << endl;
+}
 
 void IRInstrCopy::printIR(ostream &o) {
 	o << "\tcopy " << dest << " " << op1 << endl;

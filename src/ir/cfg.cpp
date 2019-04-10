@@ -168,6 +168,7 @@ void CFG::gen_asm_MSP430(ostream& o)
 
 		bb->gen_asm_MSP430(o);
 	}
+	gen_MSP430_epilogue(o);
 }
 
 void CFG::gen_asm_prologue(ostream& o)
@@ -223,17 +224,18 @@ void CFG::gen_asm_epilogue(ostream& o)
 void CFG::gen_MSP430_prologue(ostream& o)
 {
 	vector<Variable*> variables = function->getVariables(false);
-	o << "PUSHM.W #1, R4" << endl;
-	o << "MOV.W R1, R4" << endl;
-	o << "SUB.W #" << 2*variables.size() << ", R1" << endl;
+	o << "main:" << endl;
+	o << "\tPUSHM.W #1, R4" << endl;
+	o << "\tMOV.W R1, R4" << endl;
+	o << "\tSUB.W #" << 2*variables.size() << ", R1" << endl;
 }
 
 void CFG::gen_MSP430_epilogue(ostream& o)
 {
 	vector<Variable*> variables = function->getVariables(false);
-	o << "ADD.W #" << 2*variables.size() << ", R1" << endl;
-	o << "POPW.W #1, r4" << endl;
-	o << "RET" << endl;
+	o << "\tADD.W #" << 2*variables.size() << ", R1" << endl;
+	o << "\tPOPW.W #1, r4" << endl;
+	o << "\tRET" << endl;
 	
 }
 
