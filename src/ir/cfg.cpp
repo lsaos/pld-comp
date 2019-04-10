@@ -154,6 +154,22 @@ void CFG::gen_asm(ostream& o)
 	//gen_asm_epilogue(o);
 }
 
+void CFG::gen_asm_MSP430(ostream& o)
+{
+	bool prologue = true;
+
+	for (auto bb : bbs)
+	{
+		if (prologue)
+		{
+			gen_MSP430_prologue(o);
+			prologue = false;
+		}
+
+		bb->gen_asm_MSP430(o);
+	}
+}
+
 void CFG::gen_asm_prologue(ostream& o)
 {
 	o << "\tpushq %rbp" << endl << "\tmovq %rsp, %rbp" << endl;
