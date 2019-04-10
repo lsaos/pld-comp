@@ -29,12 +29,13 @@ void IR::generateAssembly(string out)
 {
 	file = ofstream(out.substr(0, out.size() - 1) + "s", ios::out);
 
-	file << ".text" << endl << ".global main" << endl << ".type main, @function" << endl; // << endl;
+	file << ".text" << endl << ".global main" << endl << ".type main, @function" << endl;
 
 	for (auto var : prog->getVariables(true))
 	{
 		int i = (var->getType() == Type::Character ? 1 : 4);
-		file << ".comm " << var->getName() << "," << i << "," << i << endl;
+		int size = (var->isArray() ? var->getArraySize() : 1);
+		file << ".comm " << var->getName() << "," << (i*size) << "," << i << endl;
 	}
 
 	for (auto cfg : cfgs)
@@ -46,12 +47,6 @@ void IR::generateAssembly(string out)
 void IR::generateAssemblyMSP430(string out)
 {
 	file = ofstream(out.substr(0, out.size() - 2) + "_MSP430.s", ios::out);
-
-	/*for (auto var : prog->getVariables(true))
-	{
-		int i = (var->getType() == Type::Character ? 1 : 4);
-		file << ".comm " << var->getName() << "," << i << "," << i << endl;
-	}*/
 
 	for (auto cfg : cfgs)
 	{
