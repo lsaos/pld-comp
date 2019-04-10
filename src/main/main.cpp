@@ -45,10 +45,8 @@ using namespace antlr4;
 using namespace ast;
 
 // Assembly generation
-#include "../assembly/assembly.hpp"
 #include "../ir/ir.hpp"
 
-using namespace assembly;
 using namespace ir;
 
 // Values returned by the program.
