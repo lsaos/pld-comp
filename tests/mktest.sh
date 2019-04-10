@@ -4,7 +4,9 @@ nKo=0
 nTotal=0
 nMis=0
 
-for i in Test*
+directories=$(find . -type d | grep -e "Test[0-9][0-9]*")
+
+for i in $directories
 do
   ./test.sh $i results.csv
   result=$?

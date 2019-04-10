@@ -64,6 +64,13 @@ namespace ast
 		virtual void prepare();
 
 	private:
+		// Return true if the specified value is the left neutral operation element.
+		bool isLeftNeutralElement(int value) const;
+
+		// Return true if the specified value is the left neutral operation element.
+		bool isRightNeutralElement(int value) const;
+
+	private:
 		BinaryOperator op; // Binary operator.
 		unique_ptr<Expression> left; // Left operand.
 		unique_ptr<Expression> right; // Right operand.

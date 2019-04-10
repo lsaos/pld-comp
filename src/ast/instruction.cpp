@@ -140,6 +140,7 @@ namespace ast
 		case Warning::None: cout << "none"; break;
 		case Warning::UnusedVariable: cout << "unused variable"; break;
 		case Warning::UnsafeCast: cout << "cast can lose information"; break;
+		case Warning::ValueOutOfType: cout << "assigning value out of type values bounds"; break;
 		default: cout << "unknown warning"; break;
 		}
 

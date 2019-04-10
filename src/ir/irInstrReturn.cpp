@@ -18,6 +18,14 @@ void IRInstrReturn::gen_asm(ostream &o)
 	o << "\tmov" << type << " " << bb->get_cfg()->IR_reg_to_asm(op) << ", " << workingReg << endl;
 }
 
+void IRInstrReturn::gen_asm_MSP430(ostream &o)
+{
+	string type = (t == Type::Integer) ? "W" : "B";
+	string workingReg = "R12";
+
+	o << "\tMOV." << type << " " << bb->get_cfg()->get_var_index(op) << "(R4), " << workingReg << endl;
+}
+
 void IRInstrReturn::printIR(ostream &o)
 {
 	o << "\treturn " << op << endl;

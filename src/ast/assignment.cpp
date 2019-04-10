@@ -68,6 +68,15 @@ namespace ast
 		if (expr->getType() == Type::Void) {
 			error(Error::InvalidStatement, expr.get());
 		}
+
+		if (advanced) {
+			if (identifier->getType() == Type::Character && expr->isConstant()) {
+				const int val = expr->getValue();
+				if (val < -128 || val > 127) {
+					warning(Warning::ValueOutOfType, identifier.get());
+				}
+			}
+		}
 	}
 
 	void Assignment::toTextualRepresentation(ostream& out, size_t i) const

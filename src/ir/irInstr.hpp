@@ -20,6 +20,7 @@ namespace ir {
 
 			/** Actual code generation */
 			virtual void gen_asm(ostream &o) = 0; /**< x86 assembly code generation for this IR instruction */
+			virtual void gen_asm_MSP430(ostream &o) {} /**< MSP430 assembly code generation for this IR instruction */
 
 			virtual void printIR(ostream &o) {}
 

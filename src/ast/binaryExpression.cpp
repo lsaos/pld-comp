@@ -216,8 +216,37 @@ namespace ast
 			constant->setValue(getValue());
 			return constant;
 		}
-		else {
-			return nullptr;
+
+		if (left->isConstant() && isLeftNeutralElement(left->getValue())) {
+			return right.release();
+		}
+
+		if (right->isConstant() && isRightNeutralElement(right->getValue())) {
+			return left.release();
+		}
+
+		return nullptr;
+	}
+
+	bool BinaryExpression::isLeftNeutralElement(int value) const
+	{
+		switch (op)
+		{
+		case BinaryOperator::Add: return value == 0;
+		case BinaryOperator::Multiply: return value == 1;
+		default: return false;
+		}
+	}
+
+	bool BinaryExpression::isRightNeutralElement(int value) const
+	{
+		switch (op)
+		{
+		case BinaryOperator::Add: return value == 0;
+		case BinaryOperator::Multiply: return value == 1;
+		case BinaryOperator::Substract: return value == 0;
+		case BinaryOperator::Divide: return value == 1;
+		default: return false;
 		}
 	}
 
@@ -310,48 +339,48 @@ namespace ast
 		unique_ptr<Expression> temp;
 		switch (op)
 		{
-			case BinaryOperator::Add:
-				operation = IRInstrBinaryOperation::Operation::add;
-				break;
-			case BinaryOperator::Substract:
-				operation = IRInstrBinaryOperation::Operation::sub;
-				break;
-			case BinaryOperator::Multiply:
-				operation = IRInstrBinaryOperation::Operation::mul;
-				break;
-			case BinaryOperator::BitwiseAnd:
-				operation = IRInstrBinaryOperation::Operation::bitwiseAnd;
-				break;
-			case BinaryOperator::BitwiseOr:
-				operation = IRInstrBinaryOperation::Operation::bitwiseOr;
-				break;
-			case BinaryOperator::BitwiseXor:
-				operation = IRInstrBinaryOperation::Operation::bitwiseXor;
-				break;
-			case BinaryOperator::Equals:
-				comparison = true;
-				operationComp = IRInstrComparison::Operation::cmp_eq;
-				break;
-			case BinaryOperator::LowerThan:
-				comparison = true;
-				operationComp = IRInstrComparison::Operation::cmp_lt;
-				break;
-			case BinaryOperator::LowerThanOrEquals:
-				comparison = true;
-				operationComp = IRInstrComparison::Operation::cmp_le;
-				break;
-			case BinaryOperator::DifferentThan:
-				comparison = true;
-				operationComp = IRInstrComparison::Operation::cmp_neq;
-				break;
-			case BinaryOperator::GreaterThan:
-				comparison = true;
-				operationComp = IRInstrComparison::Operation::cmp_gt;
-				break;
-			case BinaryOperator::GreaterThanOrEquals:
-				comparison = true;
-				operationComp = IRInstrComparison::Operation::cmp_ge;
-				break;
+		case BinaryOperator::Add:
+			operation = IRInstrBinaryOperation::Operation::add;
+			break;
+		case BinaryOperator::Substract:
+			operation = IRInstrBinaryOperation::Operation::sub;
+			break;
+		case BinaryOperator::Multiply:
+			operation = IRInstrBinaryOperation::Operation::mul;
+			break;
+		case BinaryOperator::BitwiseAnd:
+			operation = IRInstrBinaryOperation::Operation::bitwiseAnd;
+			break;
+		case BinaryOperator::BitwiseOr:
+			operation = IRInstrBinaryOperation::Operation::bitwiseOr;
+			break;
+		case BinaryOperator::BitwiseXor:
+			operation = IRInstrBinaryOperation::Operation::bitwiseXor;
+			break;
+		case BinaryOperator::Equals:
+			comparison = true;
+			operationComp = IRInstrComparison::Operation::cmp_eq;
+			break;
+		case BinaryOperator::LowerThan:
+			comparison = true;
+			operationComp = IRInstrComparison::Operation::cmp_lt;
+			break;
+		case BinaryOperator::LowerThanOrEquals:
+			comparison = true;
+			operationComp = IRInstrComparison::Operation::cmp_le;
+			break;
+		case BinaryOperator::DifferentThan:
+			comparison = true;
+			operationComp = IRInstrComparison::Operation::cmp_neq;
+			break;
+		case BinaryOperator::GreaterThan:
+			comparison = true;
+			operationComp = IRInstrComparison::Operation::cmp_gt;
+			break;
+		case BinaryOperator::GreaterThanOrEquals:
+			comparison = true;
+			operationComp = IRInstrComparison::Operation::cmp_ge;
+			break;
 		}
 
 		string var_1 = (left.get())->buildIR(cfg);
@@ -359,7 +388,7 @@ namespace ast
 		//string var_3 = cfg->create_new_tempvar(getType()); //A FAIRE DANS LE FUTUR POUR PLUS DE COHERENCE !!
 		string var_3 = cfg->create_new_tempvar(getLeftExpression()->getType());
 
-		if(!comparison)
+		if (!comparison)
 			cfg->current_bb->add_IRInstr(new IRInstrBinaryOperation(cfg->current_bb, operation, var_3, var_1, var_2), getLeftExpression()->getType()); //getType de l'expression à la place de getLeftExpression()->getType() !!
 		else
 			cfg->current_bb->add_IRInstr(new IRInstrComparison(cfg->current_bb, operationComp, var_3, var_1, var_2), getLeftExpression()->getType());

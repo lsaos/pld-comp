@@ -1,0 +1,21 @@
+test2 - test3 - test5: missing ;
+test4 : Programme avec juste des déclarations
+test6 : fonction sans prenom
+test7 - 11 - 12 -13 : erreurs arithmétiques
+test8: parametre correct suivi d'une ','
+test9 : parametre sans type
+test10 : parametre avec type sans nom
+test1: expression sans assignment
+
+//.c
+
+test14 - 15 - 16 : Mauvais appel de fonction
+test17 - 18 - 19 : boucle while
+
+
+test20 -21 -22 -23 : if;
+test24 :  char with more than one char
+
+test25 - 26 -27 -28 : for
+
+
