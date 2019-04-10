@@ -47,6 +47,38 @@ void IRInstrBinaryOperation::gen_asm(ostream &o)
 	o << "\tmov" << type << " " << workingReg << ", " << bb->get_cfg()->IR_reg_to_asm(destination) << endl;
 }
 
+void IRInstrBinaryOperation::gen_asm_MSP430(ostream &o)
+{
+	// check the variable type
+	string type = (t == Type::Integer) ? "W" : "B";
+	string workingReg = "R12";
+	string action = "ADD.";
+
+	switch (operation)
+	{
+	case Operation::add:
+		action = "ADD.";
+		break;
+	case Operation::sub:
+		action = "SUB.";
+		break;
+	case Operation::bitwiseAnd:
+		action = "AND.";
+		break;
+	case Operation::bitwiseOr:
+		action = "BIS.";
+		break;
+	case Operation::bitwiseXor:
+		action = "XOR.";
+		break;
+	}
+
+	//Assembler's code generation 
+	o << "\tMOV." << type << " " << bb->get_cfg()->get_var_index(operand1) << "(R4), " << workingReg << endl;
+	o << "\t" << action << type << " " << bb->get_cfg()->get_var_index(operand2) << "(R4), " << workingReg << endl;
+	o << "\tMOV." << type << " " << workingReg << ", " << bb->get_cfg()->get_var_index(destination) << "(R4)" << endl;
+}
+
 void IRInstrBinaryOperation::printIR(ostream &o)
 {
 	string mnemonic = "add";

@@ -24,6 +24,7 @@ namespace ir {
 			void addCFG(CFG *cfg);
 
 			void generateAssembly(string out);
+			void generateAssemblyMSP430(string out);
 			//void optimise();
 
 		protected:
