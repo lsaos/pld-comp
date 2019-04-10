@@ -30,6 +30,7 @@ namespace ir {
 		~BasicBlock();
 
 		void gen_asm(ostream &o); /**< x86 assembly code generation for this basic block (very simple) */
+		void gen_asm_MSP430(ostream &o); /**< MSP430 assembly code generation for this basic block (very simple) */
 
 		void printIR();
 
