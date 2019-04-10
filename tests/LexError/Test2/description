@@ -1,0 +1,1 @@
+Test on a file containing an unexpected character (impossible for the lexer).
