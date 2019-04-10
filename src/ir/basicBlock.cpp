@@ -62,6 +62,15 @@ void BasicBlock::gen_asm(ostream& o)
 	}
 }
 
+void BasicBlock::gen_asm_MSP430(ostream& o)
+{
+	for (auto i : instrs)
+	{
+		i->gen_asm_MSP430(o);
+	}
+	//No jump for MSP430 as only simple linear codes are managed in this compiler
+}
+
 void BasicBlock::printIR()
 {
 	for (auto i : instrs)

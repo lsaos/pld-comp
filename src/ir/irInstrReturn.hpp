@@ -11,6 +11,7 @@ namespace ir
 			~IRInstrReturn();
 
 			void gen_asm(ostream &o);
+			void gen_asm_MSP430(ostream &o);
 
 			void printIR(ostream &o);
 		

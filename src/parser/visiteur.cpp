@@ -150,8 +150,10 @@ antlrcpp::Any Visiteur::visitDeclaration(exprParser::DeclarationContext *ctx) {
 			if (sousDeclaration->at(j)->isVariable()) {
 				Variable* var = (Variable*)sousDeclaration->at(j);
 				var->setType(type);
-			}
-			declarations->push_back(sousDeclaration->at(j));
+                declarations->insert(declarations->begin(), sousDeclaration->at(j));
+			} else {
+    			declarations->push_back(sousDeclaration->at(j));
+            }
 		}
 	}
 #ifdef TREEVISIT
@@ -255,11 +257,13 @@ antlrcpp::Any Visiteur::visitBlock(exprParser::BlockContext *ctx) {
 	vector<Instruction*>* firstInstructions = new vector<Instruction*>();
 	for (int i = 0; i < ctx->declaration().size(); i++) {
 		vector<Instruction*>* declarations = (vector<Instruction*>*)visit(ctx->declaration(i));
-		//First pass : getting all declarations of symbols
-		firstInstructions->insert(firstInstructions->begin(), declarations->at(0));
-		if (declarations->size() > 1) {
-			firstInstructions->push_back(declarations->at(1));
-		}
+		for (auto instr : *declarations){
+            if(instr->isVariable()){
+                firstInstructions->insert(firstInstructions->begin(), instr);
+            } else {
+                firstInstructions->push_back(instr);
+            }
+        }
 		delete declarations;
 	}
 	for (int i = 0; i < firstInstructions->size(); i++) {

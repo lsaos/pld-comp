@@ -154,6 +154,23 @@ void CFG::gen_asm(ostream& o)
 	//gen_asm_epilogue(o);
 }
 
+void CFG::gen_asm_MSP430(ostream& o)
+{
+	bool prologue = true;
+
+	for (auto bb : bbs)
+	{
+		if (prologue)
+		{
+			gen_MSP430_prologue(o);
+			prologue = false;
+		}
+
+		bb->gen_asm_MSP430(o);
+	}
+	gen_MSP430_epilogue(o);
+}
+
 void CFG::gen_asm_prologue(ostream& o)
 {
 	o << "\tpushq %rbp" << endl << "\tmovq %rsp, %rbp" << endl;
@@ -202,6 +219,24 @@ void CFG::gen_asm_epilogue(ostream& o)
 {
 	//Créer un nouveau bloc ou pas ?
 	o << "\tpopq %rbp" << endl << "\tret" << endl;
+}
+
+void CFG::gen_MSP430_prologue(ostream& o)
+{
+	vector<Variable*> variables = function->getVariables(false);
+	o << "main:" << endl;
+	o << "\tPUSHM.W #1, R4" << endl;
+	o << "\tMOV.W R1, R4" << endl;
+	o << "\tSUB.W #" << 2*variables.size() << ", R1" << endl;
+}
+
+void CFG::gen_MSP430_epilogue(ostream& o)
+{
+	vector<Variable*> variables = function->getVariables(false);
+	o << "\tADD.W #" << 2*variables.size() << ", R1" << endl;
+	o << "\tPOPW.W #1, r4" << endl;
+	o << "\tRET" << endl;
+	
 }
 
 void CFG::printIR()
