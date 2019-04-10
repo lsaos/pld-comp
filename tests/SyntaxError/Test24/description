@@ -1,1 +1,1 @@
-char with more than one char
+[Syntax Error] : declaration of a new char with more than one char (char c = 'ab')

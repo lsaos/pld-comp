@@ -1,5 +1,6 @@
 int main (){
 
-int c='ab';
+char c ='ab';
 return 0;
+
 }
