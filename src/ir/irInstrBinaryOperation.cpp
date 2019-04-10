@@ -74,9 +74,17 @@ void IRInstrBinaryOperation::gen_asm_MSP430(ostream &o)
 	}
 
 	//Assembler's code generation 
-	o << "\tMOV." << type << " " << bb->get_cfg()->get_var_index(operand1) << "(R4), " << workingReg << endl;
-	o << "\t" << action << type << " " << bb->get_cfg()->get_var_index(operand2) << "(R4), " << workingReg << endl;
-	o << "\tMOV." << type << " " << workingReg << ", " << bb->get_cfg()->get_var_index(destination) << "(R4)" << endl;
+	if (Operation::mul)
+	{
+		cout << "Assembly error : MSP430 does not manage multiplication" << endl;
+	}
+	else
+	{
+		o << "\tMOV." << type << " " << bb->get_cfg()->get_var_index(operand1) << "(R4), " << workingReg << endl;
+		o << "\t" << action << type << " " << bb->get_cfg()->get_var_index(operand2) << "(R4), " << workingReg << endl;
+		o << "\tMOV." << type << " " << workingReg << ", " << bb->get_cfg()->get_var_index(destination) << "(R4)" << endl;
+	}
+	
 }
 
 void IRInstrBinaryOperation::printIR(ostream &o)

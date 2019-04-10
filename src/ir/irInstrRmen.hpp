@@ -11,7 +11,7 @@ namespace ir {
 
 		public:
 			/**  constructor */
-			IRInstrRmen(BasicBlock* bb, string addr, string dest);
+			IRInstrRmen(BasicBlock* bb, string addr, string dest, string offset);
 
 			/** Actual code generation */
 			void gen_asm(ostream &o);
@@ -21,5 +21,6 @@ namespace ir {
 		protected:
 			string addr;
 			string dest;
+			string offset;
 	};
 }

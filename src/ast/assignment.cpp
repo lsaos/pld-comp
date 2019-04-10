@@ -136,13 +136,22 @@ namespace ast
 
 	string Assignment::buildIR(CFG* cfg)
 	{
+		string left;
 		string right = expr->buildIR(cfg);
-		//string left = identifier->buildIR(cfg); // identifier->getReferencedVariable()->getName();
-		//cfg->current_bb->add_IRInstr(new IRInstrWmen(cfg->current_bb,left,right), (identifier.get())->getReferencedVariable()->getType());
 
-		//Simple assigment code
-		string left = identifier->getReferencedVariable()->getName();
-		cfg->current_bb->add_IRInstr(new IRInstrCopy(cfg->current_bb, left, right), (identifier.get())->getReferencedVariable()->getType());
+		if (identifier->isReferencingArray())
+		{
+			string index = identifier->buildIR(cfg); // identifier->getReferencedVariable()->getName();
+			left = identifier->getReferencedVariable()->getName();
+			cfg->current_bb->add_IRInstr(new IRInstrWmen(cfg->current_bb, left, right, index), cfg->get_var_type(left));
+		}
+		else
+		{
+			//Simple assigment code
+			left = identifier->buildIR(cfg);
+			cfg->current_bb->add_IRInstr(new IRInstrCopy(cfg->current_bb, left, right), (identifier.get())->getReferencedVariable()->getType());
+		}
+
 		return left;
 	}
 }
