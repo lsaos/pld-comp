@@ -1,0 +1,8 @@
+#!/bin/sh
+../../compiler "$1.c" -c -o
+
+as -o "$1.o" "$1.s"
+gcc "$1.o"
+./a.out
+echo $?
+rm a.out "$1.o" "$1.s"

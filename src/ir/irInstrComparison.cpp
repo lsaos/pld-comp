@@ -14,7 +14,7 @@ IRInstrComparison::IRInstrComparison(BasicBlock* bb, IRInstrComparison::Operatio
 
 void IRInstrComparison::gen_asm(ostream &o)
 {
-	//choix opération set
+	//Choose set operation to occur
 	string set = "setl";
 	switch (operation)
 	{

@@ -10,7 +10,7 @@ namespace ir {
 	class IRInstrComparison : public IRInstr {
 
 	public:
-
+		//Comparison operations available in this compiler
 		typedef enum {
 			cmp_eq,
 			cmp_neq,
@@ -20,13 +20,13 @@ namespace ir {
 			cmp_ge
 		} Operation;
 
-		/**  constructor */
-		//IRInstr(BasicBlock*, Type t);
+		//Constructor
 		IRInstrComparison(BasicBlock*, Operation op, string dest, string op1, string op2);
 
 		/** Actual code generation */
-		void gen_asm(ostream &o); /**< x86 assembly code generation for this IR instruction */
-
+		//x86 assembly code generation for this IR instruction
+		void gen_asm(ostream &o);
+		//Print IR instructions using IR mnemonics
 		void printIR(ostream &o);
 
 	protected:
