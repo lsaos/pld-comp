@@ -43,6 +43,7 @@ namespace ast
 
 	public:
 		virtual void checkSemantic(bool advanced) const;
+		// Prints a textual representation of the AST tree
 		virtual void toTextualRepresentation(ostream& out, size_t i = 0) const;
 
 	public:

@@ -18,7 +18,6 @@
 using namespace std;
 
 #include "error.hpp"
-//#include "../ir/cfg.hpp"
 
 namespace ir {
 	class CFG;

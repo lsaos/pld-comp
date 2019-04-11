@@ -11,6 +11,7 @@ namespace ir {
 
 	public:
 
+		//Binary operator taken into account in this compiler
 		typedef enum {
 			add,
 			sub,
@@ -20,20 +21,20 @@ namespace ir {
 			bitwiseXor
 		} Operation;
 
-		/**  constructor */
-		//IRInstr(BasicBlock*, Type t);
+		//Constructor
 		IRInstrBinaryOperation(BasicBlock*,Operation op, string dest, string op1, string op2);
 
-		/** Actual code generation */
-		void gen_asm(ostream &o); /**< x86 assembly code generation for this IR instruction */
-		void gen_asm_MSP430(ostream &o); /**< MSP430 assembly code generation for this IR instruction */
-
+		//x86 assembly code generation for this IR instruction
+		void gen_asm(ostream &o);
+		//MSP430 assembly code generation for this IR instruction
+		void gen_asm_MSP430(ostream &o);
+		//Print IR instructions using IR mnemonics
 		void printIR(ostream &o);
 
 	protected:
-		string destination;
-		string operand1;
-		string operand2;
-		Operation operation;
+		string destination; //destination register
+		string operand1; //first/left operand 
+		string operand2; //second/right operand
+		Operation operation; //operation to occure
 	};
 }

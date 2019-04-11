@@ -14,22 +14,24 @@ using namespace ast;
 namespace ir {
 	class IR {
 		public:
+			//Constructor
 			IR(Program * prog) : prog(prog) {}
-			//~IR();
 
 			void generateIR(bool optimize);
 
+			//Print instructions using IR mnemonics
 			void printIR();
 
 			void addCFG(CFG *cfg);
 
+			//x86 assembly code generation
 			void generateAssembly(string out);
+			//MSP430 assembly code generation
 			void generateAssemblyMSP430(string out);
-			//void optimise();
 
 		protected:
-			Program* prog;
-			map<Function*, CFG *> cfgs; //?? Lien entre CFG et fonctions ? <Identifiable*, CFG*> ou <Function*, CFG *> ??
-			ofstream file;
+			Program* prog; //Programme after being trated in the AST
+			map<Function*, CFG *> cfgs; //Links between CFG and functions
+			ofstream file; //Output file for assembly code generation
 	};
 }
