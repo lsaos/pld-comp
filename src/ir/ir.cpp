@@ -26,8 +26,7 @@ void IR::generateIR(bool optimize)
 		cfg->generateCFG();
 		context = cfg->current_context;
 
-		//optimize
-		if (true)
+		if (optimize)
 			cfg->optimize();
 	}
 }
