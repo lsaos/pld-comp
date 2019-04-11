@@ -1,3 +1,8 @@
+//
+// (c) 2019 The Super 4404 C Compiler
+// A.Belin, A.Nahid, L.Ohl, L.Saos, A.Verrier, I.Zemmouri
+// INSA Lyon
+//
 #pragma once
 
 using namespace std;
@@ -6,24 +11,13 @@ using namespace std;
 
 /**  The class for a basic block */
 
-/* A few important comments.
-	 IRInstr has no jump instructions:
-	 assembly jumps are generated as follows in BasicBlock::gen_asm():
-	 1/ a cmp_* comparison instructions, if it is the last instruction of its block,
-	   generates an actual assembly comparison followed by a conditional jump to the exit_false branch
-			 If it is not the last instruction of its block, it behaves as an arithmetic two-operand instruction (add or mult)
-		 2/ BasicBlock::gen_asm() first calls IRInstr::gen_asm() on all its instructions, and then
-			if  exit_true  is a  nullptr, it generates the epilogue
-				if  exit_false is not a nullptr, and the last instruction is not a cmp, it generates two conditional branches based on the value of the last variable assigned
-		otherwise it generates an unconditional jmp to the exit_true branch
-*/
-
 namespace ir {
 
 	class CFG;
 
 	class BasicBlock {
 	public:
+		//Constructor of BasicBlock
 		BasicBlock(CFG* cfg, string entry_label);
 
 		//Delete all the IRInstr of the BB
@@ -37,23 +31,38 @@ namespace ir {
 		//Print instructions using IR mnemonics
 		void printIR();
 
+		//Add an IR Instruction to the list of the current BB's instructions
 		void add_IRInstr(IRInstr* instr, Type t);
 
+		//Optimize the generate IR
 		void optimize();
 
+		//Set the last var to be used in the current BB
 		void set_last_var(string);
 
+		//Returns the CFG containing the current BB
 		CFG* get_cfg() { return cfg; }
+
+		//Returns the label of the current BB
 		string get_label();
 
-		BasicBlock* exit_true;  //pointer to the next basic block, true branch. If nullptr, return from procedure
-		BasicBlock* exit_false; //pointer to the next basic block, false branch. If null_ptr, the basic block ends with an unconditional jump
+		//Pointer to the next basic block, true branch. If nullptr, return from procedure
+		BasicBlock* exit_true; 
+
+		//Pointer to the next basic block, false branch. If null_ptr, the basic block ends with an unconditional jump
+		BasicBlock* exit_false;
 		
 	protected:
-		string label; //label of the BB, also will be the label in the generated code
-		CFG* cfg; //the CFG where this block belongs
-		vector<IRInstr*> instrs; //the instructions themselves
-		string lastVar;
+		//label of the BB, also will be the label in the generated code
+		string label;
+		
+		//the CFG where this block belongs
+		CFG* cfg; 
 
+		//the instructions themselves
+		vector<IRInstr*> instrs; 
+
+		//The last variable's label to be used in this BB
+		string lastVar;
 	};
 }

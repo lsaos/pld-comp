@@ -18,8 +18,13 @@ namespace ir {
 			void printIR(ostream &o);
 
 		protected:
+			//Name of the entry of the variable to read (in the symbol table)
 			string addr;
+
+			//Name of the destination variable
 			string dest;
+
+			//Offset of the variable to read (based on addr)
 			string offset;
 	};
 }
