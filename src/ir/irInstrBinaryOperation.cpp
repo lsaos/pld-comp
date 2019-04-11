@@ -77,7 +77,7 @@ void IRInstrBinaryOperation::gen_asm_MSP430(ostream &o)
 	}
 
 	//Assembler's code generation 
-	if (Operation::mul)
+	if (operation==Operation::mul)
 	{
 		cout << "Assembly error : MSP430 does not manage multiplication" << endl;
 	}

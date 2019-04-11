@@ -1,6 +1,0 @@
-#pragma once
-
-int main() {
-	int a = 2;
-	return a*1;
-}
