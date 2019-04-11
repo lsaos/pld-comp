@@ -10,7 +10,7 @@ using namespace ast;
 map<Type, string> AssemblyType::operatorType = { {Type::Character, "b"}, {Type::Integer, "l"} };
 map<Type, string> AssemblyType::registerType = { {Type::Character, "%al"}, {Type::Integer, "%eax"} };
 
-CFG::CFG(Function* function) : function(function), nextFreeSymbolIndex(0), nextBBnumber(0), current_context(0)
+CFG::CFG(Function* function) : function(function), nextFreeSymbolIndex(0), nextBBnumber(0), current_context(0), functionCall(false)
 {
 	add_to_symbol_table("!bp", Type::Void);
 
@@ -199,6 +199,9 @@ void CFG::gen_asm_MSP430(ostream& o)
 void CFG::gen_asm_prologue(ostream& o)
 {
 	o << "\tpushq %rbp" << endl << "\tmovq %rsp, %rbp" << endl;
+
+	if (functionCall)
+		o << "\tsubq $16, %rsp" << endl;
 	
 	vector<Variable*> params = function->getParameters();
 
@@ -242,8 +245,8 @@ void CFG::gen_asm_prologue(ostream& o)
 
 void CFG::gen_asm_epilogue(ostream& o)
 {
-	//Créer un nouveau bloc ou pas ?
-	o << "\tpopq %rbp" << endl << "\tret" << endl;
+	o << "\tleave" << endl << "\tret" << endl;
+	//o << "\tpopq %rbp" << endl << "\tret" << endl;
 }
 
 void CFG::gen_MSP430_prologue(ostream& o)
@@ -301,4 +304,9 @@ void CFG::add_variable_name(Variable* var)
 string CFG::get_var_name(Variable* var)
 {
 	return variablesName[var];
+}
+
+void CFG::set_functionCall(bool b)
+{
+	functionCall = b;
 }

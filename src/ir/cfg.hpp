@@ -57,6 +57,7 @@ namespace ir {
 			Type get_return_type();
 			int get_nextFreeSymbolIndex();
 			void set_nextFreeSymbolIndex(int);
+			void set_functionCall(bool);
 
 			// basic block management
 			string new_BB_name();
@@ -80,6 +81,8 @@ namespace ir {
 			map<Variable*, string> variablesName;
 			int nextFreeSymbolIndex; /**< to allocate new symbols in the symbol table */
 			int nextBBnumber; /**< just for naming */
+
+			bool functionCall;
 
 			vector <BasicBlock*> bbs; /**< all the basic blocks of this CFG*/
 	};
