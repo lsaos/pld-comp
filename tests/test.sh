@@ -125,13 +125,10 @@ for i in *.s
 do
 	fileName=`basename $i .s`
 	if [ -r "$fileName.s" ]; then
-		as -o "$fileName.o" "$fileName.s"
-		gcc "$fileName.o"
-		./a.out
+		as -o "$fileName.o" "$fileName.s" && gcc "$fileName.o" && ./a.out > putChar
 		returnCodeAssembly=$?
 		rm -f "$fileName.o" "a.out"
-		gcc "$fileName.c"
-		./a.out
+		gcc "$fileName.c" && ./a.out
 		returnCodeGCC=$?
 		rm -f "a.out"
 		if [ "$returnCodeGCC" = "$returnCodeAssembly" ]

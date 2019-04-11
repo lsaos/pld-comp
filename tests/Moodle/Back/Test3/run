@@ -1,1 +1,1 @@
-../../../../compiler test3.c
+../../../../compiler test3.c -c

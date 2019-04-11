@@ -1,5 +1,5 @@
 #include<inttypes.h>
-void main(){
+int main(){
 	char i;
 	i='A';
 	
@@ -8,4 +8,5 @@ void main(){
 			i=i+1;
 		} 
 	putchar('\n');
+    return 0;
 }
