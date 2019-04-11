@@ -481,7 +481,7 @@ antlrcpp::Any Visitor::visitChar(exprParser::CharContext *ctx) {
                 value='\n';
         }
     } else {
-    	char value = (char)ctx->CHAR()->getText().at(1);
+    	value = (char)ctx->CHAR()->getText().at(1);
     }
 	Constant * constant = new Constant(pos);
 	constant->setType(Type::Character);
