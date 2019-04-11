@@ -31,22 +31,12 @@ CFG::CFG(Function* function) : function(function), nextFreeSymbolIndex(0), nextB
 
 	for (auto var : vars)
 	{
-		//var->setName(var->getName() + "_" + to_string(current_context));
 		string name = var->getName() + "_" + to_string(current_context);
 		variablesName[var] = name;
-
-		/*if (var->getScope() == Scope::Global){
-			globalVariables[var->getName()] = var->getName();
-			SymbolType[var->getName()] = var->getType();
-		}
+		if(var->isArray())
+			add_to_symbol_table(name, var->getType(), var->getArraySize());
 		else
-		{*/
-			if(var->isArray())
-				add_to_symbol_table(name, var->getType(), var->getArraySize());
-			else
-				add_to_symbol_table(name, var->getType());
-		//}
-			
+			add_to_symbol_table(name, var->getType());
 	}
 
 	last_bb = new BasicBlock(this, function->getName()+"_last");
@@ -97,7 +87,6 @@ Function* CFG::getFunction()
 void CFG::add_to_symbol_table(string var, Type t, int nbCases)
 {
 	int size = 0;
-	//string name = var + "_" + to_string(current_context);
 
 	switch (t)
 	{
@@ -175,8 +164,6 @@ void CFG::gen_asm(ostream& o)
 
 		bb->gen_asm(o);
 	}
-
-	//gen_asm_epilogue(o);
 }
 
 void CFG::gen_asm_MSP430(ostream& o)
@@ -246,7 +233,6 @@ void CFG::gen_asm_prologue(ostream& o)
 void CFG::gen_asm_epilogue(ostream& o)
 {
 	o << "\tleave" << endl << "\tret" << endl;
-	//o << "\tpopq %rbp" << endl << "\tret" << endl;
 }
 
 void CFG::gen_MSP430_prologue(ostream& o)

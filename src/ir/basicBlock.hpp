@@ -29,9 +29,12 @@ namespace ir {
 		//Delete all the IRInstr of the BB
 		~BasicBlock();
 
-		void gen_asm(ostream &o); /**< x86 assembly code generation for this basic block (very simple) */
-		void gen_asm_MSP430(ostream &o); /**< MSP430 assembly code generation for this basic block (very simple) */
+		//x86 assembly code generation for this basic block
+		void gen_asm(ostream &o);
+		//MSP430 assembly code generation for this basic block
+		void gen_asm_MSP430(ostream &o);
 
+		//Print instructions using IR mnemonics
 		void printIR();
 
 		void add_IRInstr(IRInstr* instr, Type t);
@@ -43,13 +46,13 @@ namespace ir {
 		CFG* get_cfg() { return cfg; }
 		string get_label();
 
-		BasicBlock* exit_true;  /**< pointer to the next basic block, true branch. If nullptr, return from procedure */
-		BasicBlock* exit_false; /**< pointer to the next basic block, false branch. If null_ptr, the basic block ends with an unconditional jump */
+		BasicBlock* exit_true;  //pointer to the next basic block, true branch. If nullptr, return from procedure
+		BasicBlock* exit_false; //pointer to the next basic block, false branch. If null_ptr, the basic block ends with an unconditional jump
 		
 	protected:
-		string label; /**< label of the BB, also will be the label in the generated code */
-		CFG* cfg; /** < the CFG where this block belongs */
-		vector<IRInstr*> instrs; /** < the instructions themselves. */
+		string label; //label of the BB, also will be the label in the generated code
+		CFG* cfg; //the CFG where this block belongs
+		vector<IRInstr*> instrs; //the instructions themselves
 		string lastVar;
 
 	};

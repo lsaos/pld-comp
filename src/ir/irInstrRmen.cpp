@@ -11,7 +11,7 @@ using namespace ir;
 IRInstrRmen::IRInstrRmen(BasicBlock* bb, string addr, string dest, string offset) : IRInstr(bb, (bb->get_cfg())->get_var_type(addr)), addr(addr), dest(dest), offset(offset) { }
 
 void IRInstrRmen::gen_asm(ostream &o) {
-	// check the variable type
+	//Get the variable type
 	string type = AssemblyType::operatorType[t];
 	string workingReg = AssemblyType::registerType[t];
 	

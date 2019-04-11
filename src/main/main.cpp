@@ -21,7 +21,7 @@ using namespace antlr4;
 #include "../parser/exprLexer.h"
 #include "../parser/exprParser.h"
 #include "../parser/exprBaseVisitor.h"
-#include "../parser/visiteur.hpp"
+#include "../parser/visitor.hpp"
 
 // Abstract syntax tree
 #include "../ast/program.hpp"
@@ -94,7 +94,6 @@ int main(int argc, char* argv[])
 	if (argc < 2)
 	{
 		cout << "Usage: comp source_file [-a] [-o] [-c] [-t]" << endl;
-		system("pause"); // TODO: remove it
 		return RETURN_CODE_INVALID_ARGS;
 	}
 
@@ -131,7 +130,6 @@ int main(int argc, char* argv[])
 	if (!file)
 	{
 		cout << "Failed to open file '" << argv[1] << '\'' << endl;
-		system("pause"); // TODO: remove it
 		return RETURN_CODE_OPEN_FILE_FAILED;
 	}
 
@@ -148,12 +146,11 @@ int main(int argc, char* argv[])
 	if (syntaxErrorCount != 0)
 	{
 		cout << "Compilation failed with syntax errors" << endl;
-		system("pause"); // TODO: remove it
 		return RETURN_CODE_SYNTAX_ERROR;
 	}
 
 	// Create the abstract syntax tree
-	Visiteur visitor;
+	Visitor visitor;
 	Program* prog = nullptr;
 
 	try
@@ -164,7 +161,6 @@ int main(int argc, char* argv[])
 	{
 		cerr << e.what() << endl;
 		cout << "Compilation failed with syntax errors" << endl;
-		system("pause"); // TODO: remove it
 		return RETURN_CODE_SYNTAX_ERROR;
 	}
 
@@ -180,7 +176,6 @@ int main(int argc, char* argv[])
 	catch (...)
 	{
 		cout << "Compilation failed with semantic errors" << endl;
-		system("pause"); // TODO: remove it
 		return RETURN_CODE_SEMANTIC_ERROR;
 	}
 
@@ -218,7 +213,6 @@ int main(int argc, char* argv[])
 		chrono::duration_cast<chrono::milliseconds>(chrono::high_resolution_clock::now() - startTime).count()
 		<< "ms" << endl;
 
-	system("pause"); // TODO: remove it
 
 	return RETURN_CODE_OK;
 }

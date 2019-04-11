@@ -1,0 +1,319 @@
+-------------TEST : ./Moodle/Back/Test7
+
+
+
+-------------TEST : ./Moodle/Back/Test1
+
+
+
+-------------TEST : ./Moodle/Back/Test2
+
+
+
+-------------TEST : ./Moodle/Back/Test5
+
+
+
+-------------TEST : ./Moodle/Back/Test3
+
+
+
+-------------TEST : ./Moodle/Back/Test8
+
+
+
+-------------TEST : ./Moodle/Back/Test4
+
+
+
+-------------TEST : ./Moodle/Back/Test6
+
+
+
+-------------TEST : ./ValidPrograms/Test7
+
+Program returning the result of an expression.
+
+-------------TEST : ./ValidPrograms/Test1
+
+Running a complex program involving arrays and a for loop.
+
+-------------TEST : ./ValidPrograms/Test12
+
+Verifying Operations priorities between multiplication and addition.
+
+-------------TEST : ./ValidPrograms/Test2
+
+Program returning a basic integer.
+
+-------------TEST : ./ValidPrograms/Test10
+
+Program involving some conditions (2)
+
+-------------TEST : ./ValidPrograms/Test5
+
+Program verifying the binary operator |
+
+-------------TEST : ./ValidPrograms/Test14
+
+Veryfing that chars are allocated.
+
+-------------TEST : ./ValidPrograms/Test13
+
+Verifying that a basic loop works.
+
+-------------TEST : ./ValidPrograms/Test3
+
+Program returning an integer contained in a variable.
+
+-------------TEST : ./ValidPrograms/Test8
+
+Program involving function calls.
+
+-------------TEST : ./ValidPrograms/Test4
+
+Program verifying the binary operator &
+
+-------------TEST : ./ValidPrograms/Test11
+
+Program involving several loops
+
+-------------TEST : ./ValidPrograms/Test6
+
+Program verifying the binary operator ^
+
+-------------TEST : ./SyntaxError/Test7
+
+[Syntax Error] : arithmetic error
+
+
+-------------TEST : ./SyntaxError/Test30
+
+[Syntax Error] : Loop for
+
+
+-------------TEST : ./SyntaxError/Test1
+
+[Syntax Error] : expression with no assignment
+
+
+-------------TEST : ./SyntaxError/Test25
+
+[Syntax Error] : Loop for
+
+
+-------------TEST : ./SyntaxError/Test24
+
+[Syntax Error] : declaration of a new char with more than one char (char c = 'ab')
+
+
+-------------TEST : ./SyntaxError/Test12
+
+[Syntax Error] : arithmetic error
+
+
+-------------TEST : ./SyntaxError/Test16
+
+[Syntax Error] : bad function call
+
+
+-------------TEST : ./SyntaxError/Test20
+
+[Syntax Error] : if .. else
+
+
+-------------TEST : ./SyntaxError/Test23
+
+[Syntax Error] : if .. else
+
+
+-------------TEST : ./SyntaxError/Test2
+
+[Syntax Error] : missing ';'
+
+
+-------------TEST : ./SyntaxError/Test17
+
+[Syntax Error] : loop while
+
+
+-------------TEST : ./SyntaxError/Test27
+
+[Syntax Error] : Loop for
+
+
+-------------TEST : ./SyntaxError/Test21
+
+[Syntax Error] : if .. else
+
+
+-------------TEST : ./SyntaxError/Test10
+
+[Syntax Error] : function definition
+
+
+-------------TEST : ./SyntaxError/Test29
+
+[Syntax Error] : Loop for
+
+
+-------------TEST : ./SyntaxError/Test5
+
+[Syntax Error] : missing ';'
+
+
+-------------TEST : ./SyntaxError/Test9
+
+[Syntax Error] : function definition
+
+
+-------------TEST : ./SyntaxError/Test14
+
+[Syntax Error] : bad function call
+
+
+-------------TEST : ./SyntaxError/Test13
+
+[Syntax Error] : arithmetic error
+
+
+-------------TEST : ./SyntaxError/Test26
+
+[Syntax Error] : Loop for
+
+
+-------------TEST : ./SyntaxError/Test22
+
+[Syntax Error] : if .. else
+
+
+-------------TEST : ./SyntaxError/Test3
+
+[Syntax Error] : missing ';'
+
+
+-------------TEST : ./SyntaxError/Test8
+
+[Syntax Error] : function definition
+
+
+-------------TEST : ./SyntaxError/Test18
+
+[Syntax Error] : loop while
+
+
+-------------TEST : ./SyntaxError/Test28
+
+[Syntax Error] : Loop for
+
+
+-------------TEST : ./SyntaxError/Test15
+
+[Syntax Error] : bad function call
+
+
+-------------TEST : ./SyntaxError/Test4
+
+[Syntax Error] : program with only declarations and no function
+
+
+-------------TEST : ./SyntaxError/Test19
+
+[Syntax Error] : loop while
+
+
+-------------TEST : ./SyntaxError/Test11
+
+[Syntax Error] : arithmetic error
+
+
+-------------TEST : ./SyntaxError/Test6
+
+[Syntax Error] : function definition
+
+
+-------------TEST : ./SemanticError/Fonctions/Test7
+
+Returning an expression whose type doesn't match the function's.
+
+
+-------------TEST : ./SemanticError/Fonctions/Test1
+
+Calling a function with the wrong number of parameters
+
+
+-------------TEST : ./SemanticError/Fonctions/Test2
+
+Calling a function with a parameter not matching the needed type
+
+
+-------------TEST : ./SemanticError/Fonctions/Test5
+
+int function that doesn't have a return statement.
+
+
+-------------TEST : ./SemanticError/Fonctions/Test9
+
+Trying to define two times the same function (exact signature)
+
+
+-------------TEST : ./SemanticError/Fonctions/Test3
+
+Calling a function that doesn't exist
+
+
+-------------TEST : ./SemanticError/Fonctions/Test8
+
+Returning a variabl whose type doesn't match the function's.
+
+
+-------------TEST : ./SemanticError/Fonctions/Test4
+
+Compiling a program that doesn't have any main function.
+
+
+-------------TEST : ./SemanticError/Fonctions/Test6
+
+Returning a constant not matching the type of the function.
+
+
+-------------TEST : ./SemanticError/Variables/Test1
+
+Working on an undefined variable (l-value)
+
+
+-------------TEST : ./SemanticError/Variables/Test2
+
+Working on an undefined variable (R-value)
+
+
+-------------TEST : ./SemanticError/Variables/Test5
+
+Assigning a variable whose type doesn't match the l-value's.
+
+
+-------------TEST : ./SemanticError/Variables/Test3
+
+Assigning a constant with the wrong type to a variable
+
+
+-------------TEST : ./SemanticError/Variables/Test4
+
+Assigning an expression whose type deosn't match the variable's
+
+
+-------------TEST : ./SemanticError/Variables/Test6
+
+Defining twice the same variable.
+
+
+-------------TEST : ./LexError/Test1
+
+Test on empty file. Therefore, no compilation possible.
+
+
+-------------TEST : ./LexError/Test2
+
+Test on a file containing an unexpected character (impossible for the lexer).
+
+

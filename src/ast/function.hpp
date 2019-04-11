@@ -44,7 +44,9 @@ namespace ast
 		bool isExtern() const { return isExternal; }
 
 	public:
+		// Get a textual representation of the AST tree
 		virtual void toTextualRepresentation(ostream& out, size_t i) const;
+		// Get the symbol or the constant associated to an instruction, used for warning messages
 		virtual string getStringRepresentation() const;
 
 	public:

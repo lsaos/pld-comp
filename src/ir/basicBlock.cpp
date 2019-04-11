@@ -12,13 +12,7 @@ BasicBlock::BasicBlock(CFG* cfg, string entry_label) : cfg(cfg), label(entry_lab
 	exit_true = nullptr;
 }
 
-BasicBlock::~BasicBlock()
-{
-	for (auto i : instrs)
-	{
-		//delete i;
-	}
-}
+BasicBlock::~BasicBlock(){}
 
 void BasicBlock::add_IRInstr(IRInstr* instr, Type t)
 {
@@ -37,15 +31,12 @@ void BasicBlock::set_last_var(string var)
 
 void BasicBlock::gen_asm(ostream& o)
 {
-	//o << endl << label << " :" << endl;
-
 	for (auto i : instrs)
 	{
 		i->gen_asm(o);
 	}
 
-	//Ajouter les jumps ici
-
+	//Jumps are added here
 	if (exit_true == nullptr)
 	{
 		cfg->gen_asm_epilogue(o);
@@ -85,8 +76,7 @@ void BasicBlock::optimize()
 	for (int i = 0; i < instrs.size() ; i++)
 	{
 		instr = instrs[i];
-		instr->optimize(instrs,i); //Ou pas, faire l'optimisation ici plutôt pour connaître les IRInstr avant et après celle considérée
-
+		instr->optimize(instrs,i);
 	}
 }
 
