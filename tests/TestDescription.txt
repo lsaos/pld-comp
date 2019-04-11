@@ -30,6 +30,186 @@
 
 
 
+-------------TEST : ./Moodle/Front/Test7
+
+From moodle : 09_OperatorLeq.c
+
+
+-------------TEST : ./Moodle/Front/Test30
+
+From moodle : 50_CharConst.c
+
+
+-------------TEST : ./Moodle/Front/Test31
+
+From moodle : 51_CharConstSpecial.c
+
+
+-------------TEST : ./Moodle/Front/Test1
+
+From moodle : 01_SimpleDeclaration.c
+
+
+-------------TEST : ./Moodle/Front/Test25
+
+From moodle : 41_IfElse.c
+
+
+-------------TEST : ./Moodle/Front/Test24
+
+From moodle : 40_If.c
+
+
+-------------TEST : ./Moodle/Front/Test12
+
+From moodle : 15_OperatorOr.c
+
+
+-------------TEST : ./Moodle/Front/Test16
+
+From moodle : 19_OperatorLeftShift.c
+
+
+-------------TEST : ./Moodle/Front/Test20
+
+From moodle : 27_OperatorComp.c
+
+
+-------------TEST : ./Moodle/Front/Test23
+
+From moodle : 39_ArithmeticExpressionWithPar.c
+
+
+-------------TEST : ./Moodle/Front/Test2
+
+From moodle : 03_OperatorPlus.c
+
+
+-------------TEST : ./Moodle/Front/Test33
+
+From moodle : 54_FunctionCallCustom.c
+
+
+-------------TEST : ./Moodle/Front/Test35
+
+From moodle : 58_MultipleVarDeclarations.c
+
+
+-------------TEST : ./Moodle/Front/Test17
+
+From moodle : 20_OperatorRightShift.c
+
+
+-------------TEST : ./Moodle/Front/Test27
+
+From moodle : 44_IfElseIf.c
+
+
+-------------TEST : ./Moodle/Front/Test21
+
+From moodle : 37_Par.c
+
+
+-------------TEST : ./Moodle/Front/Test10
+
+From moodle : 12_OperatorDiff.c
+
+
+-------------TEST : ./Moodle/Front/Test29
+
+From moodle : 47_ArrayUse.c
+
+
+-------------TEST : ./Moodle/Front/Test5
+
+From moodle : 07_OperatorInf.c
+
+
+-------------TEST : ./Moodle/Front/Test9
+
+From moodle : 11_OperatorEqu.c
+
+
+-------------TEST : ./Moodle/Front/Test34
+
+From moodle : 55_Return.c
+
+
+-------------TEST : ./Moodle/Front/Test14
+
+From moodle : 17_OperatorBAnd.c
+
+
+-------------TEST : ./Moodle/Front/Test32
+
+From moodle : 53_FunctionCallPutChar.c
+
+
+-------------TEST : ./Moodle/Front/Test36
+
+From moodle : 59_MixedDeclarationsInitializations.c
+
+
+-------------TEST : ./Moodle/Front/Test13
+
+From moodle : 16_OperatorBOr.c
+
+
+-------------TEST : ./Moodle/Front/Test26
+
+From moodle : 42_While.c
+
+
+-------------TEST : ./Moodle/Front/Test22
+
+From moodle : 38_ArithmeticExpression.c
+
+
+-------------TEST : ./Moodle/Front/Test3
+
+From moodle : 04_OperatorMinus.c
+
+
+-------------TEST : ./Moodle/Front/Test8
+
+From moodle : 10_OperatorGeq.c
+
+
+-------------TEST : ./Moodle/Front/Test18
+
+From moodle : 25_OperatorNot.c
+
+
+-------------TEST : ./Moodle/Front/Test28
+
+From moodle : 46_ArrayDec.c
+
+
+-------------TEST : ./Moodle/Front/Test15
+
+From moodle : 18_OperatorNeg.c
+
+
+-------------TEST : ./Moodle/Front/Test4
+
+From moodle : 06_OperatorMult.c
+
+
+-------------TEST : ./Moodle/Front/Test19
+
+From moodle : 26_OperatorXor.c
+
+
+-------------TEST : ./Moodle/Front/Test11
+
+From moodle : 14_OperatorAnd.c
+
+
+-------------TEST : ./Moodle/Front/Test6
+
+From moodle : 08_OperatorSup.c
+
+
 -------------TEST : ./ValidPrograms/Test7
 
 Program returning the result of an expression.
