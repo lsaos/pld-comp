@@ -1,4 +1,4 @@
-#include "visiteur.hpp"
+#include "visitor.hpp"
 
 #include "../ast/program.hpp"
 #include "../ast/assignment.hpp"
@@ -33,14 +33,14 @@ using namespace ast;
 *Its purpose is to build the position (line,column) of a token while parsing
 *for later inspections and error managing.
 **/
-ItemPosition Visiteur::buildPos(size_t line, size_t column) {
+ItemPosition Visitor::buildPos(size_t line, size_t column) {
 	ItemPosition pos;
 	pos.line = line;
 	pos.offset = column;
 	return pos;
 }
 
-Expression* Visiteur::buildBinaryExpression(exprParser::ExpressionContext *ctx, BinaryOperator op) {
+Expression* Visitor::buildBinaryExpression(exprParser::ExpressionContext *ctx, BinaryOperator op) {
 #ifdef TREEVISIT
 	jump(); cout << "BINARY " << int(op) << " (" << endl;
 	indent++;
@@ -58,7 +58,7 @@ Expression* Visiteur::buildBinaryExpression(exprParser::ExpressionContext *ctx, 
 	return (Expression*)binExp;
 }
 
-Expression* Visiteur::buildUnaryExpression(exprParser::ExpressionContext* ctx, UnaryOperator op) {
+Expression* Visitor::buildUnaryExpression(exprParser::ExpressionContext* ctx, UnaryOperator op) {
 #ifdef TREEVISIT
 	jump(); cout << "UNARY " << int(op) << " (" << endl;
 	indent++;
@@ -75,7 +75,7 @@ Expression* Visiteur::buildUnaryExpression(exprParser::ExpressionContext* ctx, U
 	return (Expression*)unary;
 }
 
-antlrcpp::Any Visiteur::visitProg(exprParser::ProgContext *ctx) {
+antlrcpp::Any Visitor::visitProg(exprParser::ProgContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "PROG(" << endl;
 	indent++;
@@ -100,7 +100,7 @@ antlrcpp::Any Visiteur::visitProg(exprParser::ProgContext *ctx) {
 	return prog;
 }
 
-antlrcpp::Any Visiteur::visitFunction(exprParser::FunctionContext *ctx) {
+antlrcpp::Any Visitor::visitFunction(exprParser::FunctionContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "FUNCTION " << ctx->VAR()->getText() << endl;
 	indent++;
@@ -127,7 +127,7 @@ antlrcpp::Any Visiteur::visitFunction(exprParser::FunctionContext *ctx) {
 	return (Instruction*)func;
 }
 
-antlrcpp::Any Visiteur::visitParameters(exprParser::ParametersContext *ctx) {
+antlrcpp::Any Visitor::visitParameters(exprParser::ParametersContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "PARAMETERS(" << endl;
 	indent++;
@@ -149,7 +149,7 @@ antlrcpp::Any Visiteur::visitParameters(exprParser::ParametersContext *ctx) {
 	return variables;
 }
 
-antlrcpp::Any Visiteur::visitDeclaration(exprParser::DeclarationContext *ctx) {
+antlrcpp::Any Visitor::visitDeclaration(exprParser::DeclarationContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "DECLARATION(" << endl;
 	indent++;
@@ -177,7 +177,7 @@ antlrcpp::Any Visiteur::visitDeclaration(exprParser::DeclarationContext *ctx) {
 	return declarations;
 }
 
-antlrcpp::Any Visiteur::visitPlainNewVariable(exprParser::PlainNewVariableContext *ctx) {
+antlrcpp::Any Visitor::visitPlainNewVariable(exprParser::PlainNewVariableContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "PLAIN" << endl;
 #endif
@@ -191,7 +191,7 @@ antlrcpp::Any Visiteur::visitPlainNewVariable(exprParser::PlainNewVariableContex
 	return declaration;
 }
 
-antlrcpp::Any Visiteur::visitValuedNewVariable(exprParser::ValuedNewVariableContext *ctx) {
+antlrcpp::Any Visitor::visitValuedNewVariable(exprParser::ValuedNewVariableContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "VALUED(" << endl;
 	indent++;
@@ -217,7 +217,7 @@ antlrcpp::Any Visiteur::visitValuedNewVariable(exprParser::ValuedNewVariableCont
 	return declaration;
 }
 
-antlrcpp::Any Visiteur::visitDeclareVariable(exprParser::DeclareVariableContext *ctx) {
+antlrcpp::Any Visitor::visitDeclareVariable(exprParser::DeclareVariableContext *ctx) {
     //int a; (declaration context)
 	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
 	Variable* variable = new Variable(pos);
@@ -225,7 +225,7 @@ antlrcpp::Any Visiteur::visitDeclareVariable(exprParser::DeclareVariableContext 
 	return variable;
 }
 
-antlrcpp::Any Visiteur::visitDeclareArray(exprParser::DeclareArrayContext *ctx) {
+antlrcpp::Any Visitor::visitDeclareArray(exprParser::DeclareArrayContext *ctx) {
     //int a[1+3]; (array declaration context)
 	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
 	Variable* variable = new Variable(pos);
@@ -237,7 +237,7 @@ antlrcpp::Any Visiteur::visitDeclareArray(exprParser::DeclareArrayContext *ctx) 
 }
 
 
-antlrcpp::Any Visiteur::visitRetExpr(exprParser::RetExprContext *ctx) {
+antlrcpp::Any Visitor::visitRetExpr(exprParser::RetExprContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "RETURN_EXPR(" << endl;
 	indent++;
@@ -253,7 +253,7 @@ antlrcpp::Any Visiteur::visitRetExpr(exprParser::RetExprContext *ctx) {
 	return (Instruction*)ret;
 }
 
-antlrcpp::Any Visiteur::visitRetNoExpr(exprParser::RetNoExprContext *ctx) {
+antlrcpp::Any Visitor::visitRetNoExpr(exprParser::RetNoExprContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "RETURN_NO_EXPR(" << endl;
 	indent++;
@@ -268,7 +268,7 @@ antlrcpp::Any Visiteur::visitRetNoExpr(exprParser::RetNoExprContext *ctx) {
 
 }
 
-antlrcpp::Any Visiteur::visitBlock(exprParser::BlockContext *ctx) {
+antlrcpp::Any Visitor::visitBlock(exprParser::BlockContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "BLOCK(" << endl;
 	indent++;
@@ -301,7 +301,7 @@ antlrcpp::Any Visiteur::visitBlock(exprParser::BlockContext *ctx) {
 	return (Instruction*)block;
 }
 
-antlrcpp::Any Visiteur::visitInstruction(exprParser::InstructionContext *ctx) {
+antlrcpp::Any Visitor::visitInstruction(exprParser::InstructionContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "INSTRUCTION [" << endl;
 #endif
@@ -318,7 +318,7 @@ antlrcpp::Any Visiteur::visitInstruction(exprParser::InstructionContext *ctx) {
 	return instr;
 }
 
-antlrcpp::Any Visiteur::visitAssignment(exprParser::AssignmentContext *ctx) {
+antlrcpp::Any Visitor::visitAssignment(exprParser::AssignmentContext *ctx) {
 	//FIXME
 #ifdef TREEVISIT
 	jump(); cout << "ASSIGNMENT(" << endl;
@@ -338,14 +338,14 @@ antlrcpp::Any Visiteur::visitAssignment(exprParser::AssignmentContext *ctx) {
 
 }
 
-antlrcpp::Any Visiteur::visitVariableExpression(exprParser::VariableExpressionContext *ctx) {
+antlrcpp::Any Visitor::visitVariableExpression(exprParser::VariableExpressionContext *ctx) {
 	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
 	Identifier* identifier = new Identifier(pos);
 	identifier->setIdent(ctx->VAR()->getText());
 	return identifier;
 }
 
-antlrcpp::Any Visiteur::visitArrayExpression(exprParser::ArrayExpressionContext *ctx) {
+antlrcpp::Any Visitor::visitArrayExpression(exprParser::ArrayExpressionContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "=>ARRAY_ACCESS" << endl;
 #endif
@@ -357,7 +357,7 @@ antlrcpp::Any Visiteur::visitArrayExpression(exprParser::ArrayExpressionContext 
 	return identifier;
 }
 
-antlrcpp::Any Visiteur::visitOptional(exprParser::OptionalContext *ctx) {
+antlrcpp::Any Visitor::visitOptional(exprParser::OptionalContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "IF(" << endl;
 	indent++;
@@ -381,7 +381,7 @@ antlrcpp::Any Visiteur::visitOptional(exprParser::OptionalContext *ctx) {
 	return (Instruction*)condition;
 }
 
-antlrcpp::Any Visiteur::visitWhileLoop(exprParser::WhileLoopContext *ctx) {
+antlrcpp::Any Visitor::visitWhileLoop(exprParser::WhileLoopContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "WHILE(" << endl;
 	indent++;
@@ -399,7 +399,7 @@ antlrcpp::Any Visiteur::visitWhileLoop(exprParser::WhileLoopContext *ctx) {
 	return (Instruction*)loop;
 }
 
-antlrcpp::Any Visiteur::visitForLoop(exprParser::ForLoopContext *ctx) {
+antlrcpp::Any Visitor::visitForLoop(exprParser::ForLoopContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "FOR(" << endl;
 	indent++;
@@ -433,28 +433,28 @@ antlrcpp::Any Visiteur::visitForLoop(exprParser::ForLoopContext *ctx) {
 	return (Instruction*)forBlock;
 }
 
-antlrcpp::Any Visiteur::visitForDeclaration(exprParser::ForDeclarationContext *ctx) {
+antlrcpp::Any Visitor::visitForDeclaration(exprParser::ForDeclarationContext *ctx) {
 	vector<Instruction*>* declarations = (vector<Instruction*>*)visit(ctx->declaration());
 	return declarations;
 }
 
-antlrcpp::Any Visiteur::visitForAssignment(exprParser::ForAssignmentContext *ctx) {
+antlrcpp::Any Visitor::visitForAssignment(exprParser::ForAssignmentContext *ctx) {
 	vector<Instruction*>* assignments = new vector<Instruction*>();
 	Instruction* assignment = (Instruction*)visit(ctx->assignment());
 	assignments->push_back(assignment);
 	return assignments;
 }
 
-antlrcpp::Any Visiteur::visitCondition(exprParser::ConditionContext *ctx) {
+antlrcpp::Any Visitor::visitCondition(exprParser::ConditionContext *ctx) {
 	return (Expression*)visit(ctx->expression());
 }
 
-antlrcpp::Any Visiteur::visitControlBody(exprParser::ControlBodyContext *ctx) {
+antlrcpp::Any Visitor::visitControlBody(exprParser::ControlBodyContext *ctx) {
 	return (Instruction*)visit(ctx->children[0]);
 }
 
 
-antlrcpp::Any Visiteur::visitVariable(exprParser::VariableContext *ctx) {
+antlrcpp::Any Visitor::visitVariable(exprParser::VariableContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "VAR" << endl;
 #endif
@@ -462,7 +462,7 @@ antlrcpp::Any Visiteur::visitVariable(exprParser::VariableContext *ctx) {
 	return (Expression*)identifier;
 }
 
-antlrcpp::Any Visiteur::visitChar(exprParser::CharContext *ctx) {
+antlrcpp::Any Visitor::visitChar(exprParser::CharContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "CHAR" << endl;
 #endif
@@ -489,7 +489,7 @@ antlrcpp::Any Visiteur::visitChar(exprParser::CharContext *ctx) {
 	return (Expression*)constant;
 }
 
-antlrcpp::Any Visiteur::visitParenthesis(exprParser::ParenthesisContext *ctx) {
+antlrcpp::Any Visitor::visitParenthesis(exprParser::ParenthesisContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "PARENTHESIS(" << endl;
 	indent++;
@@ -502,7 +502,7 @@ antlrcpp::Any Visiteur::visitParenthesis(exprParser::ParenthesisContext *ctx) {
 	return expr;
 }
 
-antlrcpp::Any Visiteur::visitInt(exprParser::IntContext *ctx) {
+antlrcpp::Any Visitor::visitInt(exprParser::IntContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "INT";
 #endif
@@ -523,7 +523,7 @@ antlrcpp::Any Visiteur::visitInt(exprParser::IntContext *ctx) {
 	return (Expression*)constante;
 }
 
-antlrcpp::Any Visiteur::visitFuncType(exprParser::FuncTypeContext *ctx) {
+antlrcpp::Any Visitor::visitFuncType(exprParser::FuncTypeContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "FUNCTYPE" << endl;
 #endif
@@ -542,7 +542,7 @@ antlrcpp::Any Visiteur::visitFuncType(exprParser::FuncTypeContext *ctx) {
 	}
 }
 
-antlrcpp::Any Visiteur::visitVarType(exprParser::VarTypeContext *ctx) {
+antlrcpp::Any Visitor::visitVarType(exprParser::VarTypeContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "VARTYPE" << endl;
 #endif
@@ -558,87 +558,87 @@ antlrcpp::Any Visiteur::visitVarType(exprParser::VarTypeContext *ctx) {
 	}
 }
 
-antlrcpp::Any Visiteur::visitExprFunc(exprParser::ExprFuncContext *ctx) {
+antlrcpp::Any Visitor::visitExprFunc(exprParser::ExprFuncContext *ctx) {
 	return (Expression*)visit(ctx->funcCall());
 }
 
-antlrcpp::Any Visiteur::visitAdd(exprParser::AddContext *ctx) {
+antlrcpp::Any Visitor::visitAdd(exprParser::AddContext *ctx) {
 	return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::Add);
 }
 
-antlrcpp::Any Visiteur::visitMinus(exprParser::MinusContext *ctx) {
+antlrcpp::Any Visitor::visitMinus(exprParser::MinusContext *ctx) {
 	return (Expression*)buildUnaryExpression((exprParser::ExpressionContext*)ctx, UnaryOperator::Minus);
 }
 
-antlrcpp::Any Visiteur::visitLogicalNot(exprParser::LogicalNotContext *ctx) {
+antlrcpp::Any Visitor::visitLogicalNot(exprParser::LogicalNotContext *ctx) {
 	return (Expression*)buildUnaryExpression((exprParser::ExpressionContext*)ctx, UnaryOperator::LogicalNot);
 }
 
-antlrcpp::Any Visiteur::visitLowerThan(exprParser::LowerThanContext *ctx) {
+antlrcpp::Any Visitor::visitLowerThan(exprParser::LowerThanContext *ctx) {
 	return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::LowerThan);
 }
 
-antlrcpp::Any Visiteur::visitLowerThanEquals(exprParser::LowerThanEqualsContext *ctx) {
+antlrcpp::Any Visitor::visitLowerThanEquals(exprParser::LowerThanEqualsContext *ctx) {
 	return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::LowerThanOrEquals);
 }
 
-antlrcpp::Any Visiteur::visitBitwiseXor(exprParser::BitwiseXorContext *ctx) {
+antlrcpp::Any Visitor::visitBitwiseXor(exprParser::BitwiseXorContext *ctx) {
 	return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::BitwiseXor);
 }
 
-antlrcpp::Any Visiteur::visitBitwiseAnd(exprParser::BitwiseAndContext *ctx) {
+antlrcpp::Any Visitor::visitBitwiseAnd(exprParser::BitwiseAndContext *ctx) {
 	return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::BitwiseAnd);
 }
 
-antlrcpp::Any Visiteur::visitDifferent(exprParser::DifferentContext *ctx) {
+antlrcpp::Any Visitor::visitDifferent(exprParser::DifferentContext *ctx) {
 	return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::DifferentThan);
 }
 
-antlrcpp::Any Visiteur::visitLogicalOr(exprParser::LogicalOrContext *ctx) {
+antlrcpp::Any Visitor::visitLogicalOr(exprParser::LogicalOrContext *ctx) {
 	return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::LogicalOr);
 }
 
-antlrcpp::Any Visiteur::visitBitwiseNot(exprParser::BitwiseNotContext *ctx) {
+antlrcpp::Any Visitor::visitBitwiseNot(exprParser::BitwiseNotContext *ctx) {
 	return (Expression*)buildUnaryExpression((exprParser::ExpressionContext*)ctx, UnaryOperator::BitwiseNot);
 }
 
-antlrcpp::Any Visiteur::visitGreaterThanEquals(exprParser::GreaterThanEqualsContext *ctx) {
+antlrcpp::Any Visitor::visitGreaterThanEquals(exprParser::GreaterThanEqualsContext *ctx) {
 	return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::GreaterThanOrEquals);
 }
 
-antlrcpp::Any Visiteur::visitGreaterThan(exprParser::GreaterThanContext *ctx) {
+antlrcpp::Any Visitor::visitGreaterThan(exprParser::GreaterThanContext *ctx) {
 	return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::GreaterThan);
 }
 
-antlrcpp::Any Visiteur::visitEquals(exprParser::EqualsContext *ctx) {
+antlrcpp::Any Visitor::visitEquals(exprParser::EqualsContext *ctx) {
 	return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::Equals);
 }
 
-antlrcpp::Any Visiteur::visitLogicalAnd(exprParser::LogicalAndContext *ctx) {
+antlrcpp::Any Visitor::visitLogicalAnd(exprParser::LogicalAndContext *ctx) {
 	return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::Add);
 }
 
-antlrcpp::Any Visiteur::visitBitwiseOr(exprParser::BitwiseOrContext *ctx) {
+antlrcpp::Any Visitor::visitBitwiseOr(exprParser::BitwiseOrContext *ctx) {
 	return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::BitwiseOr);
 }
 
-antlrcpp::Any Visiteur::visitMultiply(exprParser::MultiplyContext *ctx) {
+antlrcpp::Any Visitor::visitMultiply(exprParser::MultiplyContext *ctx) {
 	return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::Multiply);
 }
 
-antlrcpp::Any Visiteur::visitRightShift(exprParser::RightShiftContext *ctx) {
+antlrcpp::Any Visitor::visitRightShift(exprParser::RightShiftContext *ctx) {
 	return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::BitwiseRightShift);
 }
 
-antlrcpp::Any Visiteur::visitSubstract(exprParser::SubstractContext *ctx) {
+antlrcpp::Any Visitor::visitSubstract(exprParser::SubstractContext *ctx) {
 	return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::Substract);
 }
 
-antlrcpp::Any Visiteur::visitLeftShift(exprParser::LeftShiftContext *ctx) {
+antlrcpp::Any Visitor::visitLeftShift(exprParser::LeftShiftContext *ctx) {
 	return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::BitwiseLeftShift);
 }
 
-antlrcpp::Any Visiteur::visitFuncCall(exprParser::FuncCallContext *ctx) {
+antlrcpp::Any Visitor::visitFuncCall(exprParser::FuncCallContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "FUNCTION_CALL(" << endl;
 	indent++;
@@ -663,7 +663,7 @@ antlrcpp::Any Visiteur::visitFuncCall(exprParser::FuncCallContext *ctx) {
 	return (Expression*)funcCall;
 }
 
-antlrcpp::Any Visiteur::visitFuncCallArguments(exprParser::FuncCallArgumentsContext *ctx) {
+antlrcpp::Any Visitor::visitFuncCallArguments(exprParser::FuncCallArgumentsContext *ctx) {
 	vector<Expression*>* expressions = new vector<Expression*>();
 	for (int i = 0; i < ctx->expression().size(); i++) {
 		expressions->push_back((Expression*)visit(ctx->expression(i)));

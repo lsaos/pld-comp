@@ -13,9 +13,9 @@
 
 using namespace std;
 
-class Visiteur : public exprBaseVisitor {
+class Visitor : public exprBaseVisitor {
 public:
-	Visiteur() {
+	Visitor() {
 #ifdef TREEVISIT
 		indent=0;
 #endif
@@ -123,7 +123,7 @@ public:
 
     virtual antlrcpp::Any visitFuncCallArguments(exprParser::FuncCallArgumentsContext *context);
     
-	virtual ~Visiteur() {}
+	virtual ~Visitor() {}
 
 #ifdef TREEVISIT
 	void jump() {
