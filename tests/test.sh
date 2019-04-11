@@ -120,7 +120,7 @@ fi
 
 #If assembly was produced, does it have the same output as a classic gcc ?
 #Get filename:
-returnCodeAssembly=2
+resultRCComp=2
 for i in *.s
 do
 	fileName=`basename $i .s`
@@ -208,4 +208,3 @@ then
 fi
 
 exit $resultGlobal
-

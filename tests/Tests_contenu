@@ -1,0 +1,22 @@
+Test 1
+return correct (BasicReturn.c)
+Test 2
+return with variable value (BasicReturnVariable.c)
+Test 3
+declaration, mathematics, correct (OperationPriorities.c)
+Test 4
+Semantic error : variable defined without a type
+Test 5
+Semantic error : undefined variable c 
+Test 6
+Semantic error : defining twice variable a
+Test 7
+correct, a bunch of if/else (ifElse1.c)
+Test 8
+correct mathematics with binary operator (BinaryAnd.c)
+Test 9
+correct mathematics, binary and and substraction (BinaryOr.c)
+Test 10
+idem as previous ones, but with xor (BinaryXor.c)
+Test 11
+correct (on optimization), unused but defined char. (SomeChar.c)
