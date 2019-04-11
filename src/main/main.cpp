@@ -202,7 +202,7 @@ int main(int argc, char* argv[])
 	}
 
 	// Generate the assembly
-	if (true) { // TODO: replace by genAsm option
+	if (genAsm) {
 		/*AssemblyGenerator ag(argv[1]);
 		ag.generateAssembly(prog);*/
 		IR ir(prog);
