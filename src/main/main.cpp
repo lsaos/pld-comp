@@ -146,6 +146,7 @@ int main(int argc, char* argv[])
 	if (syntaxErrorCount != 0)
 	{
 		cout << "Compilation failed with syntax errors" << endl;
+		system("pause");
 		return RETURN_CODE_SYNTAX_ERROR;
 	}
 
