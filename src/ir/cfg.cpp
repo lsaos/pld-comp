@@ -222,13 +222,13 @@ void CFG::gen_asm_prologue(ostream& o)
 				reg = "%edi";
 				break;
 			case 1:
-				reg = "esi";
+				reg = "%esi";
 				break;
 			case 2:
-				reg = "edx";
+				reg = "%edx";
 				break;
 			case 3:
-				reg = "ecx";
+				reg = "%ecx";
 				break;
 			case 4:
 				reg = "%r8";
