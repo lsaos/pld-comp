@@ -14,6 +14,9 @@ IRInstrComparison::IRInstrComparison(BasicBlock* bb, IRInstrComparison::Operatio
 
 void IRInstrComparison::gen_asm(ostream &o)
 {
+	string type = AssemblyType::operatorType[t];
+	string workingReg = AssemblyType::registerType[t];
+
 	//Choose set operation to occur
 	string set = "setl";
 	switch (operation)
@@ -40,19 +43,19 @@ void IRInstrComparison::gen_asm(ostream &o)
 
 	switch (t)
 	{
-	case Type::Integer:
-		o << "\tmovl " << bb->get_cfg()->IR_reg_to_asm(operand1) << ", %eax" << endl;
-		o << "\tcmpl " << bb->get_cfg()->IR_reg_to_asm(operand2) << ", %eax" << endl;
-		o << "\t" << set << " %al" << endl;
-		o << "\tmovzbl %al, %eax" << endl;
-		o << "\tmovl %eax, " << bb->get_cfg()->IR_reg_to_asm(destination) << endl;
-		break;
-	case Type::Character:
-		o << "\tmovzbl " << bb->get_cfg()->IR_reg_to_asm(operand1) << ", %eax" << endl;
-		o << "\tcmpl " << bb->get_cfg()->IR_reg_to_asm(operand2) << ", %al" << endl;
-		o << "\t" << set << " %al" << endl;
-		o << "\tmovb %al, " << bb->get_cfg()->IR_reg_to_asm(destination) << endl;
-		break;
+		case Type::Integer:
+			o << "\tmov " << AssemblyType::operatorType[bb->get_cfg()->get_var_type(operand1)] << " " << bb->get_cfg()->IR_reg_to_asm(operand1) << ", " << AssemblyType::registerType[bb->get_cfg()->get_var_type(operand1)] << endl;
+			o << "\tcmp " << AssemblyType::operatorType[bb->get_cfg()->get_var_type(operand2)] << " " << bb->get_cfg()->IR_reg_to_asm(operand2) << ", " << AssemblyType::registerType[bb->get_cfg()->get_var_type(operand2)] << endl;
+			o << "\t" << set << " %al" << endl;
+			o << "\tmovzbl %al, %eax" << endl;
+			o << "\tmov" << type << " " << workingReg << ", " << bb->get_cfg()->IR_reg_to_asm(destination) << endl;
+			break;
+		case Type::Character:
+			o << "\tmovzbl " << bb->get_cfg()->IR_reg_to_asm(operand1) << ", %eax" << endl;
+			o << "\tcmpb " << bb->get_cfg()->IR_reg_to_asm(operand2) << ", %al" << endl;
+			o << "\t" << set << " %al" << endl;
+			o << "\tmovb %al, " << bb->get_cfg()->IR_reg_to_asm(destination) << endl;
+			break;
 	}
 }
 

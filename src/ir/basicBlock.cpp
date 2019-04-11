@@ -46,7 +46,7 @@ void BasicBlock::gen_asm(ostream& o)
 			o << "\tjmp " << exit_true->get_label() << endl;
 		else
 		{
-			o << "\tcmpl $0, " << cfg->get_var_index(lastVar) << "(%rbp)" << endl;
+			o << "\tcmp" << AssemblyType::operatorType[cfg->get_var_type(lastVar)] << " $0, " << cfg->get_var_index(lastVar) << "(%rbp)" << endl;
 			o << "\tje " << exit_false->get_label() << endl;
 			o << "\tjne " << exit_true->get_label() << endl;
 		}
