@@ -165,7 +165,7 @@ namespace ast
 	{
 		if (cfg->get_var_index(getName()) == 0)
 		{
-			cfg->add_to_symbol_table(getName(), getType());
+			cfg->add_to_symbol_table(cfg->get_var_name(this), getType());
 		}
 
 		return getName();

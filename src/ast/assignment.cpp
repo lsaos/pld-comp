@@ -142,7 +142,7 @@ namespace ast
 		if (identifier->isReferencingArray())
 		{
 			string index = identifier->buildIR(cfg); // identifier->getReferencedVariable()->getName();
-			left = identifier->getReferencedVariable()->getName();
+			left = cfg->get_var_name(identifier->getReferencedVariable());
 			cfg->current_bb->add_IRInstr(new IRInstrWmen(cfg->current_bb, left, right, index), cfg->get_var_type(left));
 		}
 		else

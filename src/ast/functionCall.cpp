@@ -141,6 +141,8 @@ namespace ast
 
 	string FunctionCall::buildIR(ir::CFG* cfg)
 	{
+		cfg->set_functionCall(true);
+
 		string dest = cfg->create_new_tempvar(identifier->getType());
 		vector<string> op;
 		string temp;

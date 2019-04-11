@@ -19,6 +19,11 @@ namespace ir {
 
 			void printIR(ostream &o);
 
+			virtual bool isCopyMnem() { return true; }
+
+			string get_dest();
+			string get_op();
+
 		protected:
 			string dest;
 			string op1;

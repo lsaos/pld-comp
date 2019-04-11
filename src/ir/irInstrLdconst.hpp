@@ -21,6 +21,10 @@ namespace ir {
 
 		void printIR(ostream &o);
 
+		virtual void optimize(vector<IRInstr*>&, int);
+
+		virtual bool isLdconstMnem() { return true; }
+
 	protected:
 		string destination;
 		string constant;
