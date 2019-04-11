@@ -1,3 +1,9 @@
+//
+// (c) 2019 The Super 4404 C Compiler
+// A.Belin, A.Nahid, L.Ohl, L.Saos, A.Verrier, I.Zemmouri
+// INSA Lyon
+//
+
 #pragma once
 
 #include <vector>
@@ -17,11 +23,13 @@ namespace ir {
 			//Constructor
 			IR(Program * prog) : prog(prog) {}
 
+			//Generate the IR
 			void generateIR(bool optimize);
 
 			//Print instructions using IR mnemonics
 			void printIR();
 
+			//Add a CFG to the current IR
 			void addCFG(CFG *cfg);
 
 			//x86 assembly code generation

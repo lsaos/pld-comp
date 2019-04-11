@@ -1,4 +1,3 @@
-#pragma once
 
 #include "irInstrCopy.hpp"
 #include "basicBlock.hpp"

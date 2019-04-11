@@ -1,3 +1,9 @@
+//
+// (c) 2019 The Super 4404 C Compiler
+// A.Belin, A.Nahid, L.Ohl, L.Saos, A.Verrier, I.Zemmouri
+// INSA Lyon
+//
+
 #pragma once
 
 #include <map>
@@ -9,18 +15,15 @@ using namespace std;
 
 /** The class for the control flow graph, also includes the symbol table */
 
-/* A few important comments:
-	 The entry block is the one with the same label as the AST function name.
-	   (it could be the first of bbs, or it could be defined by an attribute value)
-	 The exit block is the one with both exit pointers equal to nullptr.
-	 (again it could be identified in a more explicit way)
-
- */
 namespace ir {
 
+	//Link between type and assembly tools
 	class AssemblyType {
 		public:
+			//Matching between C Types and assembly operators to use
 			static map<Type, string> operatorType;
+
+			//Matching between C Types and assembly registers to use
 			static map<Type, string> registerType;
 	};
 
@@ -30,15 +33,19 @@ namespace ir {
 			CFG(ast::Function* function);
 			~CFG();
 
+			//Generate the CFG
 			void generateCFG();
 
+			//Optimize the CFG
 			void optimize();
 
 			//Print instructions using IR mnemonics
 			void printIR();
 
+			//Returns the function represented by this CFG
 			ast::Function* getFunction();
 
+			//Add a BB to the current CFG
 			void add_bb(BasicBlock* bb);
 
 			// x86 code generation
@@ -54,16 +61,34 @@ namespace ir {
 			void gen_MSP430_prologue(ostream& o);
 			void gen_MSP430_epilogue(ostream& o);
 
-			//Symbol table methods
+			//Add a symbol to the symbol table (Var = variable's name, t = variable's type, nbCases = array size if it is an array)
 			void add_to_symbol_table(string var, Type t, int nbCases=1);
+
+			//Add a variable name to the symbol table
 			void add_variable_name(Variable* var);
+
+			//Create a new temporary variable
 			string create_new_tempvar(Type t);
+
+			//Returns variable's memory index
 			int get_var_index(string var);
+
+			//Returns variable's type
 			Type get_var_type(string var);
+
+			//Returns assembly variable's name
 			string get_var_name(Variable*);
+
+			//Returns the return type of the function linked to this CFG
 			Type get_return_type();
+
+			//Returns the next Free memory Index to write a variable in memory
 			int get_nextFreeSymbolIndex();
+
+			//Set the next Free memory Index to write a variable in memory
 			void set_nextFreeSymbolIndex(int);
+
+			//Set if function(s) is(are) called in the function reprensented by this CFG
 			void set_functionCall(bool);
 
 			//Basic block management
@@ -71,6 +96,8 @@ namespace ir {
 
 			//Pointer on the current BB
 			BasicBlock* current_bb;
+
+			//Pointer to the last BB of the current CFG
 			BasicBlock* last_bb;
 
 			//Number of the current block context
@@ -85,6 +112,7 @@ namespace ir {
 			int nextFreeSymbolIndex; //to allocate new symbols in the symbol table
 			int nextBBnumber; //just for naming
 
+			//True if at least one function is called in the function represented by this CFG
 			bool functionCall;
 
 			vector <BasicBlock*> bbs; //all the basic blocks of this CFG
