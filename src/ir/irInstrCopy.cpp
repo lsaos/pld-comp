@@ -35,3 +35,13 @@ void IRInstrCopy::gen_asm_MSP430(ostream &o) {
 void IRInstrCopy::printIR(ostream &o) {
 	o << "\tcopy " << dest << " " << op1 << endl;
 }
+
+string IRInstrCopy::get_dest()
+{
+	return dest;
+}
+
+string IRInstrCopy::get_op()
+{
+	return op1;
+}

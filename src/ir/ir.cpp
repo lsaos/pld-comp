@@ -13,7 +13,7 @@ void IR::addCFG(CFG *cfg)
 	this->cfgs.insert(make_pair(cfg->getFunction(), cfg));
 }
 
-void IR::generateIR()
+void IR::generateIR(bool optimize)
 {
 	vector<Function*> functions = prog->getFunctions();
 	int context = 1;
@@ -25,6 +25,10 @@ void IR::generateIR()
 		cfg->current_context = context;
 		cfg->generateCFG();
 		context = cfg->current_context;
+
+		//optimize
+		if (true)
+			cfg->optimize();
 	}
 }
 

@@ -79,3 +79,14 @@ void BasicBlock::printIR()
 	}
 }
 
+void BasicBlock::optimize()
+{
+	IRInstr* instr;
+	for (int i = 0; i < instrs.size() ; i++)
+	{
+		instr = instrs[i];
+		instr->optimize(instrs,i); //Ou pas, faire l'optimisation ici plutôt pour connaître les IRInstr avant et après celle considérée
+
+	}
+}
+

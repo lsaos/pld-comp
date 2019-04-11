@@ -310,3 +310,11 @@ void CFG::set_functionCall(bool b)
 {
 	functionCall = b;
 }
+
+void CFG::optimize()
+{
+	for (auto bb : bbs) 
+	{
+		bb->optimize();
+	}
+}

@@ -32,6 +32,8 @@ namespace ir {
 
 			void generateCFG();
 
+			void optimize();
+
 			void printIR();
 
 			ast::Function* getFunction();

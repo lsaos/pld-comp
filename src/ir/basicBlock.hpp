@@ -36,6 +36,8 @@ namespace ir {
 
 		void add_IRInstr(IRInstr* instr, Type t);
 
+		void optimize();
+
 		void set_last_var(string);
 
 		CFG* get_cfg() { return cfg; }

@@ -17,7 +17,7 @@ void IRInstrBinaryOperation::gen_asm(ostream &o)
 	// check the variable type
 	string type = AssemblyType::operatorType[t];
 	string workingReg = AssemblyType::registerType[t];
-	string action = "add";
+	string action;
 
 	switch (operation)
 	{
@@ -39,6 +39,9 @@ void IRInstrBinaryOperation::gen_asm(ostream &o)
 		case Operation::bitwiseXor:
 			action = "xor";
 			break;
+		default:
+			action = "";
+			return;
 	}
 
 	//Assembler's code generation 
