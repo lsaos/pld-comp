@@ -22,6 +22,17 @@
 
 using namespace ast;
 
+/**
+*Most methods in visiteur.cpp have an #ifdef TREEVISIT section.
+* Their goal was essentially for checking the visitors' recursive calls
+* and ensure a program is built in the desired way.
+*/
+
+/**
+*This method will most of the time be called whatever the context of the visitor.
+*Its purpose is to build the position (line,column) of a token while parsing
+*for later inspections and error managing.
+**/
 ItemPosition Visiteur::buildPos(size_t line, size_t column) {
 	ItemPosition pos;
 	pos.line = line;
@@ -69,6 +80,7 @@ antlrcpp::Any Visiteur::visitProg(exprParser::ProgContext *ctx) {
 	jump(); cout << "PROG(" << endl;
 	indent++;
 #endif
+    //Prog is the axiom of the program grammar.
 	Program* prog = new Program();
 	for (int i = 0; i < ctx->declaration().size(); i++) {
 		vector<Instruction*>* declarations = (vector<Instruction*>*)visit(ctx->declaration(i));
@@ -142,17 +154,19 @@ antlrcpp::Any Visiteur::visitDeclaration(exprParser::DeclarationContext *ctx) {
 	jump(); cout << "DECLARATION(" << endl;
 	indent++;
 #endif
+    //Since int a,b; is considered a declaration, that's why we will have to explore
+    // every "subdeclarations" or symbol declaration in the same line.
 	Type type = (Type)visit(ctx->varType());
 	vector<Instruction*>* declarations = new vector<Instruction*>;
 	for (size_t i = 0; i < ctx->newVar().size(); i++) {
-		vector<Instruction*>* sousDeclaration = (vector<Instruction*>*)visit(ctx->newVar(i));
-		for (size_t j = 0; j < sousDeclaration->size(); j++) {
-			if (sousDeclaration->at(j)->isVariable()) {
-				Variable* var = (Variable*)sousDeclaration->at(j);
+		vector<Instruction*>* subDeclaration = (vector<Instruction*>*)visit(ctx->newVar(i));
+		for (size_t j = 0; j < subDeclaration->size(); j++) {
+			if (subDeclaration->at(j)->isVariable()) {
+				Variable* var = (Variable*)subDeclaration->at(j);
 				var->setType(type);
-                declarations->insert(declarations->begin(), sousDeclaration->at(j));
+                declarations->insert(declarations->begin(), subDeclaration->at(j));
 			} else {
-    			declarations->push_back(sousDeclaration->at(j));
+    			declarations->push_back(subDeclaration->at(j));
             }
 		}
 	}
@@ -167,6 +181,10 @@ antlrcpp::Any Visiteur::visitPlainNewVariable(exprParser::PlainNewVariableContex
 #ifdef TREEVISIT
 	jump(); cout << "PLAIN" << endl;
 #endif
+    //A plain new variable is a variable declared without any assignment (e.g. int a;)
+    //Since plainVariable and ValuedNewVariable are both declaration context,
+    //they'll need to return the same type of object.
+    //That's why there's only a 1-item sized vector.
 	Variable* variable = (Variable*)visit(ctx->newVarName());
 	vector<Instruction*>* declaration = new vector<Instruction*>;
 	declaration->push_back((Instruction*)variable);
@@ -178,6 +196,7 @@ antlrcpp::Any Visiteur::visitValuedNewVariable(exprParser::ValuedNewVariableCont
 	jump(); cout << "VALUED(" << endl;
 	indent++;
 #endif
+    //A valued new variable is a variable declared with an assignment (e.g. int a=0;)
 	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
 	Variable* variable = new Variable(pos);
 	variable->setName(ctx->VAR()->getText());
@@ -199,6 +218,7 @@ antlrcpp::Any Visiteur::visitValuedNewVariable(exprParser::ValuedNewVariableCont
 }
 
 antlrcpp::Any Visiteur::visitDeclareVariable(exprParser::DeclareVariableContext *ctx) {
+    //int a; (declaration context)
 	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
 	Variable* variable = new Variable(pos);
 	variable->setName(ctx->VAR()->getText());
@@ -206,6 +226,7 @@ antlrcpp::Any Visiteur::visitDeclareVariable(exprParser::DeclareVariableContext 
 }
 
 antlrcpp::Any Visiteur::visitDeclareArray(exprParser::DeclareArrayContext *ctx) {
+    //int a[1+3]; (array declaration context)
 	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
 	Variable* variable = new Variable(pos);
 	variable->setName(ctx->VAR()->getText());
@@ -383,12 +404,16 @@ antlrcpp::Any Visiteur::visitForLoop(exprParser::ForLoopContext *ctx) {
 	jump(); cout << "FOR(" << endl;
 	indent++;
 #endif
+    //Since for is equivalent to while, we will only put initialisation before the while objet,
+    //build the while objet and the for expression at the end of this while's instructions.
 	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
 	Block* forBlock = new Block(pos);
 	vector<Instruction*>* declarations = (vector<Instruction*>*)visit(ctx->forInit());
 	Expression* expr = (Expression*)visit(ctx->expression());
 	Instruction* assignment = (Instruction*)visit(ctx->assignment());
-	Block* block = dynamic_cast<Block*>((Instruction*)visit(ctx->controlBody()));//FIXME : the ugliest way
+    //Since visitBlock always return an instruction, we need to get again a Block
+    // object to build or While object.
+	Block* block = dynamic_cast<Block*>((Instruction*)visit(ctx->controlBody()));
 
 	//Declarations before the loop
 	for (auto instr : *declarations) {
@@ -442,7 +467,8 @@ antlrcpp::Any Visiteur::visitChar(exprParser::CharContext *ctx) {
 	jump(); cout << "CHAR" << endl;
 #endif
 	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
-    char value;    
+    char value;
+    //We need to inspect if the char isn't a \n, or \t.
     if ((char)ctx->CHAR()->getText().at(1)=='\\'){
         switch((char)ctx->CHAR()->getText().at(2)){
             case 't':
