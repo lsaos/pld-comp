@@ -17,7 +17,7 @@ namespace ir {
 			IR(Program * prog) : prog(prog) {}
 			//~IR();
 
-			void generateIR();
+			void generateIR(bool optimize);
 
 			void printIR();
 

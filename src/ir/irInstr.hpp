@@ -14,15 +14,20 @@ namespace ir {
 
 	class IRInstr {
 
-		public:
-			/**  constructor */
-			IRInstr(BasicBlock* bb, Type t) : bb(bb), t(t) {}
+	public:
+		/**  constructor */
+		IRInstr(BasicBlock* bb, Type t) : bb(bb), t(t) {}
 
-			/** Actual code generation */
-			virtual void gen_asm(ostream &o) = 0; /**< x86 assembly code generation for this IR instruction */
-			virtual void gen_asm_MSP430(ostream &o) {} /**< MSP430 assembly code generation for this IR instruction */
+		/** Actual code generation */
+		virtual void gen_asm(ostream &o) = 0; /**< x86 assembly code generation for this IR instruction */
+		virtual void gen_asm_MSP430(ostream &o) {} /**< MSP430 assembly code generation for this IR instruction */
 
-			virtual void printIR(ostream &o) {}
+		virtual void printIR(ostream &o) {}
+
+		virtual void optimize(vector<IRInstr*>& instrs, int) {}
+
+		virtual bool isLdconstMnem() { return false; }
+		virtual bool isCopyMnem() { return false; }
 
 		protected:
 			BasicBlock* bb; /**< The BB this instruction belongs to, which provides a pointer to the CFG this instruction belong to */

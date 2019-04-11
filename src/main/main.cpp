@@ -206,7 +206,7 @@ int main(int argc, char* argv[])
 		/*AssemblyGenerator ag(argv[1]);
 		ag.generateAssembly(prog);*/
 		IR ir(prog);
-		ir.generateIR();
+		ir.generateIR(optimize);
 		cout << endl << endl;
 		ir.printIR();
 		cout << endl;

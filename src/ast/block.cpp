@@ -6,6 +6,7 @@
 
 #include "block.hpp"
 #include "variable.hpp"
+#include "../ir/cfg.hpp"
 
 namespace ast
 {
@@ -86,9 +87,9 @@ namespace ast
 
 		for (const auto& instr : instructions) {
 			if (instr->isVariable()) {
-				if (!variableAllowed) {
+				/*if (!variableAllowed) {
 					error(Error::VariableDeclarationBeginningFunction, instr.get());
-				}
+				}*/
 
 				const string& name(((const Variable*)instr.get())->getName());
 
@@ -163,13 +164,19 @@ namespace ast
 	void Block::prepare()
 	{
 		// Remove nested single blocks
-		if (!isProgram() && instructions.size() == 1 && instructions[0]->isBlock()) {
-			Block* subBlock = (Block*)instructions[0].get();
+		vector<Instruction*> subInstrs(getInstructions());
+		while (!isProgram() && subInstrs.size() == 1 && subInstrs[0]->isBlock()) {
+			Block* subBlock = (Block*)subInstrs[0];
 			vector<unique_ptr<Instruction>> instrs(move(subBlock->instructions));
+			instructions.erase(instructions.end() - 1); // Delete the nested block
+
+			// Append the nested block instructions
 			for (auto& instr : instrs) {
 				instr->setParent(this);
+				instructions.emplace_back(move(instr));
 			}
-			instructions = move(instrs);
+
+			subInstrs = getInstructions();
 		}
 
 		for (auto& instr : instructions) {
@@ -180,11 +187,24 @@ namespace ast
 	string Block::buildIR(ir::CFG* cfg)
 	{
 		string var;
+		int nextAvailableAddress = cfg->get_nextFreeSymbolIndex();
+		cfg->current_context++;
+
+		vector<Variable*> vars = getVariables(false);
+
+		for (auto v : vars)
+		{
+			//v->setName(v->getName() + "_" + to_string(cfg->current_context));
+			cfg->add_variable_name(v);
+		}
+
 		for (auto& i : instructions)
 		{
 			var = i->buildIR(cfg);
 		}
 
+		cfg->current_context--;
+		cfg->set_nextFreeSymbolIndex(nextAvailableAddress);
 		return var;
 	}
 }
