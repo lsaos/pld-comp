@@ -3,6 +3,6 @@
 i=1
 while [ $i -lt 15 ]
 do
-	echo "../../../compiler test$i.c -c">Test$i/run
+	rm "Test$i/test$i.s.outfile"
 	let "i=$i+1"
 done

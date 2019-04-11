@@ -442,7 +442,21 @@ antlrcpp::Any Visiteur::visitChar(exprParser::CharContext *ctx) {
 	jump(); cout << "CHAR" << endl;
 #endif
 	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
-	char value = (char)ctx->CHAR()->getText().at(1);
+    char value;    
+    if ((char)ctx->CHAR()->getText().at(1)=='\\'){
+        switch((char)ctx->CHAR()->getText().at(2)){
+            case 't':
+                value='\t';
+                break;
+            case 'n':
+                value='\n';
+                break;
+            default:
+                value='\n';
+        }
+    } else {
+    	char value = (char)ctx->CHAR()->getText().at(1);
+    }
 	Constant * constant = new Constant(pos);
 	constant->setType(Type::Character);
 	constant->setValue(value);
