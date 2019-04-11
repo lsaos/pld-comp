@@ -44,8 +44,8 @@ void IRInstrComparison::gen_asm(ostream &o)
 	switch (t)
 	{
 		case Type::Integer:
-			o << "\tmov " << AssemblyType::operatorType[bb->get_cfg()->get_var_type(operand1)] << " " << bb->get_cfg()->IR_reg_to_asm(operand1) << ", " << AssemblyType::registerType[bb->get_cfg()->get_var_type(operand1)] << endl;
-			o << "\tcmp " << AssemblyType::operatorType[bb->get_cfg()->get_var_type(operand2)] << " " << bb->get_cfg()->IR_reg_to_asm(operand2) << ", " << AssemblyType::registerType[bb->get_cfg()->get_var_type(operand2)] << endl;
+			o << "\tmov" << AssemblyType::operatorType[bb->get_cfg()->get_var_type(operand1)] << " " << bb->get_cfg()->IR_reg_to_asm(operand1) << ", " << AssemblyType::registerType[bb->get_cfg()->get_var_type(operand1)] << endl;
+			o << "\tcmp" << AssemblyType::operatorType[bb->get_cfg()->get_var_type(operand2)] << " " << bb->get_cfg()->IR_reg_to_asm(operand2) << ", " << AssemblyType::registerType[bb->get_cfg()->get_var_type(operand2)] << endl;
 			o << "\t" << set << " %al" << endl;
 			o << "\tmovzbl %al, %eax" << endl;
 			o << "\tmov" << type << " " << workingReg << ", " << bb->get_cfg()->IR_reg_to_asm(destination) << endl;
