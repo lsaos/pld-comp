@@ -10,12 +10,11 @@ namespace ir {
 	class IRInstrWmen : public IRInstr {
 
 		public:
-			/**  constructor */
+			//Constructor
 			IRInstrWmen(BasicBlock* bb, string addr, string var, string offset);
 
 			/** Actual code generation */
 			void gen_asm(ostream &o);
-
 			void printIR(ostream &o);
 
 		protected:

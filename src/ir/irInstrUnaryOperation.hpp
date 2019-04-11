@@ -10,19 +10,17 @@ namespace ir {
 	class IRInstrUnaryOperation : public IRInstr {
 
 	public:
-
+		//Unary operations available in this compiler
 		typedef enum {
 			minus,
 			logicalNot
 		} UnaryOperation;
 
-		/**  constructor */
-		//IRInstr(BasicBlock*, Type t);
+		//Constructor
 		IRInstrUnaryOperation(BasicBlock*, UnaryOperation op, string dest, string operand);
 
 		/** Actual code generation */
-		void gen_asm(ostream &o); /**< x86 assembly code generation for this IR instruction */
-
+		void gen_asm(ostream &o);
 		void printIR(ostream &o);
 
 	protected:

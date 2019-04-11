@@ -14,7 +14,7 @@ IRInstrBinaryOperation::IRInstrBinaryOperation(BasicBlock* bb, Operation op, str
 
 void IRInstrBinaryOperation::gen_asm(ostream &o)
 {
-	// check the variable type
+	//Get the variable type
 	string type = AssemblyType::operatorType[t];
 	string workingReg = AssemblyType::registerType[t];
 	string action;
@@ -44,7 +44,7 @@ void IRInstrBinaryOperation::gen_asm(ostream &o)
 			return;
 	}
 
-	//Assembler's code generation 
+	//Assembly code generation 
 	o << "\tmov" << type << " " << bb->get_cfg()->IR_reg_to_asm(operand1) << ", " << workingReg << endl;
 	o << "\t" << action << type << " " << bb->get_cfg()->IR_reg_to_asm(operand2) << ", " << workingReg << endl;
 	o << "\tmov" << type << " " << workingReg << ", " << bb->get_cfg()->IR_reg_to_asm(destination) << endl;
@@ -52,7 +52,7 @@ void IRInstrBinaryOperation::gen_asm(ostream &o)
 
 void IRInstrBinaryOperation::gen_asm_MSP430(ostream &o)
 {
-	// check the variable type
+	//Check the variable type
 	string type = (t == Type::Integer) ? "W" : "B";
 	string workingReg = "R12";
 	string action = "ADD.";
@@ -76,7 +76,7 @@ void IRInstrBinaryOperation::gen_asm_MSP430(ostream &o)
 		break;
 	}
 
-	//Assembler's code generation 
+	//Assembly code generation 
 	if (operation==Operation::mul)
 	{
 		cout << "Assembly error : MSP430 does not manage multiplication" << endl;

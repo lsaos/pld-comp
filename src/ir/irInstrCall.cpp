@@ -72,7 +72,7 @@ void IRInstrCall::gen_asm(ostream &o)
 
 	o << "\tcall " << label;
 
-	//Pour l'appel à une fonction externe ; utile ??
+	//In order to call an external function
 	if (isExternal)
 		o << "@PLT";
 
@@ -87,7 +87,8 @@ void IRInstrCall::gen_asm(ostream &o)
 } 
 
 
-void IRInstrCall::printIR(ostream &o) {
+void IRInstrCall::printIR(ostream &o) 
+{
 	o << "\tcall " << dest << " " << label << " (";
 	for (auto i : op) {
 		if (i != op[0]) {
