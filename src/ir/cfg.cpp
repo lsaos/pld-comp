@@ -31,12 +31,23 @@ CFG::CFG(Function* function) : function(function), nextFreeSymbolIndex(0), nextB
 
 	for (auto var : vars)
 	{
-		string name = var->getName() + "_" + to_string(current_context);
-		variablesName[var] = name;
-		if(var->isArray())
-			add_to_symbol_table(name, var->getType(), var->getArraySize());
-		else
-			add_to_symbol_table(name, var->getType());
+		if (var->getScope() != Scope::Global)
+		{
+			string name;
+			name = var->getName() + "_" + to_string(current_context);
+
+			variablesName[var] = name;
+			if (var->isArray())
+				add_to_symbol_table(name, var->getType(), var->getArraySize());
+			else
+				add_to_symbol_table(name, var->getType());
+		}
+		else {
+			variablesName[var] = var->getName();
+			globalVariables[var->getName()] = var->getName();
+			this->SymbolType[var->getName()] = var->getType();
+		}
+
 	}
 
 	last_bb = new BasicBlock(this, function->getName()+"_last");
@@ -101,7 +112,7 @@ void CFG::add_to_symbol_table(string var, Type t, int nbCases)
 	size = size * nbCases;
 
 	if (t == Type::Integer && nextFreeSymbolIndex%4 != 0)
-		nextFreeSymbolIndex += size - (nextFreeSymbolIndex % 4);
+		nextFreeSymbolIndex += size - (4 - (-nextFreeSymbolIndex) % 4);
 	else
 		nextFreeSymbolIndex += size;
 
