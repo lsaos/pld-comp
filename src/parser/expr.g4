@@ -70,5 +70,5 @@ Comment: '//' ~[\r\n]* -> skip;
 BlockComment: '/*' .*? '*/' -> skip;
 Preproc: '#' ~[\r\n]* -> skip;
 INT: [0-9]+;
-CHAR: '\'' ([a-zA-Z0-9]|'\\n'|' ') '\'';
+CHAR: '\'' ([a-zA-Z0-9]|'\\n'|' '|'\\t') '\'';
 VAR: [a-zA-Z_] [a-zA-Z_0-9]*;
