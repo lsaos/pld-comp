@@ -34,6 +34,7 @@ namespace ast
 		None,
 		UnusedVariable,
 		UnsafeCast,
-		ValueOutOfType
+		ValueOutOfType,
+		OverrideSymbolName
 	};
 }
