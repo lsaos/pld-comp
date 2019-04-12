@@ -3,6 +3,7 @@
 #include "irInstrBinaryOperation.hpp"
 #include "basicBlock.hpp"
 #include "cfg.hpp"
+#include "irInstrCopy.hpp"
 
 using namespace std;
 using namespace ir;
@@ -107,4 +108,13 @@ void IRInstrBinaryOperation::printIR(ostream &o)
 	}
 
 	o << "\t" << mnemonic << " " << destination << " " << operand1 << " " << operand2 << endl;
+}
+
+void IRInstrBinaryOperation::optimize(vector<IRInstr*>& instrs, int i)
+{
+	if (instrs[i + 1]->isCopyMnem() && ((IRInstrCopy*)instrs[i + 1])->get_op() == destination)
+	{
+		destination = ((IRInstrCopy*)instrs[i + 1])->get_dest();
+		instrs.erase(instrs.begin() + i + 1);
+	}
 }

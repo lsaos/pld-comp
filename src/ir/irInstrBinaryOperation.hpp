@@ -31,6 +31,8 @@ namespace ir {
 		//Print IR instructions using IR mnemonics
 		void printIR(ostream &o);
 
+		virtual void optimize(vector<IRInstr*>&, int);
+
 	protected:
 		string destination; //destination register
 		string operand1; //first/left operand 

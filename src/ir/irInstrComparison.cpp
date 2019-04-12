@@ -3,6 +3,7 @@
 #include "irInstrComparison.hpp"
 #include "basicBlock.hpp"
 #include "cfg.hpp"
+#include "irInstrCopy.hpp"
 
 using namespace std;
 using namespace ir;
