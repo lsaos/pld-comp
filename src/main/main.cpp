@@ -100,6 +100,7 @@ int main(int argc, char* argv[])
 	// Parse compiler options
 	bool staticAnalysis = false;
 	bool genAsm = false;
+	bool genMsp = false;
 	bool optimize = false;
 	bool textualRepresentation = false;
 
@@ -108,6 +109,9 @@ int main(int argc, char* argv[])
 
 		if (arg == "-c") {
 			genAsm = true;
+		}
+		else if (arg == "-m") {
+			genMsp = true;
 		}
 		else if (arg == "-a") {
 			staticAnalysis = true;
@@ -146,7 +150,6 @@ int main(int argc, char* argv[])
 	if (syntaxErrorCount != 0)
 	{
 		cout << "Compilation failed with syntax errors" << endl;
-		system("pause");
 		return RETURN_CODE_SYNTAX_ERROR;
 	}
 
@@ -197,16 +200,22 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	// Generate the assembly
-	if (genAsm) {
-		/*AssemblyGenerator ag(argv[1]);
-		ag.generateAssembly(prog);*/
+	// Generate the assembly for x86
+	if (genAsm && !genMsp) {
 		IR ir(prog);
 		ir.generateIR(optimize);
 		cout << endl << endl;
-		ir.printIR();
 		cout << endl;
 		ir.generateAssembly(argv[1]);
+	}
+
+	// Generate the assembly for MSP430
+	if (genMsp && !genAsm) {
+		IR ir(prog);
+		ir.generateIR(optimize);
+		cout << endl << endl;
+		cout << endl;
+		ir.generateAssemblyMSP430(argv[1]);
 	}
 
 	// Show the measured time
