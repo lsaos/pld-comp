@@ -18,6 +18,8 @@ You may have to change *ANTLR*, *ANTLRRUNTIME*, *ANTLRSRC* and *LDFLAGS* such th
 
 _Remark_ : The current Makefile is already adapted to the INSA IT department's computers.
 
+You will also need to create the *build/* folder at the root of the project, among *src/* and *tests/*. Otherwise, the Makefile won't be correctly executed.
+
 ### Build the executable
 
 First of all, make sure the grammar is up to date by running :
@@ -36,6 +38,19 @@ or
 
 Which is basically the content of the test target.
 
+### Run the compiler
+
+Just type :
+> ./compiler
+
+The compiler may take a few options to produce other outputs. Here follows the list of allowed options and their goal :
+<ul>
+	<li>-c : Produce assembly (.s) file</li>
+	<li>-o : Proceed optimisation </li>
+	<li>-a : Proceed static analysis</li>
+	<li>-t : View the Tree structure of the Program</li>
+	<li>-m : Produce assembly for MSP_430 target </li>
+</ul>
 ## What can I find in this folder ?
 
 Here's a description of the folder hierarchy :
@@ -46,7 +61,7 @@ Here's a description of the folder hierarchy :
 	<li>ast : You will find here every class modelling what our C program consists of, i.e. AST...</li>
 	<li>ir : You will find every item about IR.</li>
 	<li>main : This folder name is perhaps obvious about its content.</li></ul>
-<li>tests : You will find here a list of tests that can be run with the command /$make test/. Every category of test is arranged in subfolders.
+<li>tests : You will find here a list of tests that can be run with the command *make test*. Every category of test is arranged in subfolders.
 	<ul>
 	<li> ValidPrograms : programs that should normally compile with our executable.</li>
 	<li> LexError : Program generating a Lexer Error.</li>
@@ -59,3 +74,6 @@ Here's a description of the folder hierarchy :
 <li> build : It's useless to take a look at it, unless you know how to read .o files.</li>
 </ul>
 
+## Is there anything to sum up what the compiler does ?
+
+Sure ! Please check *tests/DemonstrationPrograms* and run the compiler executable on every .c file !

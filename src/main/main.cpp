@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
 	// Check we have the filename
 	if (argc < 2)
 	{
-		cout << "Usage: comp source_file [-a] [-o] [-c] [-t]" << endl;
+		cout << "Usage: comp source_file [-a] [-o] [-c] [-t] [-m]" << endl;
 		return RETURN_CODE_INVALID_ARGS;
 	}
 
