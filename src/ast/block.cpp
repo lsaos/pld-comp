@@ -7,6 +7,7 @@
 #include "block.hpp"
 #include "variable.hpp"
 #include "../ir/cfg.hpp"
+#include "program.hpp"
 
 namespace ast
 {
@@ -76,10 +77,11 @@ namespace ast
 		// Check symbols duplication
 		vector<string> symbols;
 
-		if (getParentBlock()) {
-			const vector<Variable*> vars(getParentBlock()->getVariables(true));
-			for (const Variable* var : vars) {
-				symbols.push_back(var->getName());
+		if (getProgram())
+		{
+			const vector<Function*> funcs(getProgram()->getFunctions(true));
+			for (const Function* func : funcs) {
+				symbols.push_back(func->getName());
 			}
 		}
 
@@ -95,6 +97,11 @@ namespace ast
 
 				if (find(symbols.begin(), symbols.end(), name) != symbols.end()) {
 					error(Error::DuplicatedSymbolName, instr.get());
+				}
+
+				if (advanced && getParentBlock() && getParentBlock()->getVariable(name, true))
+				{
+					warning(Warning::OverrideSymbolName, instr.get());
 				}
 
 				symbols.push_back(name);

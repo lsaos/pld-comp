@@ -100,7 +100,10 @@ void CFG::add_to_symbol_table(string var, Type t, int nbCases)
 
 	size = size * nbCases;
 
-	nextFreeSymbolIndex += size;
+	if (t == Type::Integer && nextFreeSymbolIndex%4 != 0)
+		nextFreeSymbolIndex += size - (nextFreeSymbolIndex % 4);
+	else
+		nextFreeSymbolIndex += size;
 
 	this->SymbolType[var] = t;
 	this->SymbolIndex[var] = nextFreeSymbolIndex;
@@ -116,7 +119,7 @@ string CFG::create_new_tempvar(Type t)
 		nb = -nextFreeSymbolIndex + 1;
 		break;
 	case Type::Integer:
-		nb = -nextFreeSymbolIndex + 4;
+		nb = -nextFreeSymbolIndex + 4 + (nextFreeSymbolIndex % 4);
 		break;
 	}
 

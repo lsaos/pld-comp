@@ -141,6 +141,7 @@ namespace ast
 		case Warning::UnusedVariable: cout << "unused variable"; break;
 		case Warning::UnsafeCast: cout << "cast can lose information"; break;
 		case Warning::ValueOutOfType: cout << "assigning value out of type values bounds"; break;
+		case Warning::OverrideSymbolName: cout << "overriding existing symbol name";break;
 		default: cout << "unknown warning"; break;
 		}
 
