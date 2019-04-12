@@ -59,6 +59,7 @@ expression: funcCall #exprFunc
 		  |	expression  '|'  expression #bitwiseOr
 		  |	expression  '&&'  expression #LogicalAnd
 		  |	expression  '||'  expression #LogicalOr
+		  | VAR '=' expression #assignmentExpression
 		  ;
 funcCall: VAR '(' funcCallArguments? ')';
 funcCallArguments: expression (',' expression)*;
