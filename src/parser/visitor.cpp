@@ -63,8 +63,7 @@ Expression* Visitor::buildUnaryExpression(exprParser::ExpressionContext* ctx, Un
 	jump(); cout << "UNARY " << int(op) << " (" << endl;
 	indent++;
 #endif
-	Expression* expr = (Expression*)visit(ctx->children[0]);
-
+	Expression* expr = (Expression*)visit(ctx->children[1]);//Children 0 is the operator.
 	UnaryExpression* unary = new  UnaryExpression(expr->getPosition());
 	unary->setExpression(expr);
 	unary->setOperator(op);
