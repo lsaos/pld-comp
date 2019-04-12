@@ -114,6 +114,8 @@ public:
 
     virtual antlrcpp::Any visitLeftShift(exprParser::LeftShiftContext *context);
     virtual antlrcpp::Any visitRightShift(exprParser::RightShiftContext *context);
+    
+    virtual antlrcpp::Any visitAssignmentExpression(exprParser::AssignmentExpressionContext *context);
 
     virtual antlrcpp::Any visitFuncType(exprParser::FuncTypeContext *context);
 

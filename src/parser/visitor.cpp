@@ -637,6 +637,25 @@ antlrcpp::Any Visitor::visitLeftShift(exprParser::LeftShiftContext *ctx) {
 	return (Expression*)buildBinaryExpression((exprParser::ExpressionContext*)ctx, BinaryOperator::BitwiseLeftShift);
 }
 
+antlrcpp::Any Visitor::visitAssignmentExpression(exprParser::AssignmentExpressionContext *ctx){
+	#ifdef TREEVISIT
+	jump(); cout << "ASSIGNMENT_EXPR(" << endl;
+	indent++;
+#endif
+	ItemPosition pos = buildPos(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine());
+	Assignment* assignment = new Assignment(pos);
+	Expression* expression = (Expression*)visit(ctx->expression());
+	Identifier* identifier = new Identifier(pos);
+	identifier->setIdent(ctx->VAR()->getText());
+	assignment->setValue(expression);
+	assignment->setIdentifier(identifier);
+#ifdef TREEVISIT
+	jump(); cout << ")" << endl;
+	indent--;
+#endif
+	return (Expression*)assignment;
+}
+
 antlrcpp::Any Visitor::visitFuncCall(exprParser::FuncCallContext *ctx) {
 #ifdef TREEVISIT
 	jump(); cout << "FUNCTION_CALL(" << endl;
