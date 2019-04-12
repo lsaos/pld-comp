@@ -143,6 +143,9 @@ do
 		if [ ! -r "$fileName.s.outfile" ] ; then
 			rm "$fileName.s"
 		fi
+		if [ ! -r putChar.outfile ] ; then
+			rm putChar
+		fi
 	fi
 done
 
